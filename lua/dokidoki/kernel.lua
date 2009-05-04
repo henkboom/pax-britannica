@@ -1,9 +1,12 @@
 require "dokidoki.closedmodule"
-[[ abort_main_loop, start_main_loop ]]
+[[ get_width, get_height, get_ratio, set_video_mode, set_ratio,
+   start_main_loop, abort_main_loop ]]
 
 require "luagl"
 require "SDL"
 import(SDL)
+
+---- Constants ----------------------------------------------------------------
 
 max_update_time = 0.1
 fps = 60
@@ -14,24 +17,55 @@ min_sleep_time = 0.01
 -- allow for this much inaccuracy in SDL_Delay
 sleep_allowance = 0.002
 
-quit = false
+---- State Variables ----------------------------------------------------------
 
-function abort_main_loop()
-  quit = true
+running = false
+width = 640
+height = 480
+ratio = width / height
+
+---- Public Interface ---------------------------------------------------------
+
+function get_width() return width end
+function get_height() return height end
+function get_ratio() return ratio end
+
+function set_video_mode (w, h)
+  assert(w > 0)
+  assert(h > 0)
+  width = w
+  height = h
+  if nil == SDL_SetVideoMode(w, h, 0, SDL_OPENGL) then
+    error("failed setting video mode")
+  end
+  update_viewport()
+end
+
+function set_ratio(r)
+  assert(r > 0)
+  ratio = r
+  if running then update_viewport() end
 end
 
 function start_main_loop (scene)
   SDL_Init(SDL_INIT_VIDEO)
+  running = true
   
   SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1)
-  set_video_mode(640, 480)
-  
+  set_video_mode(width, height)
+
   main_loop(scene)
 
   SDL_Quit()
 end
 
-function main_loop(scene)
+function abort_main_loop ()
+  running = false
+end
+
+---- Utility Functions --------------------------------------------------------
+
+function main_loop (scene)
   local last_update_time = get_current_time()
 
   while true do
@@ -42,7 +76,7 @@ function main_loop(scene)
         local translated = translate_event(event)
         if translated then scene.handle_event(translated) end
 
-        if quit then
+        if not running then
           SDL_Event_delete(event)
           return
         end
@@ -61,18 +95,18 @@ function main_loop(scene)
       while last_update_time + update_time <= current_time do
         last_update_time = last_update_time + update_time
         scene.update(update_time)
-        if quit then return end
+        if not running then return end
       end
     end
 
     ---- draw
     scene.draw()
-    if quit then return end
+    if not running then return end
     SDL_GL_SwapBuffers()
   end
 end
 
-function translate_event(event)
+function translate_event (event)
   if event.type == SDL_QUIT then
     return {type = event.type}
   elseif event.type == SDL_KEYDOWN or
@@ -98,9 +132,15 @@ function sleep_until (time)
   while time + 0.0001 > get_current_time() do end
 end
 
-function set_video_mode (w, h)
-  if nil == SDL_SetVideoMode(w, h, 0, SDL_OPENGL) then
-    error("failed setting video mode")
+function update_viewport ()
+  if width / height > ratio then
+    -- pillarbox
+    inner_width = math.floor(height * ratio + 0.5)
+    glViewport(math.floor((width - inner_width) / 2), 0, inner_width, height)
+  else
+    -- letterbox
+    inner_height = math.floor(width / ratio + 0.5)
+    glViewport(0, math.floor((height - inner_height) / 2), width, inner_height)
   end
 end
 

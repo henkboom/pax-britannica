@@ -11,10 +11,10 @@ import(SDL)
 kernel = require "dokidoki.kernel"
 
 function make_uber_scene (coefficient_of_awesomeness)
-  time_until_change = 0
-  color = {0, 0, 0, 0}
+  local time_until_change = 0
+  local color = {0, 0, 0, 0}
 
-  function handle_event(event)
+  function handle_event (event)
     if event.type == SDL_QUIT or
        event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE then
       kernel.abort_main_loop()
