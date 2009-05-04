@@ -52,7 +52,15 @@ return function (export_defs)
     return exported_values
   end
 
-  private = {get_module_exports = get_module_exports}
+  local function import(t)
+    for k, v in pairs(t) do
+      assert(private[k] == nil,
+             "import collision for variable " .. k)
+      private[k] = v
+    end
+  end
+
+  private = {get_module_exports = get_module_exports, import = import}
   local private_mt = {__index = _G}
 
   setmetatable(private, private_mt)
