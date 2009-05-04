@@ -9,6 +9,11 @@ max_update_time = 0.1
 fps = 60
 update_time = 1/fps
 
+-- never sleep for less than this amount
+min_sleep_time = 0.01
+-- allow for this much inaccuracy in SDL_Delay
+sleep_allowance = 0.002
+
 quit = false
 
 function abort_main_loop()
@@ -82,9 +87,15 @@ function get_current_time ()
   return SDL_GetTicks() / 1000
 end
 
--- TODO
 function sleep_until (time)
-  while time > get_current_time() do end
+  local time_to_sleep = time - get_current_time() - sleep_allowance
+  if time_to_sleep > min_sleep_time then
+    SDL_Delay(time_to_sleep * 1000)
+  end
+  -- Floating point inaccuracy can cause this to pass here but not in the main
+  -- loop, making us do iterations of 0 updates, which is stupid. Making this
+  -- condition slightly stricter fixes it.
+  while time + 0.0001 > get_current_time() do end
 end
 
 function set_video_mode (w, h)
