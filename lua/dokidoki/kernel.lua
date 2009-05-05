@@ -12,9 +12,9 @@ max_update_time = 0.1
 fps = 60
 update_time = 1/fps
 
--- never sleep for less than this amount
+-- Never sleep for less than this amount
 min_sleep_time = 0.01
--- allow for this much inaccuracy in SDL_Delay
+-- Allow for this much inaccuracy in SDL_Delay
 sleep_allowance = 0.002
 
 ---- State Variables ----------------------------------------------------------
@@ -26,9 +26,9 @@ ratio = width / height
 
 ---- Public Interface ---------------------------------------------------------
 
-function get_width() return width end
-function get_height() return height end
-function get_ratio() return ratio end
+function get_width () return width end
+function get_height () return height end
+function get_ratio () return ratio end
 
 function set_video_mode (w, h)
   assert(w > 0)
@@ -41,7 +41,7 @@ function set_video_mode (w, h)
   update_viewport()
 end
 
-function set_ratio(r)
+function set_ratio (r)
   assert(r > 0)
   ratio = r
   if running then update_viewport() end

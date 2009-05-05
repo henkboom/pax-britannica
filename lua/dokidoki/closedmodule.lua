@@ -1,4 +1,4 @@
-local function match_start(str, pat, i)
+local function match_start (str, pat, i)
   i = i or 1
   result = {string.match(str, "()" .. pat, i)}
   if result[1] == i then
@@ -8,7 +8,7 @@ local function match_start(str, pat, i)
   end
 end
 
-local function parse_exports(export_defs)
+local function parse_exports (export_defs)
   local exports = {}
   local i = 1
   while true do
@@ -52,7 +52,7 @@ return function (export_defs)
     return exported_values
   end
 
-  local function import(t)
+  local function import (t)
     for k, v in pairs(t) do
       assert(private[k] == nil,
              "import collision for variable " .. k)
