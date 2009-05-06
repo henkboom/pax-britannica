@@ -1,4 +1,4 @@
-require "dokidoki.closedmodule"
+require "dokidoki.module"
 [[ sprite_from_image, sprite_from_surface, texture_from_image,
    texture_from_surface, texture_from_ptr ]]
 

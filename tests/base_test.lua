@@ -1,3 +1,5 @@
+require "dokidoki.module" [[]]
+
 base = require "dokidoki.base"
 
 function all_equal (a, b)

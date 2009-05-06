@@ -1,4 +1,4 @@
-require "dokidoki.closedmodule" [[]]
+require "dokidoki.module" [[]]
 
 -- Stuff we need
 require "luagl"

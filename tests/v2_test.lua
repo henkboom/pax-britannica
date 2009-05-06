@@ -1,3 +1,5 @@
+require "dokidoki.module" [[]]
+
 v2 = require "dokidoki.v2"
 
 assert(v2.zero.x == 0);

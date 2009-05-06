@@ -1,4 +1,4 @@
-require "dokidoki.closedmodule"
+require "dokidoki.module"
 [[ get_width, get_height, get_ratio, set_video_mode, set_ratio,
    start_main_loop, abort_main_loop ]]
 
@@ -88,7 +88,7 @@ function main_loop (scene)
     do
       -- Since we're probably going to be waiting at this point, may as well
       -- push along the garbage collector
-      -- TODO: uncomment this after checking performance impact
+      -- TODO: figure out whether or not this is actually a good idea
       --collectgarbage("step")
       -- wait until it's time to update at least once
       sleep_until(last_update_time + update_time)

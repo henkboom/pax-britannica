@@ -1,4 +1,4 @@
-require "dokidoki.closedmodule" [[]]
+require "dokidoki.module" [[]]
 
 require "luagl"
 require "SDL"
@@ -7,9 +7,9 @@ import(SDL)
 kernel = require "dokidoki.kernel"
 graphics = require "dokidoki.graphics"
 
-function make_spinner_scene ()
+function make_sprite_scene ()
   local time = 0
-  local tex = false
+  local sprite = false
 
   local function handle_event (event)
     if event.type == SDL_QUIT or
@@ -52,5 +52,5 @@ function make_spinner_scene ()
 end
 
 kernel.set_ratio(640/480)
-kernel.start_main_loop(make_spinner_scene(math.acos(-1)))
+kernel.start_main_loop(make_sprite_scene(math.acos(-1)))
 

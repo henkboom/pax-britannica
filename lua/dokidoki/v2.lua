@@ -1,4 +1,4 @@
-require "dokidoki.closedmodule"
+require "dokidoki.module"
 [[ make, unit,
    add, sub, mul, div, dot, cross, mag, sqrmag, norm, eq, coords,
    zero, i, j ]]

@@ -1,4 +1,4 @@
-require "dokidoki.closedmodule"
+require "dokidoki.module"
 [[ map, array_for_each, array_filter, copy, build_array, identity ]]
 
 function map (f, t)

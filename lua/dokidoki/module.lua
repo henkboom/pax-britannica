@@ -1,6 +1,8 @@
+require "dokidoki.private.strict"
+
 local function match_start (str, pat, i)
   i = i or 1
-  result = {string.match(str, "()" .. pat, i)}
+  local result = {string.match(str, "()" .. pat, i)}
   if result[1] == i then
     return unpack(result, 2)
   else
@@ -15,12 +17,13 @@ local function parse_exports (export_defs)
     local key
     local begin
 
+    local external_name, internal_name
+    local i2
     -- parse external name
     external_name, i2 = match_start(export_defs, "%s*([%a_][%w_]*)()", i)
     if i2 ~= nil then i = i2 else break end
 
     -- parse internal name
-    local i2
     internal_name, i2 = match_start(export_defs, "%s*=%s*([%a_][%w_]*)()", i)
     if i2 ~= nil then i = i2 end
 
@@ -54,7 +57,7 @@ return function (export_defs)
 
   local function import (t)
     for k, v in pairs(t) do
-      assert(private[k] == nil,
+      assert(rawget(private, k) == nil and rawget(_G, k) == nil,
              "import collision for variable " .. k)
       private[k] = v
     end
