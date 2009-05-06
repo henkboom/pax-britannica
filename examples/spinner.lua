@@ -26,7 +26,7 @@ function make_spinner_scene ()
     glClear(GL_COLOR_BUFFER_BIT)
     glMatrixMode(GL_PROJECTION)
     glLoadIdentity()
-    glOrtho(0, 640, 0, 480, 1, -1)
+    glOrtho(0, 300, 0, 300, 1, -1)
     glMatrixMode(GL_MODELVIEW)
     glLoadIdentity()
   end
@@ -34,7 +34,7 @@ function make_spinner_scene ()
   local function draw ()
     init_graphics()
     glPushMatrix()
-      glTranslated(320, 240, 0)
+      glTranslated(150, 150, 0)
       glRotated(rotation, 0, 0, 1)
       glScaled(100, 100, 100)
       glColor3d(0.5, 0.25, 1)
@@ -50,6 +50,7 @@ function make_spinner_scene ()
   return {handle_event = handle_event, update = update, draw = draw}
 end
 
-kernel.set_ratio(640/480)
+kernel.set_video_mode(300, 300)
+kernel.set_ratio(1)
 kernel.start_main_loop(make_spinner_scene(math.acos(-1)))
 

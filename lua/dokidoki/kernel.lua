@@ -35,8 +35,10 @@ function set_video_mode (w, h)
   assert(h > 0)
   width = w
   height = h
-  if nil == SDL_SetVideoMode(w, h, 0, SDL_OPENGL) then
-    error("failed setting video mode")
+  if running then
+    if nil == SDL_SetVideoMode(w, h, 0, SDL_OPENGL) then
+      error("failed setting video mode")
+    end
   end
   update_viewport()
 end

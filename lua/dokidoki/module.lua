@@ -44,6 +44,7 @@ local function parse_exports (export_defs)
 end
 
 return function (export_defs)
+  -- TODO: fix declaring variables by assigning nil to them.
   local private
   local exports = parse_exports(export_defs)
 
