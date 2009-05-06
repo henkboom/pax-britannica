@@ -120,20 +120,22 @@ do
       --
       -- This invalidates the object, so don't use it anymore.
       if bound_texture == self then self:disable() end
-      delete_texture_name(self.name)
+      if self.name then delete_texture_name(self.name) end
       self.name = false
     end
   }
 
-  local mt = {__index = index, __gc = index.delete}
+  local mt = {__index = index}
 
   function make_texture (name)
     -- Makes a new texture object with the given OpenGL texture name.
     --
     -- The texture object is deleted automatically by the garbage collector,
     -- but it is recommended that you delete it manually with :delete() in
-    -- order to 
-    return setmetatable({name = name}, mt)
+    -- order to free up video memory sooner.
+    local tex =  setmetatable({name = name}, mt)
+    tex.will = make_will(function () tex:delete() end)
+    return tex
   end
 end
 
@@ -219,8 +221,9 @@ function new_texture_name ()
   return namebuffer[0]
 end
 
-function delete_texture_name ()
+function delete_texture_name (name)
   local namebuffer = memarray("uint", 1)
+  namebuffer[0] = name
   glDeleteTextures(1, namebuffer:ptr())
 end
 
@@ -236,6 +239,12 @@ function sdl_check(condition)
   if not condition then
     error(SDL_GetError())
   end
+end
+
+function make_will(fn)
+  local will = newproxy(true)
+  getmetatable(will).__gc = function () fn() end
+  return will
 end
 
 ---- Color Mask Calculation ---------------------------------------------------

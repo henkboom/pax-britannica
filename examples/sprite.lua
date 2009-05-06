@@ -23,7 +23,7 @@ function make_spinner_scene ()
   end
 
   local function init_graphics ()
-    if not spr then
+    if not sprite then
       sprite = graphics.sprite_from_image("rgba.png", nil, "centered")
     end
     glClearColor(0.3 + math.cos(time/2) * 0.1, 0, 0.75, 0)

@@ -86,6 +86,10 @@ function main_loop (scene)
 
     ---- update
     do
+      -- Since we're probably going to be waiting at this point, may as well
+      -- push along the garbage collector
+      -- TODO: uncomment this after checking performance impact
+      --collectgarbage("step")
       -- wait until it's time to update at least once
       sleep_until(last_update_time + update_time)
       local current_time = get_current_time()
