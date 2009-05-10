@@ -1,5 +1,14 @@
 require "dokidoki.module"
-[[ map, array_for_each, array_filter, copy, build_array, identity ]]
+[[ range, map, array_for_each, array_filter, copy, build_array, identity ]]
+
+function range(first, last, step)
+  step = step or 1
+  local result = {}
+  for i = first, last, step do
+    result[#result+1] = i
+  end
+  return result
+end
 
 function map (f, t)
   local result = {}

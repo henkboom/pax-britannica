@@ -1,6 +1,6 @@
 require "dokidoki.module" [[]]
 
-base = require "dokidoki.base"
+import(require "dokidoki.base")
 
 function all_equal (a, b)
   if a == b then
@@ -38,10 +38,14 @@ assert(not all_equal({a = 1}, {a = 1, b = 2}))
 assert(not all_equal({a = 1}, {}))
 assert(not all_equal({}, {a = 1}))
 
-assert(all_equal(base.map(square, {4, 2, 3}), {16, 4, 9}))
-assert(all_equal(base.map(add1, {x = 1, y = 4}), {x = 2, y = 5}))
-assert(all_equal(base.array_filter(base.identity, {1, true, false, "hello"}),
+assert(all_equal(range(1, 10), {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}))
+assert(all_equal(range(1, 4, 2), {1, 3}))
+assert(all_equal(range(1, -5), {}))
+assert(all_equal(range(1, -5, -2), {1, -1, -3, -5}))
+assert(all_equal(map(square, {4, 2, 3}), {16, 4, 9}))
+assert(all_equal(map(add1, {x = 1, y = 4}), {x = 2, y = 5}))
+assert(all_equal(array_filter(identity, {1, true, false, "hello"}),
                  {1, true, "hello"}))
-assert(all_equal(base.build_array(3, square), {1, 4, 9}))
-assert(all_equal(base.build_array(5, base.identity), {1, 2, 3, 4, 5}))
-assert(all_equal({base.identity(1, "a", true)}, {1, "a", true}))
+assert(all_equal(build_array(3, square), {1, 4, 9}))
+assert(all_equal(build_array(5, identity), {1, 2, 3, 4, 5}))
+assert(all_equal({identity(1, "a", true)}, {1, "a", true}))

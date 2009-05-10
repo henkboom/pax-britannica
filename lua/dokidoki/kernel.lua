@@ -37,7 +37,7 @@ function set_video_mode (w, h)
   height = h
   if running then
     if nil == SDL_SetVideoMode(w, h, 0, SDL_OPENGL) then
-      error("failed setting video mode")
+      error(SDL_GetError())
     end
   end
   update_viewport()
@@ -50,7 +50,9 @@ function set_ratio (r)
 end
 
 function start_main_loop (scene)
-  SDL_Init(SDL_INIT_VIDEO)
+  if SDL_Init(SDL_INIT_VIDEO) ~= 0 then
+    error(SDL_GetError())
+  end
   running = true
   
   SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1)

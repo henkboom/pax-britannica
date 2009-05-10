@@ -1,6 +1,7 @@
 badd Session.vim
 
 badd examples/colors.lua
+badd examples/font.lua
 badd examples/spinner.lua
 badd examples/sprite.lua
 badd lua/dokidoki/base.lua
