@@ -8,17 +8,14 @@ kernel = require "dokidoki.kernel"
 graphics = require "dokidoki.graphics"
 sound = require "dokidoki.sound"
 
-local sprite = false
 function make_sprite_scene ()
   local time = 0
-  local sfx = false
+  local sprite = false
 
   local function handle_event (event)
     if event.type == SDL_QUIT or
        event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE then
       kernel.abort_main_loop()
-    elseif event.type == SDL_KEYDOWN and event.key == SDLK_SPACE then
-      sfx:play()
     end
   end
 
@@ -29,7 +26,6 @@ function make_sprite_scene ()
   local function init_graphics ()
     if not sprite then
       sprite = graphics.sprite_from_image("rgba.png", nil, "centered")
-      sfx = sound.sound_effect_from_file("demo-sfx.wav")
     end
     glClearColor(0.3 + math.cos(time/2) * 0.1, 0, 0.75, 0)
     glClear(GL_COLOR_BUFFER_BIT)

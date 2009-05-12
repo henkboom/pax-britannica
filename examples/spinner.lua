@@ -52,5 +52,5 @@ end
 
 kernel.set_video_mode(300, 300)
 kernel.set_ratio(1)
-kernel.start_main_loop(make_spinner_scene(math.acos(-1)))
+kernel.start_main_loop(make_spinner_scene())
 
