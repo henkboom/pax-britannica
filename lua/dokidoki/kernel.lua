@@ -1,16 +1,20 @@
 require "dokidoki.module"
 [[ get_width, get_height, get_ratio, set_video_mode, set_ratio,
-   start_main_loop, abort_main_loop ]]
+   start_main_loop, abort_main_loop, get_fps ]]
 
 require "luagl"
 require "SDL"
 import(SDL)
 
+import(require "dokidoki.base")
+graphics = require "dokidoki.graphics"
+
 ---- Constants ----------------------------------------------------------------
 
-max_update_time = 0.1
+max_update_time = 1/30 + 0.001
 fps = 60
 update_time = 1/fps
+max_sample_frames = 30
 
 -- Never sleep for less than this amount
 min_sleep_time = 0.01
@@ -50,7 +54,7 @@ function set_ratio (r)
 end
 
 function start_main_loop (scene)
-  if SDL_Init(SDL_INIT_VIDEO) ~= 0 then
+  if SDL_Init(bit_or(SDL_INIT_VIDEO, SDL_INIT_AUDIO)) ~= 0 then
     error(SDL_GetError())
   end
   running = true
@@ -65,6 +69,16 @@ end
 
 function abort_main_loop ()
   running = false
+end
+
+frame_times = {}
+
+function get_fps ()
+  if #frame_times >= 2 then
+    return (#frame_times - 1) / (frame_times[#frame_times] - frame_times[1])
+  else
+    return 1
+  end
 end
 
 ---- Utility Functions --------------------------------------------------------
@@ -97,9 +111,15 @@ function main_loop (scene)
       -- wait until it's time to update at least once
       sleep_until(last_update_time + update_time)
       local current_time = get_current_time()
+      log_frame_time(current_time)
       -- if we would have to update for more than max_update_time, skip forward
-      last_update_time = math.max(last_update_time,
-                                  current_time - max_update_time)
+      local total_update_time = current_time - last_update_time
+      if max_update_time < total_update_time then
+        warn("underrun of %ims",
+              math.ceil(1000 * (total_update_time - max_update_time)))
+        last_update_time = current_time - max_update_time
+      end
+      -- update the right number of times
       while last_update_time + update_time <= current_time do
         last_update_time = last_update_time + update_time
         scene.update(update_time)
@@ -150,6 +170,17 @@ function update_viewport ()
     inner_height = math.floor(width / ratio + 0.5)
     glViewport(0, math.floor((height - inner_height) / 2), width, inner_height)
   end
+end
+
+function log_frame_time(time)
+  table.insert(frame_times, time)
+  if #frame_times > max_sample_frames then
+    table.remove(frame_times, 1)
+  end
+end
+
+function warn(str, ...)
+  print(string.format("warning: " .. str, ...))
 end
 
 return get_module_exports()

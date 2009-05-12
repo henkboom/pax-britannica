@@ -6,32 +6,30 @@ import(SDL)
 
 kernel = require "dokidoki.kernel"
 graphics = require "dokidoki.graphics"
-sound = require "dokidoki.sound"
 
-local sprite = false
+font_filename = "/usr/share/fonts/ttf-bitstream-vera/Vera.ttf"
+font_size = 20
+
 function make_sprite_scene ()
-  local time = 0
-  local sfx = false
+  local font_map = false
+  local tex = false
 
   local function handle_event (event)
     if event.type == SDL_QUIT or
        event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE then
       kernel.abort_main_loop()
-    elseif event.type == SDL_KEYDOWN and event.key == SDLK_SPACE then
-      sfx:play()
     end
   end
 
   local function update (dt)
-    time = time + dt
   end
 
   local function init_graphics ()
-    if not sprite then
-      sprite = graphics.sprite_from_image("rgba.png", nil, "centered")
-      sfx = sound.sound_effect_from_file("demo-sfx.wav")
+    if not font_map then
+      font_map = graphics.make_font_map(font_filename, font_size)
+      tex = font_map[" "].tex
     end
-    glClearColor(0.3 + math.cos(time/2) * 0.1, 0, 0.75, 0)
+    glClearColor(0, 0, 0, 0)
     glClear(GL_COLOR_BUFFER_BIT)
     glMatrixMode(GL_PROJECTION)
     glLoadIdentity()
@@ -45,17 +43,18 @@ function make_sprite_scene ()
 
   local function draw ()
     init_graphics()
+
     glPushMatrix()
       glTranslated(320, 240, 0)
-      glRotated(math.sin(time * math.pi) * 50, 0, 0, 1)
       glColor3d(1, 1, 1)
-      sprite:draw()
+      graphics.draw_text(font_map, "Yay it works!")
     glPopMatrix()
   end
 
   return {handle_event = handle_event, update = update, draw = draw}
 end
 
-kernel.set_ratio(640/480)
-kernel.start_main_loop(make_sprite_scene())
+kernel.set_ratio(800/600)
+kernel.set_video_mode(800, 600)
+kernel.start_main_loop(make_sprite_scene(math.acos(-1)))
 

@@ -1,7 +1,8 @@
 require "dokidoki.module"
 [[ make_font_map, draw_text,
    sprite_from_image, sprite_from_surface,
-   texture_from_image, texture_from_surface, texture_from_ptr ]]
+   texture_from_image, texture_from_surface, texture_from_ptr,
+   get_texture_count ]]
 
 require "luagl"
 require "luaglut"
@@ -15,6 +16,7 @@ import(SDL_image)
 import(SDL_ttf)
 
 import(require "dokidoki.base")
+will = require "dokidoki.private.will"
 
 ---- Fonts and Text -----------------------------------------------------------
 
@@ -132,12 +134,12 @@ do
   {
     draw = function (self)
       glPushMatrix()
-      self.tex:enable()
       
       local t = self.tex_rect
       local o = self.origin
       local s = self.size
 
+      self.tex:enable()
       glBegin(GL_QUADS)
         glTexCoord2d(t[1], t[2] + t[4])
         glVertex2d(-o[1], -o[2])
@@ -213,6 +215,8 @@ bound_texture = false
 
 -- Texture object
 do
+  local texture_count = 0
+
   local index = 
   {
     enable = function (self)
@@ -233,9 +237,12 @@ do
       -- Deletes the texture from video memory.
       --
       -- This invalidates the object, so don't use it anymore.
-      if bound_texture == self then self:disable() end
-      if self.name then delete_texture_name(self.name) end
-      self.name = false
+      if self.name then
+        if bound_texture == self then self:disable() end
+        delete_texture_name(self.name)
+        texture_count = texture_count - 1
+        self.name = false
+      end
     end
   }
 
@@ -248,8 +255,13 @@ do
     -- but it is recommended that you delete it manually with :delete() in
     -- order to free up video memory sooner.
     local tex =  setmetatable({name = name}, mt)
-    tex.will = make_will(function () tex:delete() end)
+    will.attach_will(tex, function () tex:delete() end)
+    texture_count = texture_count + 1
     return tex
+  end
+
+  function get_texture_count()
+    return texture_count
   end
 end
 
@@ -387,13 +399,8 @@ end
 function sdl_check(condition)
   if not condition then
     error(SDL_GetError())
+    else
   end
-end
-
-function make_will(fn)
-  local will = newproxy(true)
-  getmetatable(will).__gc = function () fn() end
-  return will
 end
 
 ---- Color Mask Calculation ---------------------------------------------------

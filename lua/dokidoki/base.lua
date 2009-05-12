@@ -1,5 +1,6 @@
 require "dokidoki.module"
-[[ range, map, array_for_each, array_filter, copy, build_array, identity ]]
+[[ range, map, array_for_each, array_filter, copy, build_array, identity,
+   void ]]
 
 function range(first, last, step)
   step = step or 1
@@ -50,6 +51,9 @@ end
 
 function identity (...)
   return ...
+end
+
+function void ()
 end
 
 return get_module_exports()
