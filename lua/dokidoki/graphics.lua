@@ -1,6 +1,6 @@
 require "dokidoki.module"
-[[ make_font_map, draw_text,
-   sprite_from_image, sprite_from_surface,
+[[ make_font_map, draw_text, font_map_line_height,
+   sprite_from_image, sprite_from_surface, make_sprite,
    texture_from_image, texture_from_surface, texture_from_ptr,
    get_texture_count ]]
 
@@ -27,9 +27,11 @@ end
 local font_map_chars = map(string.char, range((" "):byte(), ("~"):byte()))
 
 function make_font_map (filename, size, chars)
-  init_fonts()
-
+  assert(filename)
+  assert(size and size > 0)
   chars = chars or font_map_chars
+
+  init_fonts()
 
   -- Keep a padding of this much in glyphs to prevent them from bleeding into
   -- each other when using linear filters. This has to be higher if you're
@@ -93,7 +95,8 @@ function make_font_map (filename, size, chars)
       rect[3] / surface.w,
       rect[4] / surface.h
     }
-    sprites[c] = make_sprite(tex, {rect[3], rect[4]}, nil, tex_rect)
+    sprites[c] =
+      make_sprite(tex, {rect[3], rect[4]}, {0, line_height}, tex_rect)
   end
 
   SDL_FreeSurface(surface)
@@ -102,15 +105,32 @@ function make_font_map (filename, size, chars)
   return sprites;
 end
 
+function font_map_line_height (font_map)
+  local _, some_glyph = next(font_map)
+  return some_glyph.size[2]
+end
+
 function draw_text(font_map, text)
+  local line_height = font_map_line_height (font_map)
+
+  local current_line = 0
+
   glPushMatrix()
   for i = 1, #text do
-    local sprite = font_map[text:sub(i, i)]
-    if sprite then
-      sprite:draw()
-      glTranslated(sprite.size[1], 0, 0)
+    local char = text:sub(i, i)
+    if char == "\n" then
+      glPopMatrix()
+      current_line = current_line + 1
+      glPushMatrix()
+      glTranslated(0, current_line * -line_height, 0)
     else
-      error("Tried to render an unavailable character code " .. text:byte(i))
+      local sprite = font_map[char]
+      if sprite then
+        sprite:draw()
+        glTranslated(sprite.size[1], 0, 0)
+      else
+        error("Tried to render an unavailable character code " .. text:byte(i))
+      end
     end
   end
   glPopMatrix()
@@ -164,7 +184,7 @@ do
     assert(tex)
     assert(size)
 
-    if origin == "centered" then
+    if origin == "center" then
       origin = {size[1]/2, size[2]/2}
     end
 
@@ -330,7 +350,7 @@ function texture_from_ptr (width, height, ptr)
 
   local name = new_texture_name()
   glBindTexture(GL_TEXTURE_2D, name)
-  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
+  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
   glTexParameterf(
     GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR)
   glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP)
@@ -398,7 +418,7 @@ end
 
 function sdl_check(condition)
   if not condition then
-    error(SDL_GetError())
+    error(SDL_GetError(), 2)
     else
   end
 end

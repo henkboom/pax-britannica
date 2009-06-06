@@ -14,10 +14,11 @@ graphics = require "dokidoki.graphics"
 max_update_time = 1/30 + 0.001
 fps = 60
 update_time = 1/fps
-max_sample_frames = 30
+max_sample_frames = 16
 
--- Never sleep for less than this amount
-min_sleep_time = 0.01
+-- Never sleep for less than this amount. This has to be bigger on systems with
+-- really lame timers, like Windows.
+min_sleep_time = 0.002
 -- Allow for this much inaccuracy in SDL_Delay
 sleep_allowance = 0.002
 
@@ -54,17 +55,23 @@ function set_ratio (r)
 end
 
 function start_main_loop (scene)
-  if SDL_Init(bit_or(SDL_INIT_VIDEO, SDL_INIT_AUDIO)) ~= 0 then
-    error(SDL_GetError())
-  end
-  running = true
-  
-  SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1)
-  set_video_mode(width, height)
+  -- SDL_Quit() needs to be called even if there is an error, since otherwise
+  -- it may not return the screen to its original resolution.
+  local success, message = pcall(function ()
+    if SDL_Init(bit_or(SDL_INIT_VIDEO, SDL_INIT_AUDIO)) ~= 0 then
+      error(SDL_GetError())
+    end
+    running = true
+    
+    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1)
+    set_video_mode(width, height)
 
-  main_loop(scene)
+    main_loop(scene)
+  end)
 
   SDL_Quit()
+
+  if not success then error(message, 0) end
 end
 
 function abort_main_loop ()
@@ -91,6 +98,10 @@ function main_loop (scene)
     do
       local event = SDL_Event_new()
       while SDL_PollEvent(event) ~= 0 do
+        if event.type == SDL_VIDEORESIZE then
+          set_video_mode(event.resize.w, event.resize.h)
+        end
+
         local translated = translate_event(event)
         if translated then scene.handle_event(translated) end
 
@@ -155,8 +166,9 @@ function sleep_until (time)
     SDL_Delay(time_to_sleep * 1000)
   end
   -- Floating point inaccuracy can cause this to pass here but not in the main
-  -- loop, making us do iterations of 0 updates, which is stupid. Making this
-  -- condition slightly stricter fixes it.
+  -- loop, making us do iterations of 0 updates, which is stupid because it
+  -- will render the same thing as last time. Making this condition slightly
+  -- stricter fixes it.
   while time + 0.0001 > get_current_time() do end
 end
 

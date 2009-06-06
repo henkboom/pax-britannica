@@ -25,7 +25,7 @@ function make_sprite_scene ()
 
   local function init_graphics ()
     if not sprite then
-      sprite = graphics.sprite_from_image("rgba.png", nil, "centered")
+      sprite = graphics.sprite_from_image("rgba.png", nil, "center")
     end
     glClearColor(0.3 + math.cos(time/2) * 0.1, 0, 0.75, 0)
     glClear(GL_COLOR_BUFFER_BIT)

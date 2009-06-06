@@ -1,5 +1,5 @@
 require "dokidoki.module"
-[[ range, map, array_for_each, array_filter, copy, build_array, identity,
+[[ range, map, array_for_each, ifilter, copy, build_array, identity,
    void ]]
 
 function range(first, last, step)
@@ -25,10 +25,10 @@ function array_for_each (f, a)
   end
 end
 
-function array_filter (p, a)
+function ifilter (p, a)
   local result = {}
-  for i = 1, #a do
-    if p(a[i]) then result[#result+1] = a[i] end
+  for k, v in ipairs(a) do
+    if p(v) then result[#result+1] = v end
   end
   return result
 end

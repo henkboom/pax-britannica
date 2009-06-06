@@ -44,7 +44,7 @@ assert(all_equal(range(1, -5), {}))
 assert(all_equal(range(1, -5, -2), {1, -1, -3, -5}))
 assert(all_equal(map(square, {4, 2, 3}), {16, 4, 9}))
 assert(all_equal(map(add1, {x = 1, y = 4}), {x = 2, y = 5}))
-assert(all_equal(array_filter(identity, {1, true, false, "hello"}),
+assert(all_equal(ifilter(identity, {1, true, false, "hello"}),
                  {1, true, "hello"}))
 assert(all_equal(build_array(3, square), {1, 4, 9}))
 assert(all_equal(build_array(5, identity), {1, 2, 3, 4, 5}))

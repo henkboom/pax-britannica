@@ -1,10 +1,10 @@
 require "dokidoki.module"
 [[ make, unit,
-   add, sub, mul, div, dot, cross, mag, sqrmag, norm, eq, coords,
+   add, sub, mul, div, dot, cross, mag, sqrmag, norm, eq, coords, rotate,
    zero, i, j ]]
 
 function make (x, y)  return setmetatable({x=x, y=y}, mt) end
-function unit (angle) return v2(math.cos(angle), math.sin(angle)) end
+function unit (angle) return make(math.cos(angle), math.sin(angle)) end
 
 function add (a, b)   return make(a.x + b.x, a.y + b.y) end
 function sub (a, b)   return make(a.x - b.x, a.y - b.y) end 
@@ -18,6 +18,11 @@ function sqrmag (v)   return dot(v, v) end
 function norm (v)     return v / mag(v) end
 function eq (a, b)    return a.x == b.x and a.y == b.y end
 function coords (v)   return v.x, v.y end
+
+function rotate(v, a)
+  local sin_a, cos_a = math.sin(a), math.cos(a)
+  return make(v.x * cos_a - v.y * sin_a, v.y * cos_a + v.x * sin_a)
+end
 
 mt =
 {
