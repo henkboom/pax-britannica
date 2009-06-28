@@ -44,8 +44,8 @@ function set_video_mode (w, h)
     if nil == SDL_SetVideoMode(w, h, 0, SDL_OPENGL) then
       error(SDL_GetError())
     end
+    update_viewport()
   end
-  update_viewport()
 end
 
 function set_ratio (r)
