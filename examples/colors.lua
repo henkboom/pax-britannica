@@ -1,12 +1,7 @@
 require "dokidoki.module" [[]]
 
--- Stuff we need
-require "luagl"
-require "SDL"
--- Since all of SDL's names are prefixed already, we may as well strip the
--- namespacing.  This lets us write, for example, SDL_QUIT instead of
--- SDL.SDL_QUIT.
-import(SDL)
+require "glfw"
+import(require "gl")
 
 kernel = require "dokidoki.kernel"
 
@@ -15,8 +10,8 @@ function make_uber_scene (coefficient_of_awesomeness)
   local color = {0, 0, 0, 0}
 
   function handle_event (event)
-    if event.type == SDL_QUIT or
-       event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE then
+    if event.type == 'quit' or
+       event.type == 'key' and event.is_down and event.key == glfw.KEY_ESC then
       kernel.abort_main_loop()
     end
   end

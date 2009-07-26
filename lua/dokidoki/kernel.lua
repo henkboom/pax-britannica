@@ -2,12 +2,11 @@ require "dokidoki.module"
 [[ get_width, get_height, get_ratio, set_video_mode, set_ratio,
    start_main_loop, abort_main_loop, get_fps ]]
 
-require "luagl"
-require "SDL"
-import(SDL)
+require "glfw"
+
+import(require "gl")
 
 import(require "dokidoki.base")
-graphics = require "dokidoki.graphics"
 
 ---- Constants ----------------------------------------------------------------
 
@@ -19,7 +18,7 @@ max_sample_frames = 16
 -- Never sleep for less than this amount. This has to be bigger on systems with
 -- really lame timers, like Windows.
 min_sleep_time = 0.002
--- Allow for this much inaccuracy in SDL_Delay
+-- Allow for this much inaccuracy in the OS sleep operation
 sleep_allowance = 0.002
 
 ---- State Variables ----------------------------------------------------------
@@ -36,14 +35,13 @@ function get_height () return height end
 function get_ratio () return ratio end
 
 function set_video_mode (w, h)
+  print ('setting', w, h)
   assert(w > 0)
   assert(h > 0)
   width = w
   height = h
   if running then
-    if nil == SDL_SetVideoMode(w, h, 0, SDL_OPENGL) then
-      error(SDL_GetError())
-    end
+    glfw.SetWindowSize(w, h)
     update_viewport()
   end
 end
@@ -55,21 +53,22 @@ function set_ratio (r)
 end
 
 function start_main_loop (scene)
-  -- SDL_Quit() needs to be called even if there is an error, since otherwise
-  -- it may not return the screen to its original resolution.
+  -- glfw.Terminate() needs to be called even if there is an error, since
+  -- otherwise it may not return the screen to its original resolution.
   local success, message = pcall(function ()
-    if SDL_Init(bit_or(SDL_INIT_VIDEO, SDL_INIT_AUDIO)) ~= 0 then
-      error(SDL_GetError())
+    if glfw.Init() == GL_FALSE then
+      error("glfw initialization failed")
     end
+
     running = true
     
-    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1)
+    glfw.OpenWindow(width, height, 8, 8, 8, 8, 16, 0, glfw.WINDOW)
     set_video_mode(width, height)
 
     main_loop(scene)
   end)
 
-  SDL_Quit()
+  glfw.Terminate()
 
   if not success then error(message, 0) end
 end
@@ -90,35 +89,54 @@ end
 
 ---- Utility Functions --------------------------------------------------------
 
+function set_callback(name, callback)
+  local set = glfw['Set' .. name .. 'Callback']
+  assert(set, 'invalid callback name given')
+  local varname = '__kernel_callback_' .. name
+  
+  rawset(_G, varname, callback)
+
+  if(callback) then
+    set(varname)
+  else
+    set()
+  end
+end
+
 function main_loop (scene)
   local last_update_time = get_current_time()
 
+  -- filled in callbacks whenever glfw.SwapBuffers is called
+  local events = {}
+
+  set_callback('WindowClose', function ()
+    table.insert(events, {type = 'quit'})
+    return glfw.FALSE
+  end)
+
+  set_callback('WindowSize', function (width, height)
+    table.insert(events,
+      {type = 'resize', width = width, height = height})
+  end)
+
+  set_callback('Key', function (key, action)
+    table.insert(events,
+      {type = 'key', key = key, is_down = action == glfw.PRESS})
+  end)
+
   while true do
     ---- handle events
-    do
-      local event = SDL_Event_new()
-      while SDL_PollEvent(event) ~= 0 do
-        if event.type == SDL_VIDEORESIZE then
-          set_video_mode(event.resize.w, event.resize.h)
-        end
-
-        local translated = translate_event(event)
-        if translated then scene.handle_event(translated) end
-
-        if not running then
-          SDL_Event_delete(event)
-          return
-        end
+    for i, event in ipairs(events) do
+      if event.type == 'resize' then
+        set_video_mode(event.width, event.height)
       end
-      SDL_Event_delete(event)
+      scene.handle_event(event)
+      if not running then return end
     end
+    while #events ~= 0 do events[#events] = nil end
 
     ---- update
     do
-      -- Since we're probably going to be waiting at this point, may as well
-      -- push along the garbage collector
-      -- TODO: figure out whether or not this is actually a good idea
-      --collectgarbage("step")
       -- wait until it's time to update at least once
       sleep_until(last_update_time + update_time)
       local current_time = get_current_time()
@@ -141,29 +159,18 @@ function main_loop (scene)
     ---- draw
     scene.draw()
     if not running then return end
-    SDL_GL_SwapBuffers()
-  end
-end
-
-function translate_event (event)
-  if event.type == SDL_QUIT then
-    return {type = event.type}
-  elseif event.type == SDL_KEYDOWN or
-     event.type == SDL_KEYUP then 
-     return {type = event.type, key = event.key.keysym.sym, mod = event.key}
-  else
-    return false
+    glfw.SwapBuffers()
   end
 end
 
 function get_current_time ()
-  return SDL_GetTicks() / 1000
+  return glfw.GetTime()
 end
 
 function sleep_until (time)
   local time_to_sleep = time - get_current_time() - sleep_allowance
   if time_to_sleep > min_sleep_time then
-    SDL_Delay(time_to_sleep * 1000)
+    glfw.Sleep(time_to_sleep)
   end
   -- Floating point inaccuracy can cause this to pass here but not in the main
   -- loop, making us do iterations of 0 updates, which is stupid because it

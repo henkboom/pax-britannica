@@ -1,8 +1,7 @@
 require "dokidoki.module" [[]]
 
-require "luagl"
-require "SDL"
-import(SDL)
+require "glfw"
+import(require "gl")
 
 kernel = require "dokidoki.kernel"
 graphics = require "dokidoki.graphics"
@@ -11,8 +10,8 @@ function make_spinner_scene ()
   local rotation = 0
 
   local function handle_event (event)
-    if event.type == SDL_QUIT or
-       event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE then
+    if event.type == 'quit' or
+       event.type == 'key' and event.is_down and event.key == glfw.KEY_ESC then
       kernel.abort_main_loop()
     end
   end

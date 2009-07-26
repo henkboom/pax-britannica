@@ -1,8 +1,6 @@
 require "dokidoki.module" [[]]
 
-require "luagl"
-require "SDL"
-import(SDL)
+require "glfw"
 
 kernel = require "dokidoki.kernel"
 sound = require "dokidoki.sound"
@@ -12,13 +10,15 @@ function make_sound_scene ()
   local sfx2 = false
 
   local function handle_event (event)
-    if event.type == SDL_QUIT or
-       event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE then
+    if event.type == 'quit' or
+       event.type == 'key' and event.is_down and event.key == glfw.KEY_ESC then
       kernel.abort_main_loop()
-    elseif event.type == SDL_KEYDOWN and event.key == SDLK_1 then
+    elseif event.type == 'key' and event.is_down
+           and event.key == ("1"):byte() then
       if not sfx then sfx = sound.sound_effect_from_file("brouing.wav") end
       sfx:play()
-    elseif event.type == SDL_KEYDOWN and event.key == SDLK_2 then
+    elseif event.type == 'key' and event.is_down
+           and event.key == ("2"):byte() then
       if not sfx2 then sfx2 = sound.sound_effect_from_file("blip.wav") end
       sfx2:play()
     end

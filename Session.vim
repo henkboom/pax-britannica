@@ -5,6 +5,7 @@ badd examples/font.lua
 badd examples/sound.lua
 badd examples/spinner.lua
 badd examples/sprite.lua
+badd examples/texture.lua
 badd lua/dokidoki/base.lua
 badd lua/dokidoki/module.lua
 badd lua/dokidoki/graphics.lua
