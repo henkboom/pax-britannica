@@ -35,7 +35,6 @@ function get_height () return height end
 function get_ratio () return ratio end
 
 function set_video_mode (w, h)
-  print ('setting', w, h)
   assert(w > 0)
   assert(h > 0)
   width = w
@@ -52,22 +51,30 @@ function set_ratio (r)
   if running then update_viewport() end
 end
 
+function get_stack_trace(err)
+  return debug.traceback(err, 2)
+end
+
 function start_main_loop (scene)
   -- glfw.Terminate() needs to be called even if there is an error, since
   -- otherwise it may not return the screen to its original resolution.
-  local success, message = pcall(function ()
+  local success, message = xpcall(function ()
+    log "initializing glfw. . ."
     if glfw.Init() == GL_FALSE then
       error("glfw initialization failed")
     end
 
     running = true
     
-    glfw.OpenWindow(width, height, 8, 8, 8, 8, 16, 0, glfw.WINDOW)
+    log "setting video mode. . ."
+    glfw.OpenWindow(width, height, 8, 8, 8, 8, 24, 0, glfw.WINDOW)
     set_video_mode(width, height)
 
+    log "starting main loop"
     main_loop(scene)
-  end)
+  end, get_stack_trace)
 
+  log "shutting down"
   glfw.Terminate()
 
   if not success then error(message, 0) end
@@ -199,7 +206,11 @@ function log_frame_time(time)
 end
 
 function warn(str, ...)
-  print(string.format("warning: " .. str, ...))
+  io.stderr:write(string.format("warning: " .. str .. "\n", ...))
+end
+
+function log(str, ...)
+  io.stderr:write(string.format(str .. "\n", ...))
 end
 
 return get_module_exports()
