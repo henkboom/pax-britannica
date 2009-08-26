@@ -378,6 +378,7 @@ static int alien_makefunction(lua_State *L, void *lib, void *fn, char *name) {
     af->nparams = 0;
     af->ret_type = AT_VOID;
     af->params = NULL;
+    af->ffi_params = NULL;
   } else luaL_error(L, "out of memory!");
   return 1;
 }
