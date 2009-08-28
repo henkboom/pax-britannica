@@ -21,11 +21,12 @@ linux:
 		PLATFORM_LDFLAGS="-pthread -lpthread -lGL -lX11 -lXrandr -lm -lasound" \
 		PLATFORM_ALIEN_OPTIONS="CFLAGS=\"-I$(LUA_DIR_FROM_ALIEN_DIR)/src -DLINUX\""
 
-mingw:
-	make $(TARGET) PLATFORM=mingw \
-		PLATFORM_CFLAGS="" \
-		PLATFORM_LDFLAGS="" \
-		PLATFORM_ALIEN_OPTIONS="CFLAGS=\"-I$(LUA_DIR_FROM_ALIEN_DIR)/src -Ilibffi/win32 -DWINDOWS\""
+# doesn't work yet
+#mingw:
+#	make $(TARGET) PLATFORM=mingw \
+#		PLATFORM_CFLAGS="" \
+#		PLATFORM_LDFLAGS="" \
+#		PLATFORM_ALIEN_OPTIONS="CFLAGS=\"-I$(LUA_DIR_FROM_ALIEN_DIR)/src -Ilibffi/win32 -DWINDOWS\""
 
 #### Actual Building
 

@@ -1,18 +1,21 @@
 #include <assert.h>
-#include <math.h>
 #include <stdio.h>
-#include <stdlib.h>
+#include <malloc.h>
 #include <string.h>
 #include <portaudio.h>
 
 //// Types, Constants, Globals ////////////////////////////////////////////////
 
 typedef short sample_t;
+typedef int calc_t;
+#define SAMPLE_MIN (-0x8000)
+#define SAMPLE_MAX 0x7FFF
 #define PORTAUDIO_SAMPLE_TYPE paInt16
 
 #define SAMPLE_RATE 44100
 #define SAMPLE_TIME (1.0/SAMPLE_RATE)
 #define CHANNELS 32
+#define BUFFER_SIZE 256
 
 typedef struct
 {
@@ -43,6 +46,8 @@ typedef struct
 } channel_t;
 
 static const char * error_string = NULL;
+
+static int calc_buffer[BUFFER_SIZE * 2];
 
 #define CHECK(condition, message) \
     { if(!(condition)) { if(message) error_string = message; return 0; } }
@@ -96,7 +101,7 @@ static void channel_stop(int channel)
     channels[channel].data = NULL;
 }
 
-static void channel_mix_into(int channel, sample_t * output,
+static void channel_mix_into(int channel, calc_t * output,
                              size_t frame_count)
 {
     assert(channel_is_valid(channel));
@@ -151,12 +156,23 @@ static void channel_mix_into(int channel, sample_t * output,
 
 static void mix_into(sample_t * output, size_t frame_count)
 {
-    memset(output, 0, frame_count * 2 * sizeof(sample_t));
+    memset(calc_buffer, 0, frame_count * 2 * sizeof(calc_t));
 
     int c;
     for(c = 0; c != CHANNELS; c++)
         if(channel_is_active(c))
-            channel_mix_into(c, output, frame_count);
+            channel_mix_into(c, calc_buffer, frame_count);
+
+    int i;
+    for(i = 0; i != BUFFER_SIZE * 2; i++)
+    {
+        if(calc_buffer[i] <= SAMPLE_MIN)
+            output[i] = SAMPLE_MIN;
+        else if(calc_buffer[i] <= SAMPLE_MAX)
+            output[i] = calc_buffer[i];
+        else
+            output[i] = SAMPLE_MAX;
+    }
 }
 
 static int play_sound_effect(const sound_data_t * data, float left,
@@ -332,7 +348,7 @@ static int init()
 
     PaError err;
     err = Pa_OpenDefaultStream(&stream, 0, 2, PORTAUDIO_SAMPLE_TYPE,
-                               SAMPLE_RATE, 256, callback, NULL);
+                               SAMPLE_RATE, BUFFER_SIZE, callback, NULL);
     if(err != paNoError)
     {
         Pa_Terminate();
