@@ -4,6 +4,8 @@ require "dokidoki.module"
 
 require "glfw"
 
+local mixer = require "mixer"
+
 import(require "gl")
 
 import(require "dokidoki.base")
@@ -59,6 +61,8 @@ function start_main_loop (scene)
   -- glfw.Terminate() needs to be called even if there is an error, since
   -- otherwise it may not return the screen to its original resolution.
   local success, message = xpcall(function ()
+    log "initializing mixer. . ."
+    mixer.init()
     log "initializing glfw. . ."
     if glfw.Init() == GL_FALSE then
       error("glfw initialization failed")
@@ -165,6 +169,10 @@ function main_loop (scene)
 
     ---- draw
     scene.draw()
+
+    local err = glGetError()
+    if err ~= 0 then error('OpenGL error ' .. err) end
+
     if not running then return end
     glfw.SwapBuffers()
   end

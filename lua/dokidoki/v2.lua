@@ -1,18 +1,21 @@
 require "dokidoki.module"
 [[ make, unit,
-   add, sub, mul, div, dot, cross, mag, sqrmag, norm, eq, coords, rotate,
+   add, sub, mul, div, dot, cross, project,
+   mag, sqrmag, norm, eq, coords, rotate, rotate90,
    zero, i, j ]]
 
 function make (x, y)  return setmetatable({x=x, y=y}, mt) end
 function unit (angle) return make(math.cos(angle), math.sin(angle)) end
 
-function add (a, b)   return make(a.x + b.x, a.y + b.y) end
-function sub (a, b)   return make(a.x - b.x, a.y - b.y) end 
-function neg (v)      return make(-v.x, -v.y) end
-function mul (v, s)   return make(s * v.x, s * v.y) end
-function div (v, s)   return make(v.x / s, v.y / s) end
-function dot (a, b)   return a.x * b.x + a.y * b.y end
-function cross (a, b) return a.x * b.y - a.y * b.x end
+function add (a, b)    return make(a.x + b.x, a.y + b.y) end
+function sub (a, b)    return make(a.x - b.x, a.y - b.y) end 
+function neg (v)       return make(-v.x, -v.y) end
+function mul (v, s)    return make(s * v.x, s * v.y) end
+function div (v, s)    return make(v.x / s, v.y / s) end
+function dot (a, b)    return a.x * b.x + a.y * b.y end
+function cross (a, b)  return a.x * b.y - a.y * b.x end
+function project(a, b) return b * (dot(a, b) / sqrmag(b)) end
+
 function mag (v)      return math.sqrt(v.x * v.x + v.y * v.y) end
 function sqrmag (v)   return dot(v, v) end
 function norm (v)     return v / mag(v) end
@@ -24,11 +27,17 @@ function rotate(v, a)
   return make(v.x * cos_a - v.y * sin_a, v.y * cos_a + v.x * sin_a)
 end
 
+function rotate90(v)
+  return make(-v.y, v.x)
+end
+
 mt =
 {
   __add = add,
   __sub = sub,
-  __mul = mul,
+  __mul = function (a, b)
+    return type(a) == 'number' and mul(b, a) or mul(a, b)
+  end,
   __div = div,
   __unm = neg,
   __eq = eq,

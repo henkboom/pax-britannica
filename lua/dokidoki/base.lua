@@ -1,6 +1,6 @@
 require "dokidoki.module"
-[[ range, map, array_for_each, ifilter, copy, build_array, identity,
-   void ]]
+[[ range, map, imap, foldl, iforeach, ifilter, copy, build_array, identity,
+   void, compose ]]
 
 function range(first, last, step)
   step = step or 1
@@ -19,7 +19,22 @@ function map (f, t)
   return result
 end
 
-function array_for_each (f, a)
+function imap (f, a)
+  local result = {}
+  for i, v in ipairs(a) do
+    result[i] = f(v)
+  end
+  return result
+end
+
+function foldl(f, init, a)
+  for _, v in ipairs(a) do
+    init = f(init, v)
+  end
+  return init
+end
+
+function iforeach (f, a)
   for i = 1, #a do
     f(a[i])
   end
@@ -54,6 +69,17 @@ function identity (...)
 end
 
 function void ()
+end
+
+function compose(f, ...)
+  if select('#', ...) == 0 then 
+    return f
+  else
+    local rest = compose(...)
+    return function (...)
+      return f(rest(...))
+    end
+  end
 end
 
 return get_module_exports()

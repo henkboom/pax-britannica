@@ -3,7 +3,7 @@ require "dokidoki.module" [[]]
 require "glfw"
 
 kernel = require "dokidoki.kernel"
-sound = require "dokidoki.sound"
+mixer = require 'mixer'
 
 function make_sound_scene ()
   local sfx = false
@@ -15,11 +15,11 @@ function make_sound_scene ()
       kernel.abort_main_loop()
     elseif event.type == 'key' and event.is_down
            and event.key == ("1"):byte() then
-      if not sfx then sfx = sound.sound_effect_from_file("brouing.wav") end
+      if not sfx then sfx = mixer.load_wav("brouing.wav") end
       sfx:play()
     elseif event.type == 'key' and event.is_down
            and event.key == ("2"):byte() then
-      if not sfx2 then sfx2 = sound.sound_effect_from_file("blip.wav") end
+      if not sfx2 then sfx2 = mixer.load_wav("blip.wav") end
       sfx2:play()
     end
   end
