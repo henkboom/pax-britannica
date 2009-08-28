@@ -43,6 +43,7 @@ $(LUA_DIR)/src/liblua.a: $(LUA_DIR)/Makefile
 	make -C $(LUA_DIR) $(PLATFORM)
 
 clean:
+	make -C $(LUA_DIR) clean
 	make -C $(ALIEN_DIR) clean
 	make -C $(ALIEN_DIR)/libffi clean
 	rm -f *.o $(NAME) alien.c
