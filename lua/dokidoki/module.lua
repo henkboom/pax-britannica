@@ -1,15 +1,3 @@
-require "dokidoki.private.strict"
-
-local function match_start (str, pat, i)
-  i = i or 1
-  local result = {string.match(str, "()" .. pat, i)}
-  if result[1] == i then
-    return unpack(result, 2)
-  else
-    return
-  end
-end
-
 local function parse_exports (export_defs)
   local exports = {}
   local i = 1
@@ -20,11 +8,11 @@ local function parse_exports (export_defs)
     local external_name, internal_name
     local i2
     -- parse external name
-    external_name, i2 = match_start(export_defs, "%s*([%a_][%w_]*)()", i)
+    external_name, i2 = string.match(export_defs, "^%s*([%a_][%w_]*)()", i)
     if i2 ~= nil then i = i2 else break end
 
     -- parse internal name
-    internal_name, i2 = match_start(export_defs, "%s*=%s*([%a_][%w_]*)()", i)
+    internal_name, i2 = string.match(export_defs, "^%s*=%s*([%a_][%w_]*)()", i)
     if i2 ~= nil then i = i2 end
 
     -- assign it
@@ -33,18 +21,54 @@ local function parse_exports (export_defs)
     exports[external_name] = internal_name or external_name
 
     -- parse comma
-    i2 = match_start(export_defs, "%s*,()", i)
+    i2 = string.match(export_defs, "^%s*,()", i)
     if i2 ~= nil then i = i2 else break end
   end
-  i = match_start(export_defs, "%s*()", i)
+  i = string.match(export_defs, "^%s*()", i)
   assert(i == string.len(export_defs) + 1,
          "invalid exports starting at " .. i)
   
   return exports
 end
 
+-- modified from strict.lua
+local function make_private_table ()
+  local getinfo, error, rawset, rawget = debug.getinfo, error, rawset, rawget
+
+  local mt = {}
+  
+  mt.__declared = {}
+  
+  local function what ()
+    local d = getinfo(3, "S")
+    return d and d.what or "C"
+  end
+  
+  mt.__newindex = function (t, n, v)
+    if not mt.__declared[n] then
+      local w = what()
+      if w ~= "main" and w ~= "C" then
+        error("assign to undeclared variable '"..n.."'", 2)
+      end
+      mt.__declared[n] = true
+    end
+    rawset(t, n, v)
+  end
+    
+  mt.__index = function (t, n)
+    if _G[n] then
+      return _G[n]
+    elseif not mt.__declared[n] and what() ~= "C" then
+      error("variable '"..n.."' is not declared", 2)
+    else
+      return rawget(t, n)
+    end
+  end
+
+  return setmetatable({}, mt)
+end
+
 return function (export_defs)
-  -- TODO: fix declaring variables by assigning nil to them.
   local private
   local exports = parse_exports(export_defs)
 
@@ -60,13 +84,14 @@ return function (export_defs)
     for k, v in pairs(t) do
       assert(rawget(private, k) == nil and rawget(_G, k) == nil,
              "import collision for variable " .. k)
-      private[k] = v
+      rawset(private, k, v)
     end
   end
 
-  private = {get_module_exports = get_module_exports, import = import}
-  local private_mt = {__index = _G}
+  private = make_private_table()
+  rawset(private, "_P", private)
+  rawset(private, "get_module_exports", get_module_exports)
+  rawset(private, "import", import)
 
-  setmetatable(private, private_mt)
   setfenv(2, private)
 end

@@ -197,11 +197,11 @@ end
 function update_viewport ()
   if width / height > ratio then
     -- pillarbox
-    inner_width = math.floor(height * ratio + 0.5)
+    local inner_width = math.floor(height * ratio + 0.5)
     glViewport(math.floor((width - inner_width) / 2), 0, inner_width, height)
   else
     -- letterbox
-    inner_height = math.floor(width / ratio + 0.5)
+    local inner_height = math.floor(width / ratio + 0.5)
     glViewport(0, math.floor((height - inner_height) / 2), width, inner_height)
   end
 end
