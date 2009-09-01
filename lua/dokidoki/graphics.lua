@@ -8,6 +8,7 @@ local stb_image = require "stb_image"
 
 import(require "gl")
 import(require "glu")
+require 'memarray'
 
 local will = require "dokidoki.private.will"
 
@@ -97,11 +98,11 @@ local will = require "dokidoki.private.will"
 --
 --  return sprites;
 --end
---
---function font_map_line_height (font_map)
---  local _, some_glyph = next(font_map)
---  return some_glyph.size[2]
---end
+
+function font_map_line_height (font_map)
+  local _, some_glyph = next(font_map)
+  return some_glyph.size[2]
+end
 
 function draw_text(font_map, text)
   local line_height = font_map_line_height (font_map)
@@ -377,15 +378,15 @@ end
 ---- Utilities ----------------------------------------------------------------
 
 function new_texture_name ()
-  local namebuffer = alien.array("int", 1)
-  glGenTextures(1, namebuffer.buffer)
-  return namebuffer[1]
+  local namebuffer = memarray('GLint', 1)
+  glGenTextures(1, namebuffer:ptr())
+  return namebuffer[0]
 end
 
 function delete_texture_name (name)
-  local namebuffer = alien.array("int", 1)
-  namebuffer[1] = name
-  glDeleteTextures(1, namebuffer.buffer)
+  local namebuffer = memarray("GLint", 1)
+  namebuffer[0] = name
+  glDeleteTextures(1, namebuffer:ptr())
 end
 
 function is_power_of_two (x)
