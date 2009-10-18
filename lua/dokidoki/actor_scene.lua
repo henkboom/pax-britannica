@@ -14,7 +14,8 @@ import(require "dokidoki.base")
 function make_actor_scene (update_methods, draw_methods, init)
   local actor_interface
 
-  local actors = {}
+  local actors_by_tag = {}
+  local actors_by_method
 
   local paused = false
 
@@ -26,7 +27,13 @@ function make_actor_scene (update_methods, draw_methods, init)
   -- actors have access to these functions
 
   local function add_actor (actor)
-    actors[#actors + 1] = actor
+    for method, t in pairs(actors_by_method) do
+      if actor[method] then t[#t+1] = actor end
+    end
+    for _, tag in ipairs(actor.tags or {}) do
+      actors_by_tag[tag] = actors_by_tag[tag] or {}
+      table.insert(actors_by_tag[tag], actor)
+    end
   end
 
   local function is_key_down (key)
@@ -47,18 +54,7 @@ function make_actor_scene (update_methods, draw_methods, init)
   end
 
   local function get_actors_by_tag (tag)
-    local results = {}
-    for _, actor in ipairs(actors) do
-      if actor.tags then
-        for i, t in ipairs(actor.tags) do
-          if t == tag then
-            table.insert(results, actor)
-            break
-          end
-        end
-      end
-    end
-    return results
+    return actors_by_tag[tag] or {}
   end
 
   actor_interface =
@@ -97,13 +93,20 @@ function make_actor_scene (update_methods, draw_methods, init)
     if not paused then
       -- update all actors
       for _, update_type in ipairs(update_methods) do
-        for _, a in ipairs(actors) do
-          if not a.is_dead and a[update_type] then a[update_type]() end
+        for _, a in ipairs(actors_by_method[update_type]) do
+          if not a.is_dead then a[update_type]() end
         end
       end
 
-      actors = ifilter(function (a) return not a.is_dead end, actors)
-      
+      for k, _ in pairs(actors_by_method) do
+        actors_by_method[k] =
+          ifilter(function (a) return not a.is_dead end, actors_by_method[k])
+      end
+      for k, _ in pairs(actors_by_tag) do
+        actors_by_tag[k] =
+          ifilter(function (a) return not a.is_dead end, actors_by_tag[k])
+      end
+        
       old_key_states = key_states
       key_states = copy(old_key_states)
     end
@@ -113,25 +116,27 @@ function make_actor_scene (update_methods, draw_methods, init)
 
   local function draw ()
     for _, draw_type in ipairs(draw_methods) do
-      for _, a in ipairs(actors) do
+      for _, a in ipairs(actors_by_method[draw_type]) do
         assert(not a.is_dead)
-        if a[draw_type] then
-          local do_transform = a.pos
-          if do_transform then
-            glPushMatrix()
-            glTranslated(a.pos.x, a.pos.y, 0)
-          end
-          a[draw_type]()
-          if do_transform then
-            glPopMatrix()
-          end
+        local do_transform = a.pos
+        if do_transform then
+          glPushMatrix()
+          glTranslated(a.pos.x, a.pos.y, 0)
+        end
+        a[draw_type]()
+        if do_transform then
+          glPopMatrix()
         end
       end
     end
   end
 
-  ---- Scene Construction -----------------------------------------------------
+  ---- Init -------------------------------------------------------------------
 
+  actors_by_method = {}
+  for _, method in ipairs(iconcat(update_methods, draw_methods)) do
+    actors_by_method[method] = {}
+  end
   -- scene interface for main loop
   return { handle_event = handle_event, update = update, draw = draw }
 end
