@@ -49,8 +49,13 @@ function make_actor_scene (update_methods, draw_methods, init)
   local function get_actors_by_tag (tag)
     local results = {}
     for _, actor in ipairs(actors) do
-      if actor.tags and actor.tags[1] == tag then
-        table.insert(results, actor)
+      if actor.tags then
+        for i, t in ipairs(actor.tags) do
+          if t == tag then
+            table.insert(results, actor)
+            break
+          end
+        end
       end
     end
     return results

@@ -68,6 +68,12 @@ local function make_private_table ()
   return setmetatable({}, mt)
 end
 
+if dokidoki_disable_debug then
+  function make_private_table ()
+    return setmetatable({}, {__index = _G})
+  end
+end
+
 return function (export_defs)
   local private
   local exports = parse_exports(export_defs)
@@ -81,6 +87,7 @@ return function (export_defs)
   end
 
   local function import (t)
+    if type(t) == 'string' then t = require(t) end
     for k, v in pairs(t) do
       assert(rawget(private, k) == nil and rawget(_G, k) == nil,
              "import collision for variable " .. k)

@@ -1,12 +1,21 @@
 require "dokidoki.module"
-[[ range, map, imap, foldl, iforeach, ifilter, copy, build_array, identity,
-   void, compose ]]
+[[ range, reverse, map, imap, foldl, iforeach, irandomize, iconcat, ifilter, copy, build_array,
+   identity, void, compose ]]
 
 function range(first, last, step)
   step = step or 1
   local result = {}
   for i = first, last, step do
     result[#result+1] = i
+  end
+  return result
+end
+
+function reverse(a)
+  local result = {}
+  local len = #a
+  for i = 1, len do
+    result[i] = a[len - i + 1]
   end
   return result
 end
@@ -38,6 +47,26 @@ function iforeach (f, a)
   for i = 1, #a do
     f(a[i])
   end
+end
+
+function irandomize(a)
+  local result = copy(a)
+  for i = 1, #result-1 do
+    local j = math.random(i, #result)
+    local tmp = result[i]
+    result[i] = result[j]
+    result[j] = tmp
+  end
+  return result
+end
+
+function iconcat(a1, a2)
+  local result = copy(a1)
+  local len = #a1
+  for i, v in ipairs(a2) do
+    result[len + i] = v
+  end
+  return result
 end
 
 function ifilter (p, a)
