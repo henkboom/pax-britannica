@@ -1,5 +1,5 @@
 require "dokidoki.module"
-[[ range, reverse, map, imap, foldl, iforeach, irandomize, iconcat, ifilter, copy, build_array,
+[[ range, ireverse, map, imap, ifoldl, iforeach, irandomize, iconcat, ifilter, copy, build_array,
    identity, void, compose ]]
 
 function range(first, last, step)
@@ -11,7 +11,7 @@ function range(first, last, step)
   return result
 end
 
-function reverse(a)
+function ireverse(a)
   local result = {}
   local len = #a
   for i = 1, len do
@@ -36,7 +36,7 @@ function imap (f, a)
   return result
 end
 
-function foldl(f, init, a)
+function ifoldl(f, init, a)
   for _, v in ipairs(a) do
     init = f(init, v)
   end
