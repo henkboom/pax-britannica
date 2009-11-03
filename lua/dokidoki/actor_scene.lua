@@ -16,6 +16,7 @@ function make_actor_scene (update_methods, draw_methods, init)
 
   local actors_by_tag = {}
   local actors_by_method
+  local actor_timings = {}
 
   local paused = false
 
@@ -34,6 +35,7 @@ function make_actor_scene (update_methods, draw_methods, init)
       actors_by_tag[tag] = actors_by_tag[tag] or {}
       table.insert(actors_by_tag[tag], actor)
     end
+    actor_timings[actor] = 0
   end
 
   local function is_key_down (key)
@@ -57,6 +59,10 @@ function make_actor_scene (update_methods, draw_methods, init)
     return actors_by_tag[tag] or {}
   end
 
+  local function get_actor_timing_information ()
+    return actor_timings
+  end
+
   actor_interface =
   {
     add_actor = add_actor,
@@ -73,6 +79,9 @@ function make_actor_scene (update_methods, draw_methods, init)
     if event.type == 'quit' or
        event.type == 'key' and event.is_down and event.key == glfw.KEY_ESC then
       kernel.abort_main_loop()
+      for k, v in pairs(actor_timings) do
+        print(v, k, k.pos)
+      end
     -- Other key events
     elseif event.type == 'key' and event.is_down and
            event.key == ('P'):byte() then
@@ -94,7 +103,9 @@ function make_actor_scene (update_methods, draw_methods, init)
       -- update all actors
       for _, update_type in ipairs(update_methods) do
         for _, a in ipairs(actors_by_method[update_type]) do
+          local time = glfw.GetTime()
           if not a.is_dead then a[update_type]() end
+          actor_timings[a] = actor_timings[a] + glfw.GetTime() - time
         end
       end
 
@@ -105,6 +116,9 @@ function make_actor_scene (update_methods, draw_methods, init)
       for k, _ in pairs(actors_by_tag) do
         actors_by_tag[k] =
           ifilter(function (a) return not a.is_dead end, actors_by_tag[k])
+      end
+      for k, _ in pairs(actor_timings) do 
+        if k.is_dead then actor_timings[k] = nil end
       end
         
       old_key_states = key_states
