@@ -207,12 +207,11 @@ function sprite_from_image_string (image_string, width, height, channels, size,
                                    origin)
   -- Creates a sprite object from the given surface.
   --
-  -- When delete_surface is true, the surface is deleted after the sprite is
-  -- created. The size is the rendered size of the sprite, given as {x, y}. Its
-  -- default value is the pixel size of the surface. origin specifies the point
-  -- on the sprite which should be rendered at the origin when the sprite is
-  -- drawn, and it's in the same units as the size. origin can either be {x, y}
-  -- or "center", which sets it to half the size. origin's default value is
+  -- The size is the rendered size of the sprite, given as {x, y}. Its default
+  -- value is the pixel size of the surface. origin specifies the point on the
+  -- sprite which should be rendered at the origin when the sprite is drawn,
+  -- and it's in the same units as the size. origin can either be {x, y} or
+  -- "center", which sets it to half the size. origin's default value is
   -- {0, 0}.
 
   local tex, tex_w, tex_h =
