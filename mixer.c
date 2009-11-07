@@ -196,7 +196,6 @@ static int play_sound_effect(const sound_data_t * data, float left,
         // to jump on it
         channels[c].data = data;
 
-        printf("%i\n", c);
         return c;
     }
 }

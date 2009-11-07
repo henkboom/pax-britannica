@@ -1,5 +1,4 @@
 require "dokidoki.module" [[]]
-
 require "glfw"
 import(require "gl")
 
