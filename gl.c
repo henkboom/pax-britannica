@@ -1,8 +1,14 @@
 #include "lua.h"
 #include "lualib.h"
 #include "lauxlib.h"
+
+#ifdef __APPLE__
+#include "OpenGL/gl.h"
+#include "OpenGL/glu.h"
+#else
 #include "GL/gl.h"
 #include "GL/glu.h"
+#endif
 
 static void * checkpointer(lua_State *L, int num)
 {
