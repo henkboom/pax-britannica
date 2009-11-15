@@ -2,6 +2,7 @@ require "dokidoki.module"
 [[ make, unit,
    add, sub, neg, mul, div, dot, cross, project,
    mag, sqrmag, norm, eq, coords, rotate, rotate90, rotate_to, rotate_from,
+   random,
    zero, i, j ]]
 
 function make (x, y)  return setmetatable({x=x, y=y}, mt) end
@@ -38,6 +39,10 @@ end
 
 function rotate_from(v, i)
   return make(i.x * v.x + i.y * v.y, - i.y * v.x + i.x * v.y)
+end
+
+function random()
+  return unit(math.random() * math.pi * 2) * math.sqrt(math.random())
 end
 
 mt =
