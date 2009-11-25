@@ -21,6 +21,11 @@ function make_sound_scene ()
            and event.key == ("2"):byte() then
       if not sfx2 then sfx2 = mixer.load_wav("blip.wav") end
       sfx2:play()
+    elseif event.type == 'key' and event.is_down
+           and event.key == ("3"):byte() then
+      if not sfx then sfx = mixer.load_wav("brouing.wav") end
+      local channel = sfx:play(1, 0)
+      mixer.channel_fade_to(channel, 0.5, 0, 1)
     end
   end
 
