@@ -204,14 +204,15 @@ static void channel_fade_to(int channel, float duration, float left,
                             float right)
 {
     assert(channel_is_valid(channel));
-    assert(channel_is_active(channel));
+    if(channel_is_active(channel))
+    {
+        while(channels[channel].new_fade_duration >= 0)
+            /* wait for previous fade to be acknowledged */;
 
-    while(channels[channel].new_fade_duration >= 0)
-        /* wait for previous fade to be acknowledged */;
-
-    channels[channel].new_fade.volume[0] = left;
-    channels[channel].new_fade.volume[1] = right;
-    channels[channel].new_fade_duration = (int)(duration * SAMPLE_RATE);
+        channels[channel].new_fade.volume[0] = left;
+        channels[channel].new_fade.volume[1] = right;
+        channels[channel].new_fade_duration = (int)(duration * SAMPLE_RATE);
+    }
 }
 
 //// WAV Loading //////////////////////////////////////////////////////////////
@@ -434,9 +435,19 @@ static int mixer__load_wav(lua_State *L)
     return 0;
 }
 
-static int mixer__fade_to(lua_State *L)
+static int mixer__channel_fade_to(lua_State *L)
 {
     check_initted(L);
+    int channel = luaL_checkint(L, 1);
+    float duration = luaL_checknumber(L, 2);
+    float left = luaL_checknumber(L, 3);
+    float right = luaL_optnumber(L, 4, left);
+
+    luaL_argcheck(L, channel_is_valid(channel), 1, "invalid channel given");
+    luaL_argcheck(L, duration >= 0, 1, "invalid duration given");
+
+    channel_fade_to(channel, duration, left, right);
+
     return 0;
 }
 
@@ -472,7 +483,7 @@ static const luaL_Reg mixer_lib[] =
     {"init", mixer__init},
     {"uninit", mixer__uninit},
     {"load_wav", mixer__load_wav},
-    {"fade_to", mixer__fade_to},
+    {"channel_fade_to", mixer__channel_fade_to},
     {NULL, NULL}
 };
 
