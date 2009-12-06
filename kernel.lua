@@ -62,7 +62,7 @@ function start_main_loop (scene)
   -- otherwise it may not return the screen to its original resolution.
   local success, message = xpcall(function ()
     log "initializing mixer. . ."
-    mixer.init()
+    assert(mixer.init())
     log "initializing glfw. . ."
     if glfw.Init() == GL_FALSE then
       error("glfw initialization failed")
