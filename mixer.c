@@ -14,7 +14,7 @@ typedef int calc_t;
 
 #define SAMPLE_RATE 44100
 #define SAMPLE_TIME (1.0/SAMPLE_RATE)
-#define CHANNELS 32
+#define CHANNELS 64
 #define BUFFER_SIZE 256
 
 typedef struct
