@@ -147,8 +147,6 @@ do
   local index =
   {
     draw = function (self)
-      glPushMatrix()
-      
       local t = self.tex_rect
       local o = self.origin
       local s = self.size
@@ -168,7 +166,6 @@ do
         glVertex2d(-o[1], -o[2] + s[2])
       glEnd()
       self.tex:disable()
-      glPopMatrix()
     end
   }
 
