@@ -43,6 +43,53 @@ function make_game (update_methods, draw_methods, init)
   for _, method in ipairs(update_methods) do scripts_by_method[method] = {} end
   for _, method in ipairs(draw_methods) do scripts_by_method[method] = {} end
 
+
+  -- delayed_require(name)
+  -- Works like the regular require except that it returns a function
+  -- representing the body of the module instead of running it. Also, if the
+  -- module is not found, instead of signalling an error, nil and an error
+  -- message are returned. Bypasses the global packages.loaded table for
+  -- obvious reasons.
+  local function delayed_require(name)
+    local errors = {}
+    for _, loader in ipairs(package.loaders) do
+      local module = loader(name)
+      if type(module) == 'function' then
+        return module
+      else
+        table.insert(errors, module)
+      end
+    end
+    return nil, table.concat(errors)
+  end
+
+  local loaded_scripts = {}
+  local script_prefixes = {'dokidoki.scripts.', 'scripts.'}
+
+  -- load_script(name)
+  -- Loads a script by name.
+  local function load_script(name)
+    local errors = {}
+
+    if not loaded_scripts[name] then
+      for _, prefix in ipairs(script_prefixes) do
+        local script, err = delayed_require(prefix .. name)
+        if script then
+          loaded_scripts[name] = make_script(name, script)
+        else
+          table.insert(errors, err)
+        end
+      end
+    end
+
+    if not loaded_scripts[name] then
+      error('couldn\'t find requested script "' .. name .. '"' ..
+            table.concat(errors))
+    end
+
+    return loaded_scripts[name]
+  end
+
   --- ### `game.actors.new(blueprint, {script, key=value...}...)`
   --- Instantiates a blueprint and adds the actor to the scene. Optionally,
   --- initialization arguments can be given to any script in the blueprint.
@@ -56,12 +103,16 @@ function make_game (update_methods, draw_methods, init)
 
     local actor = {
       blueprint = blueprint,
+      tags = {},
       dead = false,
       paused = false,
       hidden = false
     }
 
     for _, script_spec in ipairs(blueprint) do
+      if type(script_spec[1]) == 'string' then
+        script_spec[1] = load_script(script_spec[1])
+      end
       local script_name = script_spec[1].name
       local script_init = script_spec[1].init
 
