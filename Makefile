@@ -2,12 +2,10 @@ NAME=dokidoki-support
 
 #### General Settings
 
-LUA_INCLUDE_PATH=/usr/include/lua5.1
-
 TARGET=$(NAME)
-CFLAGS=-Wall -O2 -I$(LUA_INCLUDE_PATH) -DMEMARRAY_USE_OPENGL \
+CFLAGS=-Wall -O2 -DMEMARRAY_USE_OPENGL \
 	   $(PLATFORM_CFLAGS) $(EXTRA_CFLAGS)
-LDFLAGS= $(STATIC_LINK) -llua5.1 -lportaudio -lglfw \
+LDFLAGS= $(STATIC_LINK) -llua -lportaudio -lglfw \
 		 $(DYNAMIC_LINK) $(PLATFORM_LDFLAGS) $(EXTRA_LDFLAGS)
 
 #### Platform Settings
@@ -24,7 +22,7 @@ macosx:
 		STATIC_LINK="" \
 		DYNAMIC_LINK="" \
 		PLATFORM_CFLAGS="" \
-		PLATFORM_LDFLAGS="-Wl,-reexport_library,$(LUA_DIR)/src/liblua.a -framework AGL -framework OpenGL -framework Carbon"
+		PLATFORM_LDFLAGS="-Wl,-reexport-llua -framework AGL -framework OpenGL -framework Carbon"
 
 mingw:
 	make $(TARGET) PLATFORM=mingw \
