@@ -46,15 +46,6 @@ function make_actor_scene (update_methods, draw_methods, init)
     return key_states[key] and not old_key_states[key]
   end
 
-  local function get_player_controls ()
-    return
-    {
-      direction = wasd_to_direction(
-        is_key_down(glfw.KEY_UP), is_key_down(glfw.KEY_LEFT),
-        is_key_down(glfw.KEY_DOWN), is_key_down(glfw.KEY_RIGHT))
-    }
-  end
-
   local function get_actors_by_tag (tag)
     return actors_by_tag[tag] or {}
   end
@@ -68,7 +59,6 @@ function make_actor_scene (update_methods, draw_methods, init)
     add_actor = add_actor,
     is_key_down = is_key_down,
     was_key_pressed = was_key_pressed,
-    get_player_controls = get_player_controls,
     get_actors_by_tag = get_actors_by_tag,
   }
 
