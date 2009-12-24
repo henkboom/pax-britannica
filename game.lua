@@ -166,7 +166,7 @@ function make_game (update_methods, draw_methods, init)
           script[k] = v
         end
       }))
-      script_init()
+      script_init(script_name)
       setfenv(script_init, env)
 
       -- index the script by its methods
