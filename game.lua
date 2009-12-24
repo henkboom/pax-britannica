@@ -225,6 +225,16 @@ function make_game (update_methods, draw_methods, init)
     end
   end
 
+  --- ### `game.actors.new_generic(name, init)`
+  --- Adds a simple one-script actor, with the script initializer given by
+  --- `init`. This is a shortcut for creating a new blueprint with one script
+  --- and then instantiating it. The generated actor will have `name` as its
+  --- name, and a single script named `generic`.
+  function game.actors.new_generic(name, init)
+    return game.actors.new(
+      make_blueprint(name, {make_script('generic', init)}))
+  end
+
   --- ### `game.actors.get(tag)`
   --- Returns a list of the actors with the given tag. This is an internal data
   --- structure, so copy it if you need to make changes.
