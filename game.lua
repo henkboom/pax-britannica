@@ -63,31 +63,74 @@ function make_game (update_methods, draw_methods, init)
     return nil, table.concat(errors)
   end
 
-  local loaded_scripts = {}
-  local script_prefixes = {'dokidoki.scripts.', 'scripts.'}
-
-  -- load_script(name)
-  -- Loads a script by name.
-  local function load_script(name)
+  local function generic_load(kind, constructor, cache, prefixes, name)
     local errors = {}
 
-    if not loaded_scripts[name] then
-      for _, prefix in ipairs(script_prefixes) do
-        local script, err = delayed_require(prefix .. name)
-        if script then
-          loaded_scripts[name] = make_script(name, script)
+    if not cache[name] then
+      for _, prefix in ipairs(prefixes) do
+        local thunk, err = delayed_require(prefix .. name)
+        if thunk then
+          cache[name] = constructor(name, thunk)
         else
           table.insert(errors, err)
         end
       end
     end
 
-    if not loaded_scripts[name] then
-      error('couldn\'t find requested script "' .. name .. '"' ..
+    if not cache[name] then
+      error('couldn\'t find requested ' .. kind .. ' "' .. name .. '"' ..
             table.concat(errors))
     end
 
-    return loaded_scripts[name]
+    return cache[name]
+  end
+
+  -- load_script(name)
+  -- Loads a script by name.
+  local loaded_scripts = {}
+  local script_prefixes = {'scripts.', 'dokidoki.scripts.'}
+  local function load_script(name)
+    return generic_load('script', make_script, loaded_scripts, script_prefixes,
+                        name)
+  end
+
+  -- game.load_component(name)
+  -- Loads a component by name.
+  local loaded_components = {}
+  local component_prefixes = {'components.', 'dokidoki.components.'}
+  local function load_component(name)
+    local function make_component(_, component) return component end
+    return generic_load('component', make_component, loaded_components,
+                        component_prefixes, name)
+  end
+
+  --- ### `game.init_component(name)`
+  --- Loads and initializes the named component.
+  function game.init_component(name)
+    if game[name] ~= nil then
+      error('name collision with component "' .. name .. '"')
+    end
+
+    local component = {game=game}
+    game[name] = component
+
+    local component_init = load_component(name)
+    local env = getfenv(component_init)
+    setfenv(component_init, setmetatable({}, {
+      __index = function (_, k)
+        local ret = component[k]
+        if ret ~= nil then
+          return ret
+        else
+          return env[k]
+        end
+      end,
+      __newindex = function (_, k, v)
+        component[k] = v
+      end
+    }))
+    component_init(name)
+    setfenv(component_init, env)
   end
 
   --- ### `game.actors.new(blueprint, {script, key=value...}...)`
