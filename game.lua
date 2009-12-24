@@ -141,6 +141,9 @@ function make_game (update_methods, draw_methods, init)
   function game.actors.new(blueprint, ...)
     local arguments = {}
     for _, arg in ipairs{...} do
+      if type(arg[1]) == 'string' then
+        arg[1] = load_script(arg[1])
+      end
       arguments[arg[1]] = arg
     end
 
@@ -175,7 +178,7 @@ function make_game (update_methods, draw_methods, init)
 
       -- add constructor values
       if arguments[script_spec[1]] then
-        for k, v in arguments[script_spec[1]] do
+        for k, v in pairs(arguments[script_spec[1]]) do
           if k ~= 1 then script[k] = v end
         end
       end
