@@ -9,4 +9,5 @@
 --- -------------
 ---
 --- - [dokidoki.game](game.lua)
+--- - [dokidoki.components.exit_handler](components/exit_handler.lua)
 --- - [dokidoki.components.keyboard](components/keyboard.lua)
