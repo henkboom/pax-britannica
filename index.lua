@@ -1,6 +1,10 @@
 --- dokidoki
 --- ========
 --- 
+--- A small game development framework for [lua][1].
+---
+--- [1]: http://www.lua.org/
+---
 --- Documentation
 --- -------------
 ---
