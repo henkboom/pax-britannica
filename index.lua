@@ -1,7 +1,8 @@
 --- dokidoki
 --- ========
 --- 
---- Module Documentation
---- -------
+--- Documentation
+--- -------------
 ---
 --- - [dokidoki.game](game.lua)
+--- - [dokidoki.components.keyboard](components/keyboard.lua)
