@@ -1,0 +1,7 @@
+--- dokidoki
+--- ========
+--- 
+--- Module Documentation
+--- -------
+---
+--- - [dokidoki.game](game.lua)
