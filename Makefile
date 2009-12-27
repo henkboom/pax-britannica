@@ -6,3 +6,6 @@ macosx:
 
 mingw:
 	make -C dokidoki-support mingw TARGET=../gamma4
+
+clean:
+	make -C dokidoki-support clean TARGET=../gamma4
