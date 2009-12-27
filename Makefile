@@ -5,8 +5,9 @@ NAME=dokidoki-support
 TARGET=$(NAME)
 CFLAGS=-Wall -O2 -DMEMARRAY_USE_OPENGL \
 	   $(PLATFORM_CFLAGS) $(EXTRA_CFLAGS)
-LDFLAGS= $(STATIC_LINK) -llua -lportaudio -lglfw \
-		 $(DYNAMIC_LINK) $(PLATFORM_LDFLAGS) $(EXTRA_LDFLAGS)
+LDFLAGS=$(STATIC_LINK) -llua -lportaudio -lglfw \
+		$(DYNAMIC_LINK) $(PLATFORM_LDFLAGS) $(EXTRA_LDFLAGS)
+CC=gcc
 
 #### Platform Settings
 
