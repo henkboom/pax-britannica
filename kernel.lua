@@ -1,3 +1,28 @@
+--- dokidoki.kernel
+--- =============
+---
+--- `dokidoki.kernel` handles initialization and the core loop.  It takes an
+--- abstract scene object which provides implementations of update, draw, and
+--- event-handling.
+---
+--- A scene must implement:
+---
+--- - `update()`
+--- - `draw()`
+--- - `handle_event(event)`
+---
+--- where none of the callbacks has a return value.
+---
+--- For the `handle_event(event)` callback, `event` has one of the following
+--- forms:
+---
+--- - `{type = 'close'}`
+--- - `{type = 'resize', width = ?, height = ?}`
+--- - `{type = 'key', key = ?, is_down = ?}` (key is a GLFW key constant)
+
+--- Implementation
+--- --------------
+
 require "dokidoki.module"
 [[ get_width, get_height, get_ratio, set_video_mode, set_ratio,
    start_main_loop, abort_main_loop, get_fps ]]
@@ -26,16 +51,35 @@ sleep_allowance = 0.002
 ---- State Variables ----------------------------------------------------------
 
 running = false
+
 width = 640
 height = 480
 ratio = width / height
 
+frame_times = {}
+
 ---- Public Interface ---------------------------------------------------------
 
+--- ### `get_width()`
+--- Returns the current total window width in pixels. This includes borders
+--- when the ratio doesn't match the window size.
 function get_width () return width end
-function get_height () return height end
-function get_ratio () return ratio end
 
+--- ### `get_height()`
+--- Returns the current total window height in pixels. This includes borders
+--- when the ratio doesn't match the window size.
+function get_height () return height end
+
+--- ### `set_video_mode(width, height)`
+--- Sets the desired width/height of the window in pixels.
+---
+--- If the main loop hasn't yet been started, it will immediately change
+--- the window size (or change video modes in fullscreen). If called before
+--- entering the main loop, this sets the initial video mode, but has no
+--- immediate effect.
+---
+--- This does not set the desired ratio, so unless you set that as well you may
+--- end up with borders.
 function set_video_mode (w, h)
   assert(w > 0)
   assert(h > 0)
@@ -47,16 +91,28 @@ function set_video_mode (w, h)
   end
 end
 
+--- ### `get_ratio()`
+--- Returns the screen ratio used within the window for the active area. See
+--- also `set_ratio()`.
+function get_ratio () return ratio end
+
+--- `set_ratio(ratio)`
+--- Sets the desired screen ratio.
+---
+--- If the window size doesn't match this ratio, then the ratio is used to set
+--- the opengl viewport shape within the window.
+---
+--- This must be set manually if a ratio other than 4/3 is wanted, since calls
+--- to `set_video_mode()` have no effect on it.
 function set_ratio (r)
   assert(r > 0)
   ratio = r
   if running then update_viewport() end
 end
 
-function get_stack_trace(err)
-  return debug.traceback(err, 2)
-end
-
+--- ### `start_main_loop (scene)`
+--- Initializes stuff and begins the main loop. `scene` is used as described in
+--- the introduction above.
 function start_main_loop (scene)
   -- glfw.Terminate() needs to be called even if there is an error, since
   -- otherwise it may not return the screen to its original resolution.
@@ -84,11 +140,14 @@ function start_main_loop (scene)
   if not success then error(message, 0) end
 end
 
+--- ### `abort_main_loop()`
+--- Sets a flag to terminate the main loop at the next opportunity.
+---
+--- This function should be called from one of the scene callbacks; the loop
+--- will be aborted when it returns.
 function abort_main_loop ()
   running = false
 end
-
-frame_times = {}
 
 function get_fps ()
   if #frame_times >= 2 then
@@ -99,6 +158,10 @@ function get_fps ()
 end
 
 ---- Utility Functions --------------------------------------------------------
+
+function get_stack_trace(err)
+  return debug.traceback(err, 2)
+end
 
 function set_callback(name, callback)
   local set = glfw['Set' .. name .. 'Callback']
