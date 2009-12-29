@@ -2,14 +2,14 @@
 --- =============
 ---
 --- `dokidoki.kernel` handles initialization and the core loop.  It takes an
---- abstract scene object which provides implementations of update, draw, and
---- event-handling.
+--- abstract scene object which provides implementations of updating, drawing,
+--- and event-handling functions.
 ---
 --- A scene must implement:
 ---
---- - `update()`
---- - `draw()`
---- - `handle_event(event)`
+--- - `scene.update()`
+--- - `scene.draw()`
+--- - `scene.handle_event(event)`
 ---
 --- where none of the callbacks has a return value.
 ---
@@ -96,7 +96,7 @@ end
 --- also `set_ratio()`.
 function get_ratio () return ratio end
 
---- `set_ratio(ratio)`
+--- ### `set_ratio(ratio)`
 --- Sets the desired screen ratio.
 ---
 --- If the window size doesn't match this ratio, then the ratio is used to set
@@ -149,6 +149,10 @@ function abort_main_loop ()
   running = false
 end
 
+--- ### `get_fps()`
+--- Returns a running average of the number of `draw()` calls per second.
+--- Since multiple updates can happen per draw, this isn't the same as the
+--- number of updates per second, which should usually stay constant.
 function get_fps ()
   if #frame_times >= 2 then
     return (#frame_times - 1) / (frame_times[#frame_times] - frame_times[1])
