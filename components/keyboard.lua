@@ -10,6 +10,8 @@
 --- Implementation
 --- --------------
 
+local base = require 'dokidoki.base'
+
 local key_states = {}
 local old_key_states = {}
 
@@ -32,10 +34,10 @@ function key_released(key)
 end
 
 game.actors.new_generic('key_monitor', function ()
-  update_setup = function ()
-    old_key_states = copy(key_states)
+  function update_cleanup()
+    old_key_states = base.copy(key_states)
   end
-  handle_event = function (event)
+  function handle_event(event)
     if event.type == 'key' then
       key_states[event.key] = event.is_down or nil
     end
