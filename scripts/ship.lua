@@ -27,10 +27,8 @@ end
 function go_towards(target_pos, force_thrust)
   local target_direction = target_pos - self.transform.pos
   if v2.cross(self.transform.facing, target_direction) > 0 then
-    print('left')
     turn(1)
   else
-    print('right')
     turn(-1)
   end
   if force_thrust or v2.dot(self.transform.facing, target_direction) > 0 then
