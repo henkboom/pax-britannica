@@ -26,6 +26,10 @@ frigate = game.make_blueprint('frigate',
 
 factory = game.make_blueprint('factory',
   {'transform', scale_x=25, scale_y=25},
+  {'wasd_ship_control'})
+
+factory = game.make_blueprint('factory',
+  {'transform', scale_x=30, scale_y=30},
   {'sprite', resource='fighter_sprite'},
   {'ship', turn_speed=0.001, accel=0.005},
   {'wasd_ship_control'})
