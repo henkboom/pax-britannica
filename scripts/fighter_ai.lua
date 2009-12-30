@@ -1,11 +1,12 @@
 function update()
-  local up = game.keyboard.key_held(string.byte('W'))
-  local left = game.keyboard.key_held(string.byte('A'))
-  local right = game.keyboard.key_held(string.byte('D'))
   local space = game.keyboard.key_held(string.byte(' '))
 
-  self.ship.turn((left and 1 or 0) - (right and 1 or 0))
-  if up then self.ship.thrust() end
+  local target = game.targeting.get_nearest_of_type(self, 'factory')
+
+  if target then
+    self.ship.go_towards(target.transform.pos, true)
+  end
+
   if space then 
 	  self.fighter_shooting.shoot()
   end
