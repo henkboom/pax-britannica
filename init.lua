@@ -6,6 +6,7 @@ local v2 = require 'dokidoki.v2'
 
 local blueprints = require 'blueprints'
 
+kernel.set_video_mode(1024, 768)
 kernel.start_main_loop(game.make_game(
   {'update'},
   {'draw_setup', 'draw'},
@@ -17,6 +18,7 @@ kernel.start_main_loop(game.make_game(
     game.opengl_2d.height = 768
 
     game.init_component('resources')
+    game.init_component('targeting')
 
     game.actors.new(blueprints.fighter, {'transform', pos=v2(200, 100)})
     game.actors.new(blueprints.bomber, {'transform', pos=v2(300, 100)})
