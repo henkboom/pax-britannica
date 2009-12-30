@@ -31,18 +31,18 @@ factory = game.make_blueprint('factory',
   {'factory_ai'})
   
 laser = game.make_blueprint('laser',
-  {'transform', scale_x=1, scale_y=1},
+  {'transform', scale_x=32, scale_y=1},
   {'sprite'},
-  {'bullet', velocity=5})
+  {'bullet'})
   
 bomb = game.make_blueprint('bomb',
   {'transform', scale_x=4, scale_y=4},
   {'sprite'},
-  {'bullet', velocity=3})  
+  {'bullet'})  
   
 missile = game.make_blueprint('missile',
-  {'transform', scale_x=2, scale_y=2},
+  {'transform', scale_x=8, scale_y=2},
   {'sprite'},
-  {'bullet', velocity=2})  
+  {'bullet'})  
 
 return get_module_exports()
