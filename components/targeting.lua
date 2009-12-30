@@ -2,7 +2,7 @@ local v2 = require 'dokidoki.v2'
 
 -- returns the closest target of the given type
 function get_nearest_of_type(source, ship_type)
-  local ships game.actors.get(ship_type)
+  local ships = game.actors.get(ship_type)
 
   -- find the closest one!
   local closest_ship
