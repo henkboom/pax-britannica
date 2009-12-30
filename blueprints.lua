@@ -43,6 +43,7 @@ bomb = game.make_blueprint('bomb',
 missile = game.make_blueprint('missile',
   {'transform', scale_x=8, scale_y=2},
   {'sprite'},
-  {'bullet'})  
+  {'ship', turn_speed=0.05, accel=0.1, hit_points=1},
+  {'heatseeking_ai'})  
 
 return get_module_exports()
