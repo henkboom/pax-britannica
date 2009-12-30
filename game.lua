@@ -149,7 +149,7 @@ function make_game (update_methods, draw_methods, init)
 
     local actor = {
       blueprint = blueprint,
-      tags = {},
+      tags = {[blueprint.name] = true},
       dead = false,
       paused = false,
       hidden = false
