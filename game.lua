@@ -276,7 +276,7 @@ function make_game (update_methods, draw_methods, init)
     -- cull dead actors
     for k, _ in pairs(scripts_by_method) do
       scripts_by_method[k] =
-        ifilter(function (a) return not a.dead end, scripts_by_method[k])
+        ifilter(function (s) return not s.self.dead end, scripts_by_method[k])
     end
     for k, _ in pairs(actors_by_tag) do
       actors_by_tag[k] =
