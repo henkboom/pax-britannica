@@ -8,7 +8,7 @@ local blueprints = require 'blueprints'
 
 kernel.set_video_mode(1024, 768)
 kernel.start_main_loop(game.make_game(
-  {'update'},
+  {'update_setup', 'update'},
   {'draw_setup', 'draw'},
   function (game)
     game.init_component('exit_handler')
