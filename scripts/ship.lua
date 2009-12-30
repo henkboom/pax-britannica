@@ -1,7 +1,9 @@
 local v2 = require 'dokidoki.v2'
 
+assert(player, 'missing player argument')
 assert(turn_speed, 'missing turn_speed argument')
 assert(accel, 'missing accel argument')
+assert(hit_points, 'missing hit_points argument')
 
 velocity = v2(0, 0)
 
@@ -18,6 +20,7 @@ end
 function update()
   velocity = velocity * 0.97
   self.transform.pos = self.transform.pos + velocity
+  if hit_points <= 0 then self.dead = true end
 end
 
 -- automatically thrusts and turns according to the target
