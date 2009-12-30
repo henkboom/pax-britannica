@@ -11,7 +11,7 @@ function get_nearest_of_type(source, ship_type)
   for _, ship in ipairs(ships) do
     local square_magnitude =
       v2.sqrmag(ship.transform.pos - source.transform.pos)
-    if not closest_ship or square_manitude < closest_square_manitude then
+    if not closest_ship or square_magnitude < closest_square_magnitude then
       closest_ship = ship
       closest_square_magnitude = square_magnitude
     end
