@@ -1,9 +1,8 @@
-function update()
-  local up = game.keyboard.key_held(string.byte('W'))
-  local left = game.keyboard.key_held(string.byte('A'))
-  local right = game.keyboard.key_held(string.byte('D'))
-  local space = game.keyboard.key_held(string.byte(' '))
+local blueprints = require 'blueprints'
+local v2 = require 'dokidoki.v2'
 
-  self.ship.turn((left and 1 or 0) - (right and 1 or 0))
-  if up then self.ship.thrust() end
+function update()
+  local x_key = game.keyboard.key_held(string.byte('X'))
+
+  if x_key then game.actors.new(blueprints.fighter, {'transform', pos=v2(500, 100)}) end
 end
