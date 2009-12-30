@@ -20,8 +20,5 @@ kernel.start_main_loop(game.make_game(
     game.init_component('resources')
     game.init_component('targeting')
 
-    game.actors.new(blueprints.fighter, {'transform', pos=v2(200, 100)})
-    game.actors.new(blueprints.bomber, {'transform', pos=v2(300, 100)})
-    game.actors.new(blueprints.frigate, {'transform', pos=v2(400, 100)})
     game.actors.new(blueprints.factory, {'transform', pos=v2(500, 100)})
   end))
