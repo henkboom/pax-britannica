@@ -226,6 +226,8 @@ function make_game (update_methods, draw_methods, init)
       actors_by_tag[tag] = actors_by_tag[tag] or {}
       table.insert(actors_by_tag[tag], actor)
     end
+
+    return actor
   end
 
   --- ### `game.actors.new_generic(name, init)`
