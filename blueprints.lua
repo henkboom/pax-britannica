@@ -8,31 +8,27 @@ fighter = game.make_blueprint('fighter',
   {'sprite', resource='fighter_sprite'},
   {'ship', turn_speed=0.05, accel=0.2},
   {'fighter_shooting'},
-  {'wasd_ship_control'})
+  {'fighter_ai'})
 
 bomber = game.make_blueprint('bomber',
   {'transform', scale_x=4, scale_y=4},
   {'sprite', resource='fighter_sprite'},
   {'ship', turn_speed=0.02, accel=0.1},
   {'bomber_shooting'},
-  {'wasd_ship_control'})
+  {'bomber_ai'})
 
 frigate = game.make_blueprint('frigate',
   {'transform', scale_x=8, scale_y=8},
   {'sprite', resource='fighter_sprite'},
   {'ship', turn_speed=0.01, accel=0.02},
   {'frigate_shooting'},
-  {'wasd_ship_control'})
-
-factory = game.make_blueprint('factory',
-  {'transform', scale_x=25, scale_y=25},
-  {'wasd_ship_control'})
+  {'frigate_ai'})
 
 factory = game.make_blueprint('factory',
   {'transform', scale_x=30, scale_y=30},
   {'sprite', resource='fighter_sprite'},
   {'ship', turn_speed=0.001, accel=0.005},
-  {'wasd_ship_control'})
+  {'factory_ai'})
   
 laser = game.make_blueprint('laser',
   {'transform', scale_x=1, scale_y=1},
