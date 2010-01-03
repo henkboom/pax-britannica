@@ -6,7 +6,7 @@ local v2 = require 'dokidoki.v2'
 fighter = game.make_blueprint('fighter',
   {'transform', scale_x=2, scale_y=2},
   {'sprite', resource='fighter_sprite'},
-  {'ship', player=1, turn_speed=0.05, accel=0.2, hit_points=50},
+  {'ship', player=1, turn_speed=0.03, accel=0.2, hit_points=50},
   {'fighter_shooting'},
   {'fighter_ai'})
 
