@@ -35,3 +35,16 @@ function go_towards(target_pos, force_thrust)
     thrust()
   end
 end
+
+--this behaviour should probably be refactored into go_towards
+function go_away(target_pos, force_thrust)
+  local target_direction = self.transform.pos - target_pos
+  if v2.cross(self.transform.facing, target_direction) > 0 then
+    turn(1)
+  else
+    turn(-1)
+  end
+  if force_thrust or v2.dot(self.transform.facing, target_direction) > 0 then
+    thrust()
+  end
+end
