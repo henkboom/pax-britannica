@@ -13,7 +13,7 @@ fighter = game.make_blueprint('fighter',
 bomber = game.make_blueprint('bomber',
   {'transform', scale_x=4, scale_y=4},
   {'sprite', resource='fighter_sprite'},
-  {'ship', player=1, turn_speed=0.02, accel=0.1, hit_points=200},
+  {'ship', player=1, turn_speed=0.04, accel=0.1, hit_points=200},
   {'bomber_shooting'},
   {'bomber_ai'})
 
