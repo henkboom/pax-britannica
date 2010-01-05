@@ -9,9 +9,9 @@ function get_nearest_of_type(source, ship_type)
   local closest_square_magnitude
 
   for _, ship in ipairs(ships) do
-    local square_magnitude =
-      v2.sqrmag(ship.transform.pos - source.transform.pos)
-    if not closest_ship or square_magnitude < closest_square_magnitude then
+    local square_magnitude = v2.sqrmag(ship.transform.pos - source.transform.pos)
+    
+    if source.ship.player ~= ship.ship.player and (not closest_ship or square_magnitude < closest_square_magnitude) then
       closest_ship = ship
       closest_square_magnitude = square_magnitude
     end

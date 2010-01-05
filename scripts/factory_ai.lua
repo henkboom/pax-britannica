@@ -6,7 +6,7 @@ function update()
   local c_key = game.keyboard.key_pressed(string.byte('C'))
   local v_key = game.keyboard.key_pressed(string.byte('V'))
 
-  if x_key then game.actors.new(blueprints.fighter, {'transform', pos=self.transform.pos}) end
-  if c_key then game.actors.new(blueprints.bomber, {'transform', pos=self.transform.pos}) end
-  if v_key then game.actors.new(blueprints.frigate, {'transform', pos=self.transform.pos}) end
+  if x_key then game.actors.new(blueprints.fighter, {'transform', pos=self.transform.pos}, {'ship', player=self.ship.player}) end
+  if c_key then game.actors.new(blueprints.bomber, {'transform', pos=self.transform.pos}, {'ship', player=self.ship.player}) end
+  if v_key then game.actors.new(blueprints.frigate, {'transform', pos=self.transform.pos}, {'ship', player=self.ship.player}) end
 end
