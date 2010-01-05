@@ -1,7 +1,7 @@
 local v2 = require 'dokidoki.v2'
 
 local approaching = true
-local cooldown_timer = 0
+local cooldown_timer = 100
 
 function update()
   local target = game.targeting.get_nearest_of_type(self, 'factory')
