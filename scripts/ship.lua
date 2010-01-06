@@ -5,6 +5,13 @@ assert(turn_speed, 'missing turn_speed argument')
 assert(accel, 'missing accel argument')
 assert(hit_points, 'missing hit_points argument')
 
+local player_colors = {
+  {0.5, 0.2, 0.8},
+  {0.5, 0.8, 0.2}
+}
+
+self.sprite.color = player_colors[player]
+
 velocity = v2(0, 0)
 
 -- 1 for left, -1 for right
