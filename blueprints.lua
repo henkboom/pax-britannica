@@ -6,21 +6,21 @@ local v2 = require 'dokidoki.v2'
 fighter = game.make_blueprint('fighter',
   {'transform', scale_x=2, scale_y=2},
   {'sprite', resource='fighter_sprite'},
-  {'ship', turn_speed=0.03, accel=0.2, hit_points=50},
+  {'ship', turn_speed=0.03, accel=0.1, hit_points=50},
   {'fighter_shooting'},
   {'fighter_ai'})
 
 bomber = game.make_blueprint('bomber',
   {'transform', scale_x=4, scale_y=4},
   {'sprite', resource='fighter_sprite'},
-  {'ship', turn_speed=0.04, accel=0.1, hit_points=200},
+  {'ship', turn_speed=0.03, accel=0.05, hit_points=200},
   {'bomber_shooting'},
   {'bomber_ai'})
 
 frigate = game.make_blueprint('frigate',
   {'transform', scale_x=8, scale_y=8},
   {'sprite', resource='fighter_sprite'},
-  {'ship', turn_speed=0.01, accel=0.02, hit_points=500},
+  {'ship', turn_speed=0.01, accel=0.01, hit_points=500},
   {'frigate_shooting'},
   {'frigate_ai'})
 
@@ -43,7 +43,7 @@ bomb = game.make_blueprint('bomb',
 missile = game.make_blueprint('missile',
   {'transform', scale_x=8, scale_y=2},
   {'sprite'},
-  {'ship', turn_speed=0.05, accel=0.1, hit_points=1},
+  {'ship', turn_speed=0.1, accel=0.12, hit_points=1},
   {'heatseeking_ai'})  
 
 return get_module_exports()
