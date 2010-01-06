@@ -1,12 +1,16 @@
 local v2 = require 'dokidoki.v2'
 
+local buffer = 500
+
 function update()
   local screen_bounds = v2(game.opengl_2d.width, game.opengl_2d.height);
 
   self.transform.pos = self.transform.pos + velocity
   
-  if self.transform.pos.x > screen_bounds.x or self.transform.pos.y > screen_bounds.y or 
-     self.transform.pos.x < 0 or self.transform.pos.y < 0 then
+  if self.transform.pos.x > screen_bounds.x + buffer
+     or self.transform.pos.y > screen_bounds.y + buffer
+     or self.transform.pos.x < -buffer
+     or self.transform.pos.y < -buffer then
 	 self.dead = true
   end
 end
