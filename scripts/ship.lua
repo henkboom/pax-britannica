@@ -23,9 +23,10 @@ function update()
   if hit_points <= 0 then self.dead = true end
 end
 
--- automatically thrusts and turns according to the target
-function go_towards(target_pos, force_thrust)
+local function go_towards_or_away(target_pos, force_thrust, is_away)
   local target_direction = target_pos - self.transform.pos
+  if is_away then target_direction = -target_direction end
+
   if v2.cross(self.transform.facing, target_direction) > 0 then
     turn(1)
   else
@@ -36,15 +37,11 @@ function go_towards(target_pos, force_thrust)
   end
 end
 
---this behaviour should probably be refactored into go_towards
+-- automatically thrusts and turns according to the target
+function go_towards(target_pos, force_thrust)
+  go_towards_or_away(target_pos, force_thrust, false)
+end
+
 function go_away(target_pos, force_thrust)
-  local target_direction = self.transform.pos - target_pos
-  if v2.cross(self.transform.facing, target_direction) > 0 then
-    turn(1)
-  else
-    turn(-1)
-  end
-  if force_thrust or v2.dot(self.transform.facing, target_direction) > 0 then
-    thrust()
-  end
+  go_towards_or_away(target_pos, force_thrust, true)
 end
