@@ -1,5 +1,5 @@
 --- dokidoki.kernel
---- =============
+--- ===============
 ---
 --- `dokidoki.kernel` handles initialization and the core loop.  It takes an
 --- abstract scene object which provides implementations of updating, drawing,
@@ -18,7 +18,7 @@
 ---
 --- - `{type = 'close'}`
 --- - `{type = 'resize', width = ?, height = ?}`
---- - `{type = 'key', key = ?, is_down = ?}` (key is a GLFW key constant)
+--- - `{type = 'key', key = ?, is_down = ?}` (`key` is a GLFW key constant)
 
 --- Implementation
 --- --------------
@@ -110,7 +110,7 @@ function set_ratio (r)
   if running then update_viewport() end
 end
 
---- ### `start_main_loop (scene)`
+--- ### `start_main_loop(scene)`
 --- Initializes stuff and begins the main loop. `scene` is used as described in
 --- the introduction above.
 function start_main_loop (scene)
