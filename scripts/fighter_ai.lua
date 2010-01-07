@@ -12,7 +12,9 @@ local running = false
 local target = false
 
 local function retarget ()
-  target = game.targeting.get_nearest_of_type(self, 'factory')
+  target = game.targeting.get_nearest_of_type(self, 'bomber') or
+           game.targeting.get_nearest_of_type(self, 'fighter') or
+           game.targeting.get_nearest_of_type(self, 'factory')
 end
 
 -- basically, the behaviour is to go towards the target and attack it, then
@@ -20,7 +22,8 @@ end
 -- gone a certain distance
 
 function update()
-  if not target then
+  -- this math.random stuff is temporary
+  if not target or math.random() < 0.005 then
     retarget()
   end
 
