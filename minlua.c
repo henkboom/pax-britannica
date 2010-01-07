@@ -23,12 +23,13 @@ void init_preloaders(lua_State *L)
     lua_getfield(L, -1, "preload");
 
     // add your custom loaders here, they look like this:
+    REGISTER_LOADER("collision.native", luaopen_collision_native);
     REGISTER_LOADER("gl", luaopen_gl);
+    REGISTER_LOADER("glfw", luaopen_glfw);
     REGISTER_LOADER("glu", luaopen_glu);
     REGISTER_LOADER("memarray", luaopen_memarray);
     REGISTER_LOADER("mixer", luaopen_mixer);
     REGISTER_LOADER("stb_image", luaopen_stb_image);
-    REGISTER_LOADER("glfw", luaopen_glfw);
     
     lua_pop(L, 2);
 }
