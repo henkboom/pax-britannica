@@ -35,6 +35,8 @@ function shoot()
     cooldown = shot_cooldown_time
 
     local start_vel = bullet_speed * self.transform.facing + self.ship.velocity
-    game.actors.new(blueprints.laser, {'transform', pos=self.transform.pos, facing=self.transform.facing}, {'bullet', velocity=start_vel})
+    game.actors.new(blueprints.laser,
+      {'transform', pos=self.transform.pos, facing=self.transform.facing},
+      {'bullet', player=self.ship.player, velocity=start_vel})
   end
 end

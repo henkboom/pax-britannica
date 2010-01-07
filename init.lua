@@ -8,7 +8,8 @@ local blueprints = require 'blueprints'
 
 kernel.set_video_mode(1024, 768)
 kernel.start_main_loop(game.make_game(
-  {'update_setup', 'update', 'update_cleanup'},
+  {'update_setup', 'update', 'collision_registry', 'collision_check',
+   'update_cleanup'},
   {'draw_setup', 'draw'},
   function (game)
     game.init_component('exit_handler')
@@ -17,6 +18,7 @@ kernel.start_main_loop(game.make_game(
     game.opengl_2d.width = 1024
     game.opengl_2d.height = 768
 
+    game.init_component('collision')
     game.init_component('resources')
     game.init_component('targeting')
 

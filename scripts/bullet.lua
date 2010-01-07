@@ -1,5 +1,8 @@
 local v2 = require 'dokidoki.v2'
 
+assert(player, 'missing player argument')
+assert(velocity, 'missing velocity argument')
+
 local buffer = 500
 
 function update()
