@@ -8,6 +8,7 @@ import(require 'dokidoki.base')
 
 local native = require 'collision.native'
 
+-- create a convex polygon from a list of points
 function make_polygon(vertices)
   if v2.cross(vertices[2] - vertices[1], vertices[3] - vertices[2]) < 0 then
     vertices = ireverse(vertices)
@@ -21,6 +22,9 @@ function make_polygon(vertices)
   return {data = native.make_polygon(coords), vertices = vertices}
 end
 
+-- detect collision between a pair of bodies, where each body is of the form
+-- {pos=?, facing=?, poly=?}. returns false if there is no collision, otherwise
+-- returns the vector which would pull body1 out of body2.
 function collide(body1, body2)
   -- grr backwards compatibility
   local facing1 = body1.facing or v2.unit(body1.angle)
