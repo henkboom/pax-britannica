@@ -34,7 +34,8 @@ factory = game.make_blueprint('factory',
   {'sprite', resource='fighter_sprite'},
   {'collision', collision_type='ship', poly=collision.make_rectangle(180, 120)},
   {'ship', turn_speed=0.001, accel=0.005, hit_points=20000},
-  {'factory_ai'})
+  {'factory_ai'},
+  {'menu'})
   
 laser = game.make_blueprint('laser',
   {'transform', scale_x=32, scale_y=1},
