@@ -5,7 +5,7 @@ local game = require 'dokidoki.game'
 local v2 = require 'dokidoki.v2'
 
 fighter = game.make_blueprint('fighter',
-  {'transform', scale_x=2, scale_y=2},
+  {'transform', scale_x=1, scale_y=1},
   {'sprite', resource='fighter_sprite'},
   {'collision', collision_type='ship', poly=collision.make_rectangle(12, 8)},
   {'ship', turn_speed=0.015, accel=0.1, hit_points=50},
@@ -13,7 +13,7 @@ fighter = game.make_blueprint('fighter',
   {'fighter_ai'})
 
 bomber = game.make_blueprint('bomber',
-  {'transform', scale_x=4, scale_y=4},
+  {'transform', scale_x=3, scale_y=3},
   {'sprite', resource='fighter_sprite'},
   {'collision', collision_type='ship', poly=collision.make_rectangle(24, 16)},
   {'ship', turn_speed=0.03, accel=0.05, hit_points=200},
@@ -21,7 +21,7 @@ bomber = game.make_blueprint('bomber',
   {'bomber_ai'})
 
 frigate = game.make_blueprint('frigate',
-  {'transform', scale_x=8, scale_y=8},
+  {'transform', scale_x=6, scale_y=6},
   {'sprite', resource='fighter_sprite'},
   {'collision', collision_type='ship', poly=collision.make_rectangle(48, 32)},
   {'ship', turn_speed=0.01, accel=0.01, hit_points=500},
