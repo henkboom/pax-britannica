@@ -5,6 +5,7 @@ local target_fuzzy_pos
 
 local function retarget ()
   target = game.targeting.get_nearest_of_type(self, 'fighter') or
+           game.targeting.get_nearest_of_type(self, 'frigate') or
            game.targeting.get_nearest_of_type(self, 'factory')
            
   if target then
