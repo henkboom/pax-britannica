@@ -9,7 +9,7 @@ fighter = game.make_blueprint('fighter',
   {'transform', scale_x=1, scale_y=1},
   {'sprite', resource='fighter_sprite'},
   {'collision', collision_type='ship', poly=collision.make_rectangle(12, 8)},
-  {'ship', turn_speed=0.025, accel=0.1, hit_points=50},
+  {'ship', turn_speed=0.025, accel=0.1, hit_points=40},
   {'fighter_shooting'},
   {'fighter_ai'})
 
@@ -17,7 +17,7 @@ bomber = game.make_blueprint('bomber',
   {'transform', scale_x=3, scale_y=3},
   {'sprite', resource='fighter_sprite'},
   {'collision', collision_type='ship', poly=collision.make_rectangle(24, 16)},
-  {'ship', turn_speed=0.03, accel=0.05, hit_points=250},
+  {'ship', turn_speed=0.03, accel=0.05, hit_points=300},
   {'bomber_shooting'},
   {'bomber_ai'})
 
@@ -50,7 +50,7 @@ easy_enemy_factory = game.make_blueprint('factory',
 laser = game.make_blueprint('laser',
   {'transform', scale_x=32, scale_y=1},
   {'sprite'},
-  {'collision', collision_type='bullet', damage=15, poly=collision.make_rectangle(32, 1)},
+  {'collision', collision_type='bullet', damage=10, poly=collision.make_rectangle(32, 1)},
   {'bullet'})
   
 bomb = game.make_blueprint('bomb',
@@ -62,7 +62,7 @@ bomb = game.make_blueprint('bomb',
 missile = game.make_blueprint('missile',
   {'transform', scale_x=8, scale_y=2},
   {'sprite'},
-  {'collision', collision_type='bullet', damage=50, poly=collision.make_rectangle(8, 2)},
+  {'collision', collision_type='bullet', damage=40, poly=collision.make_rectangle(8, 2)},
   {'ship', turn_speed=0.1, accel=0.15, hit_points=1},
   {'heatseeking_ai'})  
 

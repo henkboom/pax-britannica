@@ -1,7 +1,7 @@
 local v2 = require 'dokidoki.v2'
 local blueprints = require 'blueprints'
 
-local speed = 5
+local speed = 3.5
 
 function shoot(approach_sign)
   local facing = approach_sign * v2.rotate90(self.transform.facing)

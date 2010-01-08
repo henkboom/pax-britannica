@@ -4,9 +4,9 @@ local turn_speed = 0.15
 local accel = 0.15
 
 -- Try to find a target
-local target = game.targeting.get_type_in_range(self, 'fighter', 400) or
-               game.targeting.get_type_in_range(self, 'bomber', 400) or
-               game.targeting.get_type_in_range(self, 'frigate', 400) or
+local target = game.targeting.get_type_in_range(self, 'fighter', 600) or
+               game.targeting.get_type_in_range(self, 'bomber', 600) or
+               game.targeting.get_type_in_range(self, 'frigate', 600) or
                game.targeting.get_nearest_of_type(self, 'fighter') or
                game.targeting.get_nearest_of_type(self, 'factory')
 

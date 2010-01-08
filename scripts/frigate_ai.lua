@@ -21,11 +21,9 @@ function update()
   
   if target then      
     target_distance = v2.mag(target.transform.pos - self.transform.pos)
-    target_direction = v2.norm(target.transform.pos - self.transform.pos)
-    facing_direction = v2.norm(self.transform.facing)
-    speed = v2.mag(self.ship.velocity)
+    speed_square = v2.sqrmag(self.ship.velocity)
     
-    if self.frigate_shooting.is_ready_to_shoot() and speed > 0 and target_distance < 350 then
+    if self.frigate_shooting.is_ready_to_shoot() and speed_square > 0 then
       stopping = true
     elseif self.frigate_shooting.is_empty() then
       stopping = false
@@ -40,8 +38,8 @@ function update()
       end
     end
     
-    -- Only shoot when not moving and in range
-    if not self.frigate_shooting.is_empty() and speed < 0.1 then
+    -- Shoot when not moving and able to fire
+    if not self.frigate_shooting.is_empty() and speed_square < 0.01 then
         self.frigate_shooting.shoot()
     end
   end
