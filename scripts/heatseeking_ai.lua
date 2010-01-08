@@ -1,7 +1,7 @@
 local v2 = require 'dokidoki.v2'
 
-local turn_speed = 0.1
-local accel = 0.1
+local turn_speed = 0.15
+local accel = 0.15
 
 -- Try to find a target
 local target = game.targeting.get_nearest_of_type(self, 'fighter')
