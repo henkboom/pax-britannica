@@ -9,12 +9,9 @@ local target = game.targeting.get_type_in_range(self, 'fighter', 400) or
                game.targeting.get_type_in_range(self, 'frigate', 400) or
                game.targeting.get_nearest_of_type(self, 'fighter') or
                game.targeting.get_nearest_of_type(self, 'factory')
-               
--- F this, self-destruct
-if not target then self_destruct() end
 
 function update()
-  if target.dead then
+  if not target or target.dead then
     self_destruct()
   end
   self.ship.go_towards(target.transform.pos, true)

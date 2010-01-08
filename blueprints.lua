@@ -25,7 +25,7 @@ frigate = game.make_blueprint('frigate',
   {'transform', scale_x=6, scale_y=6},
   {'sprite', resource='fighter_sprite'},
   {'collision', collision_type='ship', poly=collision.make_rectangle(48, 32)},
-  {'ship', turn_speed=0.01, accel=0.01, hit_points=600},
+  {'ship', turn_speed=0.01, accel=0.01, hit_points=1000},
   {'frigate_shooting'},
   {'frigate_ai'})
 
@@ -46,13 +46,13 @@ laser = game.make_blueprint('laser',
 bomb = game.make_blueprint('bomb',
   {'transform', scale_x=4, scale_y=4},
   {'sprite'},
-  {'collision', collision_type='bullet', damage=120, poly=collision.make_rectangle(4, 4)},
+  {'collision', collision_type='bullet', damage=200, poly=collision.make_rectangle(4, 4)},
   {'bullet'})  
   
 missile = game.make_blueprint('missile',
   {'transform', scale_x=8, scale_y=2},
   {'sprite'},
-  {'collision', collision_type='bullet', damage=60, poly=collision.make_rectangle(8, 2)},
+  {'collision', collision_type='bullet', damage=50, poly=collision.make_rectangle(8, 2)},
   {'ship', turn_speed=0.1, accel=0.15, hit_points=1},
   {'heatseeking_ai'})  
 
