@@ -1,5 +1,5 @@
 require 'dokidoki.module'
-[[ fighter, bomber, frigate, factory, laser, bomb, missile ]]
+[[ fighter, bomber, frigate, player_factory, easy_enemy_factory, laser, bomb, missile ]]
 
 local collision = require 'dokidoki.collision'
 local game = require 'dokidoki.game'
@@ -29,13 +29,23 @@ frigate = game.make_blueprint('frigate',
   {'frigate_shooting'},
   {'frigate_ai'})
 
-factory = game.make_blueprint('factory',
+player_factory = game.make_blueprint('factory',
   {'transform', scale_x=30, scale_y=30},
   {'sprite', resource='fighter_sprite'},
   {'collision', collision_type='ship', poly=collision.make_rectangle(180, 120)},
   {'ship', turn_speed=0.001, accel=0.005, hit_points=20000},
   {'factory_ai'},
-  {'menu'})
+  {'production'},
+  {'player_production'})
+  
+easy_enemy_factory = game.make_blueprint('factory',
+  {'transform', scale_x=30, scale_y=30},
+  {'sprite', resource='fighter_sprite'},
+  {'collision', collision_type='ship', poly=collision.make_rectangle(180, 120)},
+  {'ship', turn_speed=0.001, accel=0.005, hit_points=20000},
+  {'factory_ai'},
+  {'production'},
+  {'easy_enemy_production'})
   
 laser = game.make_blueprint('laser',
   {'transform', scale_x=32, scale_y=1},
