@@ -4,18 +4,18 @@ local turn_speed = 0.15
 local accel = 0.15
 
 -- Try to find a target
-local target = game.targeting.get_nearest_of_type(self, 'fighter')
-if not target then target = game.targeting.get_nearest_of_type(self, 'frigate') end
-if not target then target = game.targeting.get_nearest_of_type(self, 'bomber') end
-if not target then target = game.targeting.get_nearest_of_type(self, 'factory') end
--- F this, self-destruct
-if not target then self_destruct() end
+local target = game.targeting.get_type_in_range(self, 'fighter', 400) or
+               game.targeting.get_type_in_range(self, 'bomber', 400) or
+               game.targeting.get_type_in_range(self, 'frigate', 400) or
+               game.targeting.get_nearest_of_type(self, 'fighter') or
+               game.targeting.get_nearest_of_type(self, 'factory')
 
 function update()
-  if target.dead then
+  if not target or target.dead then
     self_destruct()
+  else
+    self.ship.go_towards(target.transform.pos, true)
   end
-  self.ship.go_towards(target.transform.pos, true)
 end
 
 function self_destruct()

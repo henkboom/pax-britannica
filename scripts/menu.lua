@@ -20,9 +20,18 @@ local function spawn(blueprint)
 end
 
 function update()
-  local key_space = game.keyboard.key_held(string.byte(' '))
+  local one_button = false
+  if self.ship.player == 1 then
+    one_button = game.keyboard.key_held(string.byte('1'))
+  elseif self.ship.player == 2 then
+    one_button = game.keyboard.key_held(string.byte('2'))
+  elseif self.ship.player == 3 then
+    one_button = game.keyboard.key_held(string.byte('3'))
+  elseif self.ship.player == 4 then
+    one_button = game.keyboard.key_held(string.byte('4'))
+  end
   
-  if key_space then
+  if one_button then
     if frames_button_held < TOTAL_FRAMES then frames_button_held = frames_button_held + 1 end
   else
     if frames_button_held > TOTAL_FRAMES - FRIGATE_FRAMES then
