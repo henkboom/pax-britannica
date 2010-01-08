@@ -1,10 +1,13 @@
 local v2 = require 'dokidoki.v2'
 
 local stopping = false
+local target_fuzzy_pos
 
 local function retarget ()
   target = game.targeting.get_nearest_of_type(self, 'fighter') or
            game.targeting.get_nearest_of_type(self, 'factory')
+           
+  target_fuzzy_pos = target.transform.pos + v2.random() * 250
 end
 
 function update()
@@ -13,7 +16,7 @@ function update()
     retarget()
   end
   
-  if target then    
+  if target then      
     target_distance = v2.mag(target.transform.pos - self.transform.pos)
     target_direction = v2.norm(target.transform.pos - self.transform.pos)
     facing_direction = v2.norm(self.transform.facing)
@@ -28,9 +31,9 @@ function update()
     if not stopping then
       if target_distance < 200 then
         --not too close!
-        self.ship.go_away(target.transform.pos, true)
+        self.ship.go_away(target_fuzzy_pos, true)
       else
-        self.ship.go_towards(target.transform.pos, true)
+        self.ship.go_towards(target_fuzzy_pos, true)
       end
     end
     
