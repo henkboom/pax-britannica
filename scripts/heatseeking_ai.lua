@@ -13,8 +13,9 @@ local target = game.targeting.get_type_in_range(self, 'fighter', 400) or
 function update()
   if not target or target.dead then
     self_destruct()
+  else
+    self.ship.go_towards(target.transform.pos, true)
   end
-  self.ship.go_towards(target.transform.pos, true)
 end
 
 function self_destruct()
