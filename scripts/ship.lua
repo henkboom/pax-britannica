@@ -44,6 +44,10 @@ local function go_towards_or_away(target_pos, force_thrust, is_away)
   end
 end
 
+function damage(amount)
+  hit_points = hit_points - amount
+end
+
 -- automatically thrusts and turns according to the target
 function go_towards(target_pos, force_thrust)
   go_towards_or_away(target_pos, force_thrust, false)
