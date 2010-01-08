@@ -18,11 +18,19 @@ kernel.start_main_loop(game.make_game(
     game.opengl_2d.width = 1024
     game.opengl_2d.height = 768
 
+    game.init_component('constants')
     game.init_component('collision')
     game.init_component('resources')
     game.init_component('targeting')
     game.init_component('tracing')
 
-    game.actors.new(blueprints.factory, {'transform', pos=v2(500, 150)}, {'ship', player=1})
-    game.actors.new(blueprints.factory, {'transform', pos=v2(500, 600)}, {'ship', player=2})
+    game.actors.new(blueprints.factory,
+      {'transform', pos=v2(200, 200)},
+      {'ship', player=1})
+    game.actors.new(blueprints.factory,
+      {'transform', pos=v2(800, 400), facing=v2(-1, 0)},
+      {'ship', player=2})
+    game.actors.new(blueprints.factory,
+      {'transform', pos=v2(200, 600)},
+      {'ship', player=3})
   end))

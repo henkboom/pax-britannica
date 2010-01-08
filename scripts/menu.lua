@@ -4,7 +4,7 @@ local v2 = require 'dokidoki.v2'
 
 local SEGMENTS = 16
 local RADIUS = 25
-local OFFSET = {-30, 0}
+local OFFSET = -30
 
 local FIGHTER_FRAMES = 60;
 local BOMBER_FRAMES = 60;
@@ -15,7 +15,7 @@ local frames_button_held = 0
 
 local function spawn(blueprint)
   game.actors.new(blueprint,
-    {'transform', pos=self.transform.pos},
+    {'transform', pos=self.transform.pos, facing=self.transform.facing},
     {'ship', player=self.ship.player})
 end
 
@@ -46,9 +46,10 @@ end
 
 function draw()
   local pos = self.transform.pos;
+  local offset = OFFSET * self.transform.facing
 
   gl.glPushMatrix()
-  gl.glTranslated(pos.x, pos.y, 0)
+  gl.glTranslated(pos.x + offset.x, pos.y + offset.y, 0)
   
   gl.glEnable(gl.GL_LINE_SMOOTH)
   gl.glHint(gl.GL_LINE_SMOOTH_HINT, gl.GL_NICEST)
@@ -59,19 +60,19 @@ function draw()
   gl.glBegin(gl.GL_POLYGON)
     local angle = frames_button_held / TOTAL_FRAMES
     gl.glColor3d(0.5, 0.5, 0.5)
-    gl.glVertex2d(OFFSET[1], OFFSET[2])
+    gl.glVertex2d(0, 0)
     for point = 0,SEGMENTS do
-      gl.glVertex2d(math.sin(point / SEGMENTS * math.pi * 2 * angle) * RADIUS + OFFSET[1], math.cos(point / SEGMENTS * math.pi * 2 * angle) * RADIUS + OFFSET[2])
-      gl.glVertex2d(math.sin((point+1) / SEGMENTS * math.pi * 2 * angle) * RADIUS + OFFSET[1], math.cos((point+1) / SEGMENTS * math.pi * 2 * angle) * RADIUS + OFFSET[2])
+      gl.glVertex2d(math.sin(point / SEGMENTS * math.pi * 2 * angle) * RADIUS, math.cos(point / SEGMENTS * math.pi * 2 * angle) * RADIUS)
+      gl.glVertex2d(math.sin((point+1) / SEGMENTS * math.pi * 2 * angle) * RADIUS, math.cos((point+1) / SEGMENTS * math.pi * 2 * angle) * RADIUS)
     end
-    gl.glVertex2d(OFFSET[1], OFFSET[2])
+    gl.glVertex2d(0, 0)
   gl.glEnd()   
   
   -- Draw the outline
   gl.glBegin(gl.GL_LINE_LOOP)
     gl.glColor3d(1, 1, 1)
     for point = 0,SEGMENTS do
-      gl.glVertex2d(math.sin(point / SEGMENTS * math.pi * 2) * RADIUS + OFFSET[1], math.cos(point / SEGMENTS * math.pi * 2) * RADIUS + OFFSET[2])
+      gl.glVertex2d(math.sin(point / SEGMENTS * math.pi * 2) * RADIUS, math.cos(point / SEGMENTS * math.pi * 2) * RADIUS)
     end
   gl.glEnd() 
   
@@ -79,19 +80,20 @@ function draw()
   gl.glBegin(gl.GL_LINES)
     local angle = FIGHTER_FRAMES / TOTAL_FRAMES
     gl.glColor3d(1, 0, 0)
-    gl.glVertex2d(OFFSET[1], OFFSET[2])
-    gl.glVertex2d(math.sin(math.pi * 2 * angle) * RADIUS + OFFSET[1], math.cos(math.pi * 2 * angle) * RADIUS + OFFSET[2])
+    gl.glVertex2d(0, 0)
+    gl.glVertex2d(math.sin(math.pi * 2 * angle) * RADIUS, math.cos(math.pi * 2 * angle) * RADIUS)
     
     angle = (FIGHTER_FRAMES + BOMBER_FRAMES) / TOTAL_FRAMES
     gl.glColor3d(0, 1, 0)
-    gl.glVertex2d(OFFSET[1], OFFSET[2])
-    gl.glVertex2d(math.sin(math.pi * 2 * angle) * RADIUS + OFFSET[1], math.cos(math.pi * 2 * angle) * RADIUS + OFFSET[2])
+    gl.glVertex2d(0, 0)
+    gl.glVertex2d(math.sin(math.pi * 2 * angle) * RADIUS, math.cos(math.pi * 2 * angle) * RADIUS)
 
     angle = (FIGHTER_FRAMES + BOMBER_FRAMES + FRIGATE_FRAMES) / TOTAL_FRAMES
     gl.glColor3d(0, 0, 1)
-    gl.glVertex2d(OFFSET[1], OFFSET[2])
-    gl.glVertex2d(math.sin(math.pi * 2 * angle) * RADIUS + OFFSET[1], math.cos(math.pi * 2 * angle) * RADIUS + OFFSET[2])
+    gl.glVertex2d(0, 0)
+    gl.glVertex2d(math.sin(math.pi * 2 * angle) * RADIUS, math.cos(math.pi * 2 * angle) * RADIUS)
   gl.glEnd() 
+  gl.glColor3d(1, 1, 1)
   
   gl.glDisable(gl.GL_LINE_SMOOTH)
   

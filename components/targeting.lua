@@ -1,11 +1,10 @@
 local v2 = require 'dokidoki.v2'
 
-local function on_screen(pos)
-  if pos.x < 0 or pos.x > 1028 or pos.y < 0 or pos.y > 768 then
-    return false
-  else
-    return true
-  end
+function on_screen(pos)
+  return pos.x >= game.constants.screen_left and
+         pos.x <= game.constants.screen_right and
+         pos.y >= game.constants.screen_bottom and
+         pos.y <= game.constants.screen_top
 end
 
 -- returns the closest target of the given type

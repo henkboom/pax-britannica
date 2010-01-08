@@ -9,7 +9,8 @@ local max_hit_points = hit_points
 
 local player_colors = {
   {0.5, 0.2, 0.8},
-  {0.5, 0.8, 0.2}
+  {0.5, 0.8, 0.2},
+  {0.2, 0.6, 0.6}
 }
 
 self.sprite.color = player_colors[player]
