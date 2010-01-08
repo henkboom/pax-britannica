@@ -21,6 +21,7 @@ kernel.start_main_loop(game.make_game(
     game.init_component('collision')
     game.init_component('resources')
     game.init_component('targeting')
+    game.init_component('tracing')
 
     game.actors.new(blueprints.factory, {'transform', pos=v2(500, 150)}, {'ship', player=1})
     game.actors.new(blueprints.factory, {'transform', pos=v2(500, 600)}, {'ship', player=2})

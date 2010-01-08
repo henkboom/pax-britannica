@@ -1,4 +1,5 @@
-require 'dokidoki.module' [[fighter, bomber, frigate, factory, laser, bomb, missile]]
+require 'dokidoki.module'
+[[ fighter, bomber, frigate, factory, laser, bomb, missile ]]
 
 local collision = require 'dokidoki.collision'
 local game = require 'dokidoki.game'

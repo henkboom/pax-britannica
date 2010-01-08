@@ -5,6 +5,8 @@ assert(turn_speed, 'missing turn_speed argument')
 assert(accel, 'missing accel argument')
 assert(hit_points, 'missing hit_points argument')
 
+local max_hit_points = hit_points
+
 local player_colors = {
   {0.5, 0.2, 0.8},
   {0.5, 0.8, 0.2}
@@ -28,6 +30,8 @@ function update()
   velocity = velocity * 0.97
   self.transform.pos = self.transform.pos + velocity
   if hit_points <= 0 then self.dead = true end
+  game.tracing.trace_bar(self.transform.pos + v2(0, 10),
+                         hit_points / max_hit_points)
 end
 
 local function go_towards_or_away(target_pos, force_thrust, is_away)
