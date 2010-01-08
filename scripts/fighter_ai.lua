@@ -10,6 +10,7 @@ local run_distance = 200
 local running = false
 
 local target = false
+local on_screen = true
 
 local function retarget ()
   target = game.targeting.get_nearest_of_type(self, 'bomber') or
@@ -22,9 +23,18 @@ end
 -- gone a certain distance
 
 function update()
-  -- this math.random stuff is temporary
-  if not target or math.random() < 0.005 then
+  -- if we go from on to off screen, retarget
+  local new_on_screen = game.targeting.on_screen(self.transform.pos)
+  if (on_screen and not new_on_screen)
+     or not target
+     or target.dead
+     or math.random() < 0.005 then
     retarget()
+  end
+  on_screen = new_on_screen
+
+  if target then
+    game.tracing.trace_line(self.transform.pos, target.transform.pos)
   end
 
   if target then

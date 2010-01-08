@@ -6,6 +6,22 @@ local function in_debug_mode()
   return game.keyboard.key_held(string.byte('`'))
 end
 
+function trace_line(from, to)
+  if in_debug_mode() then
+    table.insert(tracers, game.actors.new_generic('line_trace', function ()
+      function draw()
+        gl.glBegin(gl.GL_LINES)
+        gl.glColor4d(1, 1, 1, 0.3)
+        gl.glVertex2d(from.x, from.y)
+        gl.glColor4d(1, 1, 1, 0)
+        gl.glVertex2d(to.x, to.y)
+        gl.glEnd()
+        gl.glColor3d(1, 1, 1)
+      end
+    end))
+  end
+end
+
 function trace_bar(pos, progress)
   if in_debug_mode() then
     table.insert(tracers, game.actors.new_generic('arrow_trace', function ()
