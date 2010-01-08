@@ -9,7 +9,7 @@ fighter = game.make_blueprint('fighter',
   {'transform', scale_x=1, scale_y=1},
   {'sprite', resource='fighter_sprite'},
   {'collision', collision_type='ship', poly=collision.make_rectangle(12, 8)},
-  {'ship', turn_speed=0.015, accel=0.1, hit_points=50},
+  {'ship', turn_speed=0.025, accel=0.1, hit_points=50},
   {'fighter_shooting'},
   {'fighter_ai'})
 
