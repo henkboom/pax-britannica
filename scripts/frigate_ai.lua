@@ -15,7 +15,7 @@ end
 
 function update()
   -- this math.random stuff is temporary
-  if not target or math.random() < 0.001 then
+  if not target or target.dead or math.random() < 0.001 then
     retarget()
   end
   
