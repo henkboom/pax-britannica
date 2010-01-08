@@ -60,9 +60,9 @@ bomb = game.make_blueprint('bomb',
   {'bullet'})  
   
 missile = game.make_blueprint('missile',
-  {'transform', scale_x=8, scale_y=2},
+  {'transform', scale_x=5, scale_y=2},
   {'sprite'},
-  {'collision', collision_type='bullet', damage=40, poly=collision.make_rectangle(8, 2)},
+  {'collision', collision_type='bullet', damage=40, poly=collision.make_rectangle(5, 2)},
   {'ship', turn_speed=0.1, accel=0.15, hit_points=1},
   {'heatseeking_ai'})  
 
