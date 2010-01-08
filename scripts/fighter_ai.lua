@@ -42,7 +42,7 @@ function update()
         self.ship.thrust()
       end
 
-      if self.fighter_shooting.is_reloaded() and not too_close then
+      if not self.fighter_shooting.is_empty() and not too_close then
         running = false
       end
     else
