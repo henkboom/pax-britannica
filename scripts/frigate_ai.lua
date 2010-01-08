@@ -7,7 +7,9 @@ local function retarget ()
   target = game.targeting.get_nearest_of_type(self, 'fighter') or
            game.targeting.get_nearest_of_type(self, 'factory')
            
-  target_fuzzy_pos = target.transform.pos + v2.random() * 250
+  if target then
+    target_fuzzy_pos = target.transform.pos + v2.random() * 250
+  end
 end
 
 function update()
