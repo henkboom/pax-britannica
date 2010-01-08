@@ -1,7 +1,7 @@
 local v2 = require 'dokidoki.v2'
 
 -- shot range
-local shot_range = 350
+local shot_range = 200
 -- try to stay this far away when you're out of ammo
 local run_distance = 200
 
