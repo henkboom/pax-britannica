@@ -14,24 +14,24 @@ fighter = game.make_blueprint('fighter',
   {'fighter_ai'})
 
 bomber = game.make_blueprint('bomber',
-  {'transform', scale_x=3, scale_y=3},
-  {'sprite', resource='fighter_sprite'},
+  {'transform', scale_x=1, scale_y=1},
+  {'sprite', resource='bomber_sprite'},
   {'collision', collision_type='ship', poly=collision.make_rectangle(24, 16)},
   {'ship', turn_speed=0.03, accel=0.05, hit_points=300},
   {'bomber_shooting'},
   {'bomber_ai'})
 
 frigate = game.make_blueprint('frigate',
-  {'transform', scale_x=6, scale_y=6},
-  {'sprite', resource='fighter_sprite'},
+  {'transform', scale_x=1, scale_y=1},
+  {'sprite', resource='frigate_sprite'},
   {'collision', collision_type='ship', poly=collision.make_rectangle(48, 32)},
   {'ship', turn_speed=0.01, accel=0.01, hit_points=1000},
   {'frigate_shooting'},
   {'frigate_ai'})
 
 player_factory = game.make_blueprint('factory',
-  {'transform', scale_x=30, scale_y=30},
-  {'sprite', resource='fighter_sprite'},
+  {'transform', scale_x=1, scale_y=1},
+  {'sprite', resource='factory_sprite'},
   {'collision', collision_type='ship', poly=collision.make_rectangle(180, 120)},
   {'ship', turn_speed=0.001, accel=0.005, hit_points=20000},
   {'factory_ai'},
@@ -39,8 +39,8 @@ player_factory = game.make_blueprint('factory',
   {'player_production'})
   
 easy_enemy_factory = game.make_blueprint('factory',
-  {'transform', scale_x=30, scale_y=30},
-  {'sprite', resource='fighter_sprite'},
+  {'transform', scale_x=1, scale_y=1},
+  {'sprite', resource='factory_sprite'},
   {'collision', collision_type='ship', poly=collision.make_rectangle(180, 120)},
   {'ship', turn_speed=0.001, accel=0.005, hit_points=20000},
   {'factory_ai'},
