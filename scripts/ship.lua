@@ -7,8 +7,15 @@ assert(hit_points, 'missing hit_points argument')
 
 local max_hit_points = hit_points
 
+--local player_colors = {
+--  {0.5, 0.2, 0.8},
+--  {0.5, 0.8, 0.2},
+--  {0.2, 0.6, 0.6},
+--  {0.8, 0.4, 0.2}  
+--}
+
 local player_colors = {
-  {0.5, 0.2, 0.8},
+  {1.0, 1.0, 1.0},
   {0.5, 0.8, 0.2},
   {0.2, 0.6, 0.6},
   {0.8, 0.4, 0.2}  
