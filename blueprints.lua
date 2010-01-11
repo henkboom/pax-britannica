@@ -1,9 +1,14 @@
 require 'dokidoki.module'
-[[ fighter, bomber, frigate, player_factory, easy_enemy_factory, laser, bomb, missile ]]
+[[ background, fighter, bomber, frigate, player_factory, easy_enemy_factory,
+   laser, bomb, missile ]]
 
 local collision = require 'dokidoki.collision'
 local game = require 'dokidoki.game'
 local v2 = require 'dokidoki.v2'
+
+background = game.make_blueprint('background',
+  {'transform', scale_x=1, scale_y=1},
+  {'sprite', resource='background'})
 
 fighter = game.make_blueprint('fighter',
   {'transform', scale_x=1, scale_y=1},
