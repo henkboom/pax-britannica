@@ -23,10 +23,13 @@ function update()
     if frames_button_held < TOTAL_FRAMES then frames_button_held = frames_button_held + 1 end
   else
     if frames_button_held > UNIT_FRAMES.bomber then
+      game.log.record_spawn(blueprints.frigate)
       spawn(blueprints.frigate)
     elseif frames_button_held > UNIT_FRAMES.fighter then
+      game.log.record_spawn(blueprints.bomber)
       spawn(blueprints.bomber)
     elseif frames_button_held ~= 0 then
+      game.log.record_spawn(blueprints.fighter)
       spawn(blueprints.fighter)
     end
     frames_button_held = 0
@@ -36,9 +39,18 @@ function update()
   local key_x = game.keyboard.key_pressed(string.byte('X'))
   local key_c = game.keyboard.key_pressed(string.byte('C'))
 
-  if key_z then spawn(blueprints.fighter) end
-  if key_x then spawn(blueprints.bomber)  end
-  if key_c then spawn(blueprints.frigate) end
+  if key_z then
+    game.log.record_spawn(blueprints.fighter)
+    spawn(blueprints.fighter)
+  end
+  if key_x then
+    game.log.record_spawn(blueprints.bomber)
+    spawn(blueprints.bomber)
+  end
+  if key_c then
+    game.log.record_spawn(blueprints.frigate)
+    spawn(blueprints.frigate)
+  end
 end
 
 function draw()
