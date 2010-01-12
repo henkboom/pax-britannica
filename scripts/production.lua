@@ -2,23 +2,27 @@ local gl = require 'gl'
 local blueprints = require 'blueprints'
 local v2 = require 'dokidoki.v2'
 
-local BUILDING_SPEED = 3
+BUILDING_SPEED = 3
 
 local SEGMENTS = 16
 local RADIUS = 25
 local OFFSET = -30
 
-UNIT_COSTS = { fighter = 60, bomber = 180, frigate = 360, upgrade = 720 }
+UNIT_COSTS = { fighter = 50, bomber = 180, frigate = 360, upgrade = 720 }
 
 local potential_cost = 0
 button_held = false
 
-local function spawn(blueprint)
-  self.resources.amount = self.resources.amount - UNIT_COSTS[blueprint.name]
-
-  game.actors.new(blueprint,
-    {'transform', pos=self.transform.pos, facing=self.transform.facing},
-    {'ship', player=self.ship.player})
+local function spawn(unit_type)
+  self.resources.amount = self.resources.amount - UNIT_COSTS[unit_type]
+  
+  if (unit_type == 'upgrade') then 
+    self.resources.harvest_rate = self.resources.harvest_rate * 2 
+  else
+    game.actors.new(blueprints[unit_type],
+      {'transform', pos=self.transform.pos, facing=self.transform.facing},
+      {'ship', player=self.ship.player})
+  end
 end
 
 function update()  
@@ -31,13 +35,13 @@ function update()
     end
   else
     if potential_cost > UNIT_COSTS.upgrade then
-      spawn(blueprints.upgrade)    
+      spawn('upgrade')    
     elseif potential_cost > UNIT_COSTS.frigate then
-      spawn(blueprints.frigate)  
+      spawn('frigate')  
     elseif potential_cost > UNIT_COSTS.bomber then
-      spawn(blueprints.bomber)
+      spawn('bomber')
     elseif potential_cost > UNIT_COSTS.fighter then
-      spawn(blueprints.fighter)
+      spawn('fighter')
     end
     potential_cost = 0
   end
@@ -48,10 +52,10 @@ function update()
   local key_c = game.keyboard.key_pressed(string.byte('C'))
   local key_v = game.keyboard.key_pressed(string.byte('V'))
 
-  if key_z then spawn(blueprints.fighter) end
-  if key_x then spawn(blueprints.bomber)  end
-  if key_c then spawn(blueprints.frigate) end
-  if key_v then spawn(blueprints.upgrade) end
+  if key_z then spawn('fighter') end
+  if key_x then spawn('bomber')  end
+  if key_c then spawn('frigate') end
+  if key_v then spawn('upgrade') end
 end
 
 local function scale_angle(frames)

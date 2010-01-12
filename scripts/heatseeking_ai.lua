@@ -1,24 +1,36 @@
 local v2 = require 'dokidoki.v2'
 
+local MAX_LIFETIME = 60*5 -- 5 seconds to auto-destruct
+
 local turn_speed = 0.15
 local accel = 0.15
+local age = 0
 
--- Try to find a target
-local target = game.targeting.get_type_in_range(self, 'fighter', 600) or
-               game.targeting.get_type_in_range(self, 'bomber', 600) or
-               game.targeting.get_type_in_range(self, 'frigate', 600) or
-               game.targeting.get_nearest_of_type(self, 'fighter') or
-               game.targeting.get_nearest_of_type(self, 'factory')
+local target
+
+local function self_destruct()
+  --EXPLODE!
+  self.dead = true
+end
+
+local function retarget()
+  target = game.targeting.get_type_in_range(self, 'fighter', 600) or
+           game.targeting.get_type_in_range(self, 'bomber', 600) or
+           game.targeting.get_type_in_range(self, 'frigate', 600) or
+           game.targeting.get_nearest_of_type(self, 'fighter') or
+           game.targeting.get_nearest_of_type(self, 'factory')
+end
+retarget()
 
 function update()
-  if not target or target.dead then
+  age = age + 1
+
+  if not target or age > MAX_LIFETIME then
     self_destruct()
+  elseif target.dead then
+    retarget()
   else
     self.ship.go_towards(target.transform.pos, true)
   end
 end
 
-function self_destruct()
-  --EXPLODE!
-  self.dead = true
-end
