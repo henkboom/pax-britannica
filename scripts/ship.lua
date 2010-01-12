@@ -15,10 +15,10 @@ local max_hit_points = hit_points
 --}
 
 local player_colors = {
-  {1.0, 1.0, 1.0},
   {0.5, 0.8, 0.2},
   {0.2, 0.6, 0.6},
-  {0.8, 0.4, 0.2}  
+  {0.8, 0.4, 0.2},
+  {1.0, 1.0, 1.0}  
 }
 
 self.sprite.color = player_colors[player]
@@ -38,7 +38,7 @@ end
 function update()
   velocity = velocity * 0.97
   self.transform.pos = self.transform.pos + velocity
-  if hit_points <= 0 then self.dead = true end
+  if hit_points <= 0 then destruct() end
   game.tracing.trace_bar(self.transform.pos + v2(0, 10),
                          hit_points / max_hit_points)
 end
@@ -59,6 +59,11 @@ end
 
 function damage(amount)
   hit_points = hit_points - amount
+end
+
+function destruct()
+  game.log.record_death(self.blueprint)
+  self.dead = true
 end
 
 -- automatically thrusts and turns according to the target
