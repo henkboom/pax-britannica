@@ -2,17 +2,17 @@ NAME=gamma4
 
 # bootstrap
 linux:
-	make $(NAME) particles.so \
+	make $(NAME) \
 		PLATFORM=linux \
 		EXT=so
 
 macosx:
-	make $(NAME) particles.so \
+	make $(NAME) \
 		PLATFORM=macosx \
 		EXT=so
 
 mingw:
-	make $(NAME) particles.dll \
+	make $(NAME) \
 		PLATFORM=mingw \
 		EXT=dll
 
