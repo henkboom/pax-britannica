@@ -41,7 +41,8 @@ player_factory = game.make_blueprint('factory',
   {'ship', turn_speed=0.001, accel=0.005, hit_points=20000},
   {'factory_ai'},
   {'production'},
-  {'player_production'})
+  {'player_production'},
+  {'resources'})
   
 easy_enemy_factory = game.make_blueprint('factory',
   {'transform', scale_x=1, scale_y=1},
@@ -50,7 +51,8 @@ easy_enemy_factory = game.make_blueprint('factory',
   {'ship', turn_speed=0.001, accel=0.005, hit_points=20000},
   {'factory_ai'},
   {'production'},
-  {'easy_enemy_production'})
+  {'easy_enemy_production'},
+  {'resources'})
   
 laser = game.make_blueprint('laser',
   {'transform', scale_x=32, scale_y=1},

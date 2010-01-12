@@ -17,7 +17,7 @@ local function next_action()
   if action_index > table.getn(SCRIPTED_ACTIONS) then action_index = 1 end
   
   -- how much time to hold the button (with randomness to fool CAPTCHAS)
-  frames_to_hold = self.production.UNIT_FRAMES[SCRIPTED_ACTIONS[action_index]] - 30
+  frames_to_hold = self.production.UNIT_COSTS[SCRIPTED_ACTIONS[action_index]] - 30
   frames_to_hold = frames_to_hold + (math.random() - 0.5) * 20
   
   -- how much time to wait before actually performing the scripted action?

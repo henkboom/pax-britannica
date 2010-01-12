@@ -26,7 +26,7 @@ kernel.start_main_loop(game.make_game(
 
     game.actors.new(blueprints.background,
       {'transform', pos=v2(0, 0)})
-    game.actors.new(blueprints.easy_enemy_factory,
+    game.actors.new(blueprints.player_factory,
       {'transform', pos=v2(500, 200)},
       {'ship', player=1})
     game.actors.new(blueprints.easy_enemy_factory,
