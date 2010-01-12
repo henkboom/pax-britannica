@@ -19,6 +19,7 @@ local function spawn(unit_type)
   if (unit_type == 'upgrade') then 
     self.resources.harvest_rate = self.resources.harvest_rate * 2 
   else
+    game.log.record_spawn(blueprints[unit_type])
     game.actors.new(blueprints[unit_type],
       {'transform', pos=self.transform.pos, facing=self.transform.facing},
       {'ship', player=self.ship.player})

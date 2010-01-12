@@ -23,10 +23,19 @@ kernel.start_main_loop(game.make_game(
     game.init_component('resources')
     game.init_component('targeting')
     game.init_component('tracing')
+    game.init_component('log')
+    
+    function game.exit_handler.on_close()
+      game.log.print_stats()
+      kernel.abort_main_loop()
+    end
 
     game.actors.new(blueprints.background,
       {'transform', pos=v2(0, 0)})
-    game.actors.new(blueprints.player_factory,
+
+    game.init_component('particles')
+
+    game.actors.new(blueprints.easy_enemy_factory,
       {'transform', pos=v2(500, 200)},
       {'ship', player=1})
     game.actors.new(blueprints.easy_enemy_factory,

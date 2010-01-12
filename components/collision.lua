@@ -1,4 +1,5 @@
 local collision = require 'dokidoki.collision'
+local log = require 'components.log'
 
 -- umm, looks like brute force n^2 checking is fast enough
 local bodies = {}
@@ -16,10 +17,12 @@ game.actors.new_generic('collision', function ()
         if b1.type ~= b2.type and b1.player ~= b2.player
           and collision.collide(b1, b2) then
           if b1.type == 'bullet' then
+            game.log.record_hit(b2.actor, b1.actor)
             b2.actor.ship.damage(b1.actor.collision.damage)
             b1.actor.dead = true
             end
           if b2.type == 'bullet' then
+            game.log.record_hit(b1.actor, b2.actor)
             b1.actor.ship.damage(b2.actor.collision.damage)
             b2.actor.dead = true
             end
