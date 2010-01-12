@@ -30,6 +30,12 @@ void init_preloaders(lua_State *L)
     REGISTER_LOADER("memarray", luaopen_memarray);
     REGISTER_LOADER("mixer", luaopen_mixer);
     REGISTER_LOADER("stb_image", luaopen_stb_image);
+
+    // each night I pray that I might one day happen upon a less disgusting way
+    // of doing this
+    #ifdef EXTRA_LOADERS
+    #include EXTRA_LOADERS
+    #endif
     
     lua_pop(L, 2);
 }
