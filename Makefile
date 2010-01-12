@@ -30,7 +30,7 @@ mingw:
 		STATIC_LINK="-Wl,-Bstatic" \
 		DYNAMIC_LINK="-Wl,-Bdynamic" \
 		PLATFORM_CFLAGS="" \
-		PLATFORM_LDFLAGS="-Wl,-E -lopengl32 -lglu32 -lole32 -lwinmm"
+		PLATFORM_LDFLAGS="-lopengl32 -lglu32 -lole32 -lwinmm"
 
 clean:
 	rm -f *.o $(NAME)
