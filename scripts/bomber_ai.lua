@@ -1,7 +1,7 @@
 local v2 = require 'dokidoki.v2'
 
 local approaching = true
-local cooldown_timer = 100
+local cooldown_timer = 60
 local target = false
 local approach_sign = 1
 
@@ -46,7 +46,7 @@ function update()
     -- Only shoot when perpendicular to target and in range
     if cooldown_timer == 0 and target_distance < 220 and v2.dot(firing_direction, target_direction) > 0.99 then
         self.bomber_shooting.shoot(approach_sign)
-        cooldown_timer = 100
+        cooldown_timer = 60
     end
   end
   
