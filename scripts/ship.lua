@@ -35,10 +35,26 @@ function thrust()
   velocity = velocity + self.transform.facing * accel
 end
 
+local function random_point_on_ship()
+  -- assumes the ship is a rectangle
+  local a = self.collision.poly.vertices[1]
+  local ab = self.collision.poly.vertices[2] - a
+  local ac = self.collision.poly.vertices[4] - a
+  return self.transform.pos +
+         v2.rotate_to(self.transform.facing,
+                      a + ab * math.random() + ac * math.random())
+end
+
 function update()
   velocity = velocity * 0.97
   self.transform.pos = self.transform.pos + velocity
   if hit_points <= 0 then destruct() end
+
+  if math.random() < v2.mag(velocity) / 10 then
+    game.particles.add_bubble(random_point_on_ship())
+  end
+
+  -- debug
   game.tracing.trace_bar(self.transform.pos + v2(0, 10),
                          hit_points / max_hit_points)
 end

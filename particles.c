@@ -23,6 +23,9 @@ typedef struct {
 } particle_t;
 
 typedef struct {
+    int texture;
+    float width;
+    float height;
     int next;
     particle_t particles[PARTICLE_COUNT];
 } emitter_t;
@@ -31,11 +34,17 @@ static inline void draw_particle(emitter_t *emitter, particle_t *particle)
 {
     if(particle->life)
     {
-        glColor4d(1, particle->life / 60.0, 1, particle->life / 60.0);
-        glVertex2d(particle->x - 4, particle->y - 4);
-        glVertex2d(particle->x + 4, particle->y - 4);
-        glVertex2d(particle->x + 4, particle->y + 4);
-        glVertex2d(particle->x - 4, particle->y + 4);
+        float dx = emitter->width/2;
+        float dy = emitter->height/2;
+        glColor4f(1, particle->life / 180.0, 1, particle->life / 180.0);
+        glTexCoord2d(0, 1);
+        glVertex2f(particle->x - dx, particle->y - dy);
+        glTexCoord2d(1, 1);
+        glVertex2f(particle->x + dx, particle->y - dy);
+        glTexCoord2d(1, 0);
+        glVertex2f(particle->x + dx, particle->y + dy);
+        glTexCoord2d(0, 0);
+        glVertex2f(particle->x - dx, particle->y + dy);
     }
 }
 
@@ -44,14 +53,18 @@ static int emitter__draw(lua_State *L)
     emitter_t *emitter = luaL_checkudata(L, 1, "particles.emitter");
     int i;
 
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, emitter->texture);
     glBegin(GL_QUADS);
     for(i = emitter->next; i != PARTICLE_COUNT; i++)
         draw_particle(emitter, &emitter->particles[i]);
     for(i = 0; i != emitter->next; i++)
         draw_particle(emitter, &emitter->particles[i]);
     glEnd();
+    glBindTexture(GL_TEXTURE_2D, 0);
+    glDisable(GL_TEXTURE_2D);
 
-    glColor3d(1, 1, 1);
+    glColor3f(1, 1, 1);
 
     return 0;
 }
@@ -89,7 +102,7 @@ static int emitter__add_particle(lua_State *L)
     emitter->next = (emitter->next + 1) % PARTICLE_COUNT;
 
     // initialize it
-    particle->life = 60;
+    particle->life = 180;
     particle->x = x;
     particle->y = y;
     particle->xvel = xvel;
@@ -100,10 +113,17 @@ static int emitter__add_particle(lua_State *L)
 
 static int particles__make_emitter(lua_State *L)
 {
-    printf("123");
+    float width = (float)luaL_checknumber(L, 1);
+    float height = (float)luaL_checknumber(L, 2);
+    int texture = luaL_checkint(L, 3);
+
     emitter_t *emitter = lua_newuserdata(L, sizeof(emitter_t));
     luaL_getmetatable(L, emitter_udata);
     lua_setmetatable(L, -2);
+
+    emitter->width = width;
+    emitter->height = height;
+    emitter->texture = texture;
 
     emitter->next = 0;
     int i;
