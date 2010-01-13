@@ -36,7 +36,7 @@ static inline void draw_particle(emitter_t *emitter, particle_t *particle)
     {
         float dx = emitter->width/2;
         float dy = emitter->height/2;
-        glColor4f(1, particle->life / 180.0, 1, particle->life / 180.0);
+        glColor4f(1, 1, 1, particle->life / 180.0);
         glTexCoord2d(0, 1);
         glVertex2f(particle->x - dx, particle->y - dy);
         glTexCoord2d(1, 1);
