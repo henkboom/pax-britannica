@@ -7,11 +7,11 @@ local game = require 'dokidoki.game'
 local v2 = require 'dokidoki.v2'
 
 background = game.make_blueprint('background',
-  {'transform', scale_x=1, scale_y=1},
+  {'transform'},
   {'sprite', resource='background'})
 
 fighter = game.make_blueprint('fighter',
-  {'transform', scale_x=1, scale_y=1},
+  {'transform'},
   {'sprite', resource='fighter_sprite'},
   {'collision', collision_type='ship', poly=collision.make_rectangle(9, 6)},
   {'ship', turn_speed=0.025, accel=0.1, hit_points=40},
@@ -19,7 +19,7 @@ fighter = game.make_blueprint('fighter',
   {'fighter_ai'})
 
 bomber = game.make_blueprint('bomber',
-  {'transform', scale_x=1, scale_y=1},
+  {'transform'},
   {'sprite', resource='bomber_sprite'},
   {'collision', collision_type='ship', poly=collision.make_rectangle(18, 12)},
   {'ship', turn_speed=0.03, accel=0.05, hit_points=250},
@@ -27,7 +27,7 @@ bomber = game.make_blueprint('bomber',
   {'bomber_ai'})
 
 frigate = game.make_blueprint('frigate',
-  {'transform', scale_x=1, scale_y=1},
+  {'transform'},
   {'sprite', resource='frigate_sprite'},
   {'collision', collision_type='ship', poly=collision.make_rectangle(36, 24)},
   {'ship', turn_speed=0.01, accel=0.01, hit_points=1500},
@@ -35,7 +35,7 @@ frigate = game.make_blueprint('frigate',
   {'frigate_ai'})
 
 player_factory = game.make_blueprint('factory',
-  {'transform', scale_x=1, scale_y=1},
+  {'transform'},
   {'sprite', resource='factory_sprite'},
   {'collision', collision_type='ship', poly=collision.make_rectangle(180, 120)},
   {'ship', turn_speed=0.001, accel=0.005, hit_points=20000},
@@ -45,7 +45,7 @@ player_factory = game.make_blueprint('factory',
   {'resources'})
   
 easy_enemy_factory = game.make_blueprint('factory',
-  {'transform', scale_x=1, scale_y=1},
+  {'transform'},
   {'sprite', resource='factory_sprite'},
   {'collision', collision_type='ship', poly=collision.make_rectangle(180, 120)},
   {'ship', turn_speed=0.001, accel=0.005, hit_points=20000},
@@ -70,7 +70,7 @@ missile = game.make_blueprint('missile',
   {'transform', scale_x=5, scale_y=2},
   {'sprite'},
   {'collision', collision_type='bullet', damage=40, poly=collision.make_rectangle(5, 2)},
-  {'ship', turn_speed=0.15, accel=0.17, hit_points=1},
+  {'ship', turn_speed=0.2, accel=0.17, hit_points=1},
   {'heatseeking_ai'})  
 
 return get_module_exports()
