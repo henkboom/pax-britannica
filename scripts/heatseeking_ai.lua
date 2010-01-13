@@ -22,6 +22,18 @@ local function retarget()
 end
 retarget()
 
+local function predict(target)
+  local to_target = target.transform.pos - self.transform.pos
+  if v2.dot(self.ship.velocity, to_target) ~= 0 then
+    local time_to_target =
+      v2.sqrmag(to_target) / v2.dot(self.ship.velocity - target.ship.velocity, to_target)
+    return target.transform.pos +
+           (target.ship.velocity - self.ship.velocity) * math.max(0, time_to_target)
+  else
+    return target.transform.pos
+  end
+end
+
 function update()
   age = age + 1
 
@@ -30,7 +42,8 @@ function update()
   elseif target.dead then
     retarget()
   else
-    self.ship.go_towards(target.transform.pos, true)
+    game.tracing.trace_line(self.transform.pos, target.transform.pos)
+    self.ship.go_towards(predict(target), true)
   end
 end
 
