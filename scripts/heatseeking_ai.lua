@@ -23,12 +23,12 @@ end
 retarget()
 
 local function predict(target)
+  local relative_vel = self.ship.velocity - target.ship.velocity
   local to_target = target.transform.pos - self.transform.pos
   if v2.dot(self.ship.velocity, to_target) ~= 0 then
     local time_to_target =
-      v2.sqrmag(to_target) / v2.dot(self.ship.velocity - target.ship.velocity, to_target)
-    return target.transform.pos +
-           (target.ship.velocity - self.ship.velocity) * math.max(0, time_to_target)
+      v2.sqrmag(to_target) / v2.dot(relative_vel, to_target)
+    return target.transform.pos - relative_vel * math.max(0, time_to_target)
   else
     return target.transform.pos
   end
