@@ -11,9 +11,10 @@ function update()
   self.transform.pos = self.transform.pos + velocity
   
   if self.transform.pos.x > screen_bounds.x + buffer
-     or self.transform.pos.y > screen_bounds.y + buffer
-     or self.transform.pos.x < -buffer
-     or self.transform.pos.y < -buffer then
-	 self.dead = true
+      or self.transform.pos.y > screen_bounds.y + buffer
+      or self.transform.pos.x < -buffer
+      or self.transform.pos.y < -buffer then
+	   game.log.record_miss(self)
+	   self.dead = true
   end
 end
