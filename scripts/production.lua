@@ -17,7 +17,7 @@ local function spawn(unit_type)
   self.resources.amount = self.resources.amount - UNIT_COSTS[unit_type]
   
   if (unit_type == 'upgrade') then 
-    self.resources.harvest_rate = self.resources.harvest_rate * 2 
+    self.resources.harvest_rate = self.resources.harvest_rate * 1.25
   else
     game.log.record_spawn(blueprints[unit_type])
     game.actors.new(blueprints[unit_type],
@@ -101,14 +101,17 @@ function draw()
 	gl.glEnable(gl.GL_BLEND)
 	gl.glBlendFunc(gl.GL_SRC_ALPHA, gl.GL_ONE_MINUS_SRC_ALPHA)
   
+  gl.glPushMatrix()
+  gl.glRotated(22.5, 0, 0, 1)
+  
   -- Draw the available resources pie-slice
-  gl.glBegin(gl.GL_POLYGON)
-    local angle = scale_angle(self.resources.amount)
-    gl.glColor4d(0, 0, 0, 0.25)
+  gl.glBegin(gl.GL_TRIANGLE_FAN)
+    local angle = scale_angle(self.resources.amount) * math.pi * 2
+    gl.glColor4d(0, 0, 0, 0.5)
     gl.glVertex2d(0, 0)
     for point = 0,SEGMENTS-1 do
-      gl.glVertex2d(math.sin(point / SEGMENTS * angle * math.pi * 2) * RADIUS, math.cos(point / SEGMENTS * angle * math.pi * 2) * RADIUS)
-      gl.glVertex2d(math.sin((point+1) / SEGMENTS * angle * math.pi * 2) * RADIUS, math.cos((point+1) / SEGMENTS * angle * math.pi * 2) * RADIUS)
+      gl.glVertex2d(math.sin(point / SEGMENTS * angle) * RADIUS, math.cos(point / SEGMENTS * angle) * RADIUS)
+      gl.glVertex2d(math.sin((point+1) / SEGMENTS * angle) * RADIUS, math.cos((point+1) / SEGMENTS * angle) * RADIUS)
     end
     gl.glVertex2d(0, 0)
   gl.glEnd()   
@@ -131,42 +134,17 @@ function draw()
   
   -- Draw the needle
   local angle = scale_angle(potential_cost)
-  gl.glColor3d(1, 1, 1)
+  color = self.ship.player_colors[self.ship.player]
+  gl.glColor3d(color[1], color[2], color[3])
   gl.glPushMatrix()
     gl.glScaled(0.5, 0.5, 1)
     gl.glRotated(-angle * 360, 0, 0, 1)
     game.resources.needle_sprite:draw()
   gl.glPopMatrix()    
   
-  -- Draw the outline
-  gl.glBegin(gl.GL_LINE_LOOP)
-    local color = self.resources.amount< UNIT_COSTS.fighter and {1, 0, 0} or {1, 1, 1}
-    gl.glColor3d(color[1], color[2], color[3])
-    for point = 0,SEGMENTS do
-      gl.glVertex2d(math.sin(point / SEGMENTS * math.pi * 2) * RADIUS, math.cos(point / SEGMENTS * math.pi * 2) * RADIUS)
-    end
-  gl.glEnd()
-  
-  -- Draw the separating lines
-  gl.glBegin(gl.GL_LINES)
-    local angle = 0.25
-    gl.glColor3d(1, 0, 0)
-    gl.glVertex2d(0, 0)
-    gl.glVertex2d(math.sin(math.pi * 2 * angle) * RADIUS, math.cos(math.pi * 2 * angle) * RADIUS)
-    
-    angle = 0.5
-    gl.glColor3d(0, 1, 0)
-    gl.glVertex2d(0, 0)
-    gl.glVertex2d(math.sin(math.pi * 2 * angle) * RADIUS, math.cos(math.pi * 2 * angle) * RADIUS)
-
-    angle = 0.75
-    gl.glColor3d(0, 0, 1)
-    gl.glVertex2d(0, 0)
-    gl.glVertex2d(math.sin(math.pi * 2 * angle) * RADIUS, math.cos(math.pi * 2 * angle) * RADIUS)
-  gl.glEnd() 
-  gl.glColor3d(1, 1, 1)
+  gl.glPopMatrix() -- tilt rotation to compensate for art
   
   gl.glDisable(gl.GL_LINE_SMOOTH)
   
-  gl.glPopMatrix()
+  gl.glPopMatrix() -- main push
 end
