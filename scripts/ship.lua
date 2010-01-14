@@ -14,7 +14,7 @@ local max_hit_points = hit_points
 --  {0.8, 0.4, 0.2}  
 --}
 
-local player_colors = {
+player_colors = {
   {1.0, 1.0, 1.0},
   {0.5, 0.8, 0.2},
   {0.2, 0.6, 0.6},
