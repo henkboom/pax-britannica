@@ -19,6 +19,8 @@ game.actors.new_generic('opengl_setup', function ()
     gl.glMatrixMode(gl.GL_PROJECTION)
     gl.glLoadIdentity()
     gl.glOrtho(0, width, 0, height, 1, -1)
+    gl.glMatrixMode(gl.GL_TEXTURE)
+    gl.glLoadIdentity()
     gl.glMatrixMode(gl.GL_MODELVIEW)
     gl.glLoadIdentity()
   end
