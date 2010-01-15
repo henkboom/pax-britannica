@@ -26,13 +26,15 @@ self.sprite.color = player_colors[player]
 velocity = v2(0, 0)
 
 -- 1 for left, -1 for right
-function turn(direction)
+function turn(direction, amount)
+  amount = amount or 1
   self.transform.facing =
-    v2.norm(v2.rotate(self.transform.facing, turn_speed * direction))
+    v2.norm(v2.rotate(self.transform.facing, turn_speed * direction * amount))
 end
 
-function thrust()
-  velocity = velocity + self.transform.facing * accel
+function thrust(amount)
+  amount = amount or 1
+  velocity = velocity + self.transform.facing * accel * amount
 end
 
 local function random_point_on_ship()
