@@ -8,6 +8,8 @@ local frames_to_hold = 0
 local accumulated_frames = 0
 local frames_to_wait = 0
 
+self.resources.harvest_rate = self.resources.harvest_rate * 0.8
+
 local function next_action()
   accumulated_frames = 0  
  

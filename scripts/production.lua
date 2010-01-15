@@ -139,7 +139,7 @@ function draw()
   local angle = scale_angle(potential_cost)
   if angle == 0  then
     if needle_angle > 0 or needle_velocity < 0 then
-      needle_velocity = needle_velocity + 0.002
+      needle_velocity = math.min(needle_velocity + 0.002, 0.025)
       needle_angle = math.max(needle_angle - needle_velocity, 0)
       if (needle_angle == 0) then needle_velocity = needle_velocity * -0.475 end
     end
@@ -154,6 +154,8 @@ function draw()
     gl.glRotated(-needle_angle * 360, 0, 0, 1)
     game.resources.needle_sprite:draw()
   gl.glPopMatrix()    
+  
+  gl.glColor3d(1, 1, 1)
   
   gl.glPopMatrix() -- tilt rotation to compensate for art
   
