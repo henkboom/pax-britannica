@@ -61,14 +61,14 @@ laser = game.make_blueprint('laser',
   {'bullet'})
   
 bomb = game.make_blueprint('bomb',
-  {'transform', scale_x=4, scale_y=4},
-  {'sprite'},
+  {'transform', scale_x=1, scale_y=1},
+  {'sprite', resource='bomb_sprite'},
   {'collision', collision_type='bullet', damage=175, poly=collision.make_rectangle(4, 4)},
   {'bullet'})  
   
 missile = game.make_blueprint('missile',
-  {'transform', scale_x=5, scale_y=2},
-  {'sprite'},
+  {'transform', scale_x=1, scale_y=1},
+  {'sprite', resource='missile_sprite'},
   {'collision', collision_type='bullet', damage=40, poly=collision.make_rectangle(5, 2)},
   {'ship', turn_speed=0.05, accel=0.15, hit_points=1},
   {'heatseeking_ai'})  
