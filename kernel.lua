@@ -24,8 +24,9 @@
 --- --------------
 
 require "dokidoki.module"
-[[ get_width, get_height, get_ratio, set_video_mode, set_ratio,
-   start_main_loop, abort_main_loop, get_fps ]]
+[[ set_fps, set_max_frameskip, get_width, get_height, get_ratio,
+   set_video_mode, set_ratio, start_main_loop, abort_main_loop,
+   get_framerate ]]
 
 require "glfw"
 
@@ -37,9 +38,8 @@ import(require "dokidoki.base")
 
 ---- Constants ----------------------------------------------------------------
 
-max_update_time = 1/30 + 0.001
+max_frameskip = 6
 fps = 60
-update_time = 1/fps
 max_sample_frames = 16
 
 -- Never sleep for less than this amount. This has to be bigger on systems with
@@ -59,6 +59,23 @@ ratio = width / height
 frame_times = {}
 
 ---- Public Interface ---------------------------------------------------------
+
+--- ### `set_max_frameskip(max_frameskip)`
+--- Sets the maximum number of updates to run before forcing a draw.
+---
+--- If more than this number of updates are queued to happen before a redraw,
+--- the rest will be discared.
+function set_max_frameskip(new_max_frameskip)
+  assert(type(new_max_frameskip == 'number') and new_max_frameskip >= 1)
+  max_frameskip = new_max_frameskip
+end
+
+--- ### `set_fps(fps)`
+--- Sets the target frames-per-second.
+function set_fps(new_fps)
+  assert(type(new_fps == 'number') and fps > 0)
+  fps = new_fps
+end
 
 --- ### `get_width()`
 --- Returns the current total window width in pixels. This includes borders
@@ -140,6 +157,18 @@ function start_main_loop (scene)
   if not success then error(message, 0) end
 end
 
+--- ### `get_framerate()`
+--- Returns a running average of the number of `draw()` calls per second.
+--- Since multiple updates can happen per draw, this isn't the same as the
+--- number of updates per second, which should usually stay constant.
+function get_framerate ()
+  if #frame_times >= 2 then
+    return (#frame_times - 1) / (frame_times[#frame_times] - frame_times[1])
+  else
+    return 1
+  end
+end
+
 --- ### `abort_main_loop()`
 --- Sets a flag to terminate the main loop at the next opportunity.
 ---
@@ -147,18 +176,6 @@ end
 --- will be aborted when it returns.
 function abort_main_loop ()
   running = false
-end
-
---- ### `get_fps()`
---- Returns a running average of the number of `draw()` calls per second.
---- Since multiple updates can happen per draw, this isn't the same as the
---- number of updates per second, which should usually stay constant.
-function get_fps ()
-  if #frame_times >= 2 then
-    return (#frame_times - 1) / (frame_times[#frame_times] - frame_times[1])
-  else
-    return 1
-  end
 end
 
 ---- Utility Functions --------------------------------------------------------
@@ -216,10 +233,12 @@ function main_loop (scene)
     ---- update
     do
       -- wait until it's time to update at least once
+      local update_time = 1/fps
       sleep_until(last_update_time + update_time)
       local current_time = get_current_time()
       log_frame_time(current_time)
       -- if we would have to update for more than max_update_time, skip forward
+      local max_update_time = max_frameskip / fps + 0.001
       local total_update_time = current_time - last_update_time
       if max_update_time < total_update_time then
         warn("underrun of %ims",
