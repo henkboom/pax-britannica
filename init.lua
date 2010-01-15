@@ -12,6 +12,8 @@ kernel.start_main_loop(game.make_game(
    'update_cleanup'},
   {'draw_setup', 'draw'},
   function (game)
+    math.randomseed(os.time())
+
     game.init_component('exit_handler')
     game.init_component('keyboard')
     game.init_component('opengl_2d')
