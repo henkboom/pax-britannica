@@ -14,7 +14,9 @@ local approach_sign = 1
 
 local function retarget()
   target = game.targeting.get_nearest_of_type(self, 'frigate') or
-           game.targeting.get_nearest_of_type(self, 'factory')
+           game.targeting.get_nearest_of_type(self, 'factory') or
+           game.targeting.get_nearest_of_type(self, 'bomber') or
+           game.targeting.get_nearest_of_type(self, 'fighter')
 end
 
 local function revise_approach()

@@ -2,8 +2,8 @@ local blueprints = require 'blueprints'
 
 local missile_speed = 1
 local shot_cooldown_time = 6
-local shot_capacity = 10
-local shot_reload_rate = 1.6 / 60
+local shot_capacity = 8
+local shot_reload_rate = 1.2 / 60
 
 local shots = 0
 local cooldown = 0
