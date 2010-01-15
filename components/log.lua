@@ -31,12 +31,13 @@ function record_hit(receiver, bullet)
     print('Unknown projectile type ', bullet)
   end
   
+  real_damage = math.min(bullet.collision.damage, receiver.ship.hit_points)
+  
   damage_given[giver] = damage_given[giver] or 0
-  damage_given[giver] = damage_given[giver] + bullet.collision.damage
+  damage_given[giver] = damage_given[giver] + real_damage
   
   damage_received[receiver.blueprint.name] = damage_received[receiver.blueprint.name] or 0
-  damage_received[receiver.blueprint.name] = damage_received[receiver.blueprint.name]
-                                             + bullet.collision.damage
+  damage_received[receiver.blueprint.name] = damage_received[receiver.blueprint.name] + real_damage
                                              
   accuracy_hits[giver] = accuracy_hits[giver] or 0
   accuracy_hits[giver] = accuracy_hits[giver] + 1
