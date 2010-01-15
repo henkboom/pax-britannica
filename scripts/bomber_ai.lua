@@ -1,6 +1,6 @@
 local v2 = require 'dokidoki.v2'
 
-local APPROACH_DISTANCE = 250
+local APPROACH_DISTANCE = 275
 local COOLDOWN_DURATION = 40
 local MAX_SHOTS = 4
 
@@ -54,7 +54,7 @@ function update()
       end
       
     elseif state == 'shoot' then
-      self.ship.turn(approach_sign * 0.15)
+      self.ship.turn(approach_sign * 0.05)
       self.ship.thrust(unit_factor * 0.75)
       
       cooldown_timer = cooldown_timer - 1
