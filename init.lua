@@ -24,6 +24,7 @@ kernel.start_main_loop(game.make_game(
     game.init_component('targeting')
     game.init_component('tracing')
     game.init_component('log')
+    game.init_component('fast_forward')
     
     function game.exit_handler.on_close()
       game.log.print_stats()
@@ -40,5 +41,5 @@ kernel.start_main_loop(game.make_game(
       {'ship', player=1})
     game.actors.new(blueprints.easy_enemy_factory,
       {'transform', pos=v2(500, 600), facing=v2(-1, 0)},
-      {'ship', player=2})    
+      {'ship', player=2})
   end))
