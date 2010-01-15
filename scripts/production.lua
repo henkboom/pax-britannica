@@ -4,13 +4,16 @@ local v2 = require 'dokidoki.v2'
 
 BUILDING_SPEED = 3
 
-local SEGMENTS = 16
+local SEGMENTS = 32
 local RADIUS = 25
 local OFFSET = -30
 
 UNIT_COSTS = { fighter = 50, bomber = 180, frigate = 360, upgrade = 720 }
 
 local potential_cost = 0
+local needle_angle = 0
+local needle_velocity = 0
+
 button_held = false
 
 local function spawn(unit_type)
@@ -102,7 +105,7 @@ function draw()
 	gl.glBlendFunc(gl.GL_SRC_ALPHA, gl.GL_ONE_MINUS_SRC_ALPHA)
   
   gl.glPushMatrix()
-  gl.glRotated(22.5, 0, 0, 1)
+  gl.glRotated(45, 0, 0, 1)
   
   -- Draw the available resources pie-slice
   gl.glBegin(gl.GL_TRIANGLE_FAN)
@@ -134,11 +137,21 @@ function draw()
   
   -- Draw the needle
   local angle = scale_angle(potential_cost)
+  if angle == 0  then
+    if needle_angle > 0 or needle_velocity < 0 then
+      needle_velocity = needle_velocity + 0.002
+      needle_angle = math.max(needle_angle - needle_velocity, 0)
+      if (needle_angle == 0) then needle_velocity = needle_velocity * -0.475 end
+    end
+  else
+    needle_velocity = 0
+    needle_angle = angle
+  end
   color = self.ship.player_colors[self.ship.player]
   gl.glColor3d(color[1], color[2], color[3])
   gl.glPushMatrix()
     gl.glScaled(0.5, 0.5, 1)
-    gl.glRotated(-angle * 360, 0, 0, 1)
+    gl.glRotated(-needle_angle * 360, 0, 0, 1)
     game.resources.needle_sprite:draw()
   gl.glPopMatrix()    
   

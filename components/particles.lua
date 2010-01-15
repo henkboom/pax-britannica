@@ -9,7 +9,7 @@ local bubble_emitter = particles.make_emitter(
 local emitters = { bubble_emitter }
 
 function add_bubble(pos)
-  bubble_emitter:add_particle(pos.x, pos.y, math.random() * 0.3 - 0.15, 0.2) 
+  bubble_emitter:add_particle(pos.x, pos.y, math.random() * 0.3 - 0.15, 0.25) 
 end
 
 game.actors.new_generic('particles', function ()
