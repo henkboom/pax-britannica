@@ -10,6 +10,7 @@ local target
 
 local function self_destruct()
   --EXPLODE!
+  game.log.record_miss(self)
   self.dead = true
 end
 

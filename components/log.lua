@@ -5,6 +5,8 @@ local spawn = { fighter=0, bomber=0, frigate=0 }
 local death = { fighter=0, bomber=0, frigate=0 }
 local damage_given = { fighter=0, bomber=0, frigate=0 }
 local damage_received = { fighter=0, bomber=0, frigate=0 }
+local accuracy_hits = {fighter=0, bomber=0, frigate=0}
+local accuracy_misses = {fighter=0, bomber=0, frigate=0}
 
 function record_spawn(spawned)
   spawn[spawned.name] = spawn[spawned.name] or 0
@@ -29,12 +31,32 @@ function record_hit(receiver, bullet)
     print('Unknown projectile type ', bullet)
   end
   
+  real_damage = math.min(bullet.collision.damage, receiver.ship.hit_points)
+  
   damage_given[giver] = damage_given[giver] or 0
-  damage_given[giver] = damage_given[giver] + bullet.collision.damage
+  damage_given[giver] = damage_given[giver] + real_damage
   
   damage_received[receiver.blueprint.name] = damage_received[receiver.blueprint.name] or 0
-  damage_received[receiver.blueprint.name] = damage_received[receiver.blueprint.name]
-                                             + bullet.collision.damage
+  damage_received[receiver.blueprint.name] = damage_received[receiver.blueprint.name] + real_damage
+                                             
+  accuracy_hits[giver] = accuracy_hits[giver] or 0
+  accuracy_hits[giver] = accuracy_hits[giver] + 1
+end
+
+function record_miss(bullet)
+  if bullet.blueprint.name == 'laser' then
+    giver = 'fighter'
+  elseif bullet.blueprint.name == 'bomb' then
+    giver = 'bomber'
+  elseif bullet.blueprint.name == 'missile' then
+    giver = 'frigate'
+  else
+    --what the hell hit you?
+    print('Unknown projectile type ', bullet)
+  end
+  
+  accuracy_misses[giver] = accuracy_misses[giver] or 0
+  accuracy_misses[giver] = accuracy_misses[giver] + 1
 end
 
 function print_stats()
@@ -45,5 +67,11 @@ function print_stats()
   print('Destroyed:')       for k,v in pairs(death) do print("    ",string.upper(k),v) end
   print('Damage Given:')    for k,v in pairs(damage_given) do print("    ",string.upper(k),v) end
   print('Damage Received:') for k,v in pairs(damage_received) do print("    ",string.upper(k),v) end
+  
+  print('Accuracy:')
+  for k,v in pairs(accuracy_hits) do
+    accuracy = v / (v + accuracy_misses[k]) * 100
+    print("    ",string.upper(k), string.format("%.2f%%", accuracy))
+  end
   print('============================================================')
 end
