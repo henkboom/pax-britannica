@@ -1,5 +1,4 @@
 local collision = require 'dokidoki.collision'
-local log = require 'components.log'
 
 -- umm, looks like brute force n^2 checking is fast enough
 local bodies = {}
