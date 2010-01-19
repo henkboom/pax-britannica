@@ -8,7 +8,7 @@ local SEGMENTS = 32
 local RADIUS = 25
 local OFFSET = -30
 
-UNIT_COSTS = { fighter = 50, bomber = 180, frigate = 360, upgrade = 720 }
+UNIT_COSTS = { fighter = 50, bomber = 170, frigate = 360, upgrade = 720 }
 
 local potential_cost = 0
 local needle_angle = 0
