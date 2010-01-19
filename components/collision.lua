@@ -14,17 +14,17 @@ game.actors.new_generic('collision', function ()
       for j = i+1, #bodies do
         local b2 = bodies[j]
         if b1.type ~= b2.type and b1.player ~= b2.player
-          and collision.collide(b1, b2) then
+           and collision.collide(b1, b2) then
           if b1.type == 'bullet' then
-            game.log.record_hit(b2.actor, b1.actor)
-            b2.actor.ship.damage(b1.actor.collision.damage)
-            b1.actor.dead = true
-            end
-          if b2.type == 'bullet' then
-            game.log.record_hit(b1.actor, b2.actor)
-            b1.actor.ship.damage(b2.actor.collision.damage)
-            b2.actor.dead = true
-            end
+            b1, b2 = b2, b1
+          end
+          local ship = b1.actor
+          local bullet = b2.actor
+          game.log.record_hit(ship, bullet)
+          game.particles.bullet_hit(ship, bullet)
+          ship.ship.damage(bullet.collision.damage)
+          bullet.dead = true
+
         end
       end
     end

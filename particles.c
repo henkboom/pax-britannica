@@ -27,6 +27,8 @@ typedef struct {
     int texture;
     float width;
     float height;
+    int life;
+    float damping;
     float delta_scale;
     int next;
     particle_t particles[PARTICLE_COUNT];
@@ -38,7 +40,7 @@ static inline void draw_particle(emitter_t *emitter, particle_t *particle)
     {
         float dx = emitter->width/2 * particle->scale;
         float dy = emitter->height/2 * particle->scale;
-        glColor4f(1, 1, 1, particle->life / 180.0);
+        glColor4f(1, 1, 1, (float)particle->life / emitter->life);
         glTexCoord2d(0, 1);
         glVertex2f(particle->x - dx, particle->y - dy);
         glTexCoord2d(1, 1);
@@ -85,6 +87,8 @@ static int emitter__update(lua_State *L)
             particle->life--;
             particle->x += particle->xvel;
             particle->y += particle->yvel;
+            particle->xvel *= emitter->damping;
+            particle->yvel *= emitter->damping;
             particle->scale += emitter->delta_scale;
         }
     }
@@ -105,7 +109,7 @@ static int emitter__add_particle(lua_State *L)
     emitter->next = (emitter->next + 1) % PARTICLE_COUNT;
 
     // initialize it
-    particle->life = 180;
+    particle->life = emitter->life;
     particle->x = x;
     particle->y = y;
     particle->xvel = xvel;
@@ -120,7 +124,9 @@ static int particles__make_emitter(lua_State *L)
     float width = (float)luaL_checknumber(L, 1);
     float height = (float)luaL_checknumber(L, 2);
     int texture = luaL_checkint(L, 3);
-    float delta_scale = luaL_checknumber(L, 4);
+    int life = luaL_checkint(L, 4);
+    float damping = luaL_checknumber(L, 5);
+    float delta_scale = luaL_checknumber(L, 6);
 
     emitter_t *emitter = lua_newuserdata(L, sizeof(emitter_t));
     luaL_getmetatable(L, emitter_udata);
@@ -129,6 +135,8 @@ static int particles__make_emitter(lua_State *L)
     emitter->width = width;
     emitter->height = height;
     emitter->texture = texture;
+    emitter->life = life;
+    emitter->damping = damping;
     emitter->delta_scale = delta_scale;
 
     emitter->next = 0;

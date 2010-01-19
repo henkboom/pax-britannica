@@ -80,6 +80,7 @@ function damage(amount)
 end
 
 function destruct()
+  game.particles.explode(self.transform.pos)
   game.log.record_death(self.blueprint)
   self.dead = true
 end
