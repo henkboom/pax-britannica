@@ -20,12 +20,14 @@ typedef struct {
     float y;
     float xvel;
     float yvel;
+    float scale;
 } particle_t;
 
 typedef struct {
     int texture;
     float width;
     float height;
+    float delta_scale;
     int next;
     particle_t particles[PARTICLE_COUNT];
 } emitter_t;
@@ -34,8 +36,8 @@ static inline void draw_particle(emitter_t *emitter, particle_t *particle)
 {
     if(particle->life)
     {
-        float dx = emitter->width/2;
-        float dy = emitter->height/2;
+        float dx = emitter->width/2 * particle->scale;
+        float dy = emitter->height/2 * particle->scale;
         glColor4f(1, 1, 1, particle->life / 180.0);
         glTexCoord2d(0, 1);
         glVertex2f(particle->x - dx, particle->y - dy);
@@ -83,6 +85,7 @@ static int emitter__update(lua_State *L)
             particle->life--;
             particle->x += particle->xvel;
             particle->y += particle->yvel;
+            particle->scale += emitter->delta_scale;
         }
     }
 
@@ -107,6 +110,7 @@ static int emitter__add_particle(lua_State *L)
     particle->y = y;
     particle->xvel = xvel;
     particle->yvel = yvel;
+    particle->scale = 1;
 
     return 0;
 }
@@ -116,6 +120,7 @@ static int particles__make_emitter(lua_State *L)
     float width = (float)luaL_checknumber(L, 1);
     float height = (float)luaL_checknumber(L, 2);
     int texture = luaL_checkint(L, 3);
+    float delta_scale = luaL_checknumber(L, 4);
 
     emitter_t *emitter = lua_newuserdata(L, sizeof(emitter_t));
     luaL_getmetatable(L, emitter_udata);
@@ -124,6 +129,7 @@ static int particles__make_emitter(lua_State *L)
     emitter->width = width;
     emitter->height = height;
     emitter->texture = texture;
+    emitter->delta_scale = delta_scale;
 
     emitter->next = 0;
     int i;
