@@ -33,8 +33,8 @@ end
 
 function explode(pos)
   explosion_emitter:add_particle(pos.x, pos.y, 0, 0)
-  for i = 1, 20 do
-    local vel = v2.random() * 2
+  for i = 1, 40 do
+    local vel = (v2.random() + v2.random())
     for i = 1, 20 do
       local vel = vel * i/20
       spark_emitter:add_particle(pos.x, pos.y, vel.x, vel.y)
