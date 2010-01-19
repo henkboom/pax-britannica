@@ -47,7 +47,6 @@ function explode(pos)
 end
 
 function bullet_hit(ship, bullet)
-  print(ship.blueprint.name, bullet.blueprint.name)
   local pos = bullet.transform.pos
 
   -- ugh. . .
