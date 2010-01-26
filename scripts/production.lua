@@ -154,6 +154,17 @@ function draw()
     game.resources.needle_sprite:draw()
   gl.glPopMatrix()    
   
+  -- Draw the preview outline
+  if button_held then
+    if potential_cost > UNIT_COSTS.frigate then
+      game.resources.frigate_preview_sprite:draw() 
+    elseif potential_cost > UNIT_COSTS.bomber then
+      game.resources.bomber_preview_sprite:draw() 
+    elseif potential_cost > UNIT_COSTS.fighter then
+      game.resources.fighter_preview_sprite:draw() 
+    end
+  end
+  
   gl.glColor3d(1, 1, 1)
   
   gl.glPopMatrix() -- tilt rotation to compensate for art
