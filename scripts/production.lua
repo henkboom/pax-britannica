@@ -5,8 +5,8 @@ local v2 = require 'dokidoki.v2'
 BUILDING_SPEED = 3
 
 local SEGMENTS = 32
-local RADIUS = 25
-local OFFSET = -30
+local RADIUS = 30
+local OFFSET = -4
 
 UNIT_COSTS = { fighter = 50, bomber = 170, frigate = 360, upgrade = 720 }
 
@@ -105,7 +105,6 @@ function draw()
 	gl.glBlendFunc(gl.GL_SRC_ALPHA, gl.GL_ONE_MINUS_SRC_ALPHA)
   
   gl.glPushMatrix()
-  gl.glRotated(45, 0, 0, 1)
   
   -- Draw the available resources pie-slice
   gl.glBegin(gl.GL_TRIANGLE_FAN)
