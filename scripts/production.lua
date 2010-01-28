@@ -106,6 +106,8 @@ function draw()
   
   gl.glPushMatrix()
   
+  game.resources.factory_layer_2:draw()
+  
   -- Draw the available resources pie-slice
   gl.glBegin(gl.GL_TRIANGLE_FAN)
     local angle = scale_angle(self.resources.amount) * math.pi * 2
@@ -152,7 +154,21 @@ function draw()
     gl.glScaled(0.5, 0.5, 1)
     gl.glRotated(-needle_angle * 360, 0, 0, 1)
     game.resources.needle_sprite:draw()
-  gl.glPopMatrix()    
+  gl.glPopMatrix()
+  
+  game.resources.factory_layer_3:draw()
+  game.resources.factory_layer_4:draw()
+  
+  -- Draw the preview outline
+  if button_held then
+    if potential_cost > UNIT_COSTS.frigate then
+      game.resources.frigate_preview_sprite:draw() 
+    elseif potential_cost > UNIT_COSTS.bomber then
+      game.resources.bomber_preview_sprite:draw() 
+    elseif potential_cost > UNIT_COSTS.fighter then
+      game.resources.fighter_preview_sprite:draw() 
+    end
+  end
   
   gl.glColor3d(1, 1, 1)
   
