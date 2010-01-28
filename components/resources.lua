@@ -27,7 +27,17 @@ spark_sprite = graphics.sprite_from_image('sprites/spark.png', nil, 'center')
 
 -- woot for hacks, this fixes some icky jittering when the factory moves
 local gl = require 'gl'
-factory_sprite.tex:enable()
-gl.glTexParameterf(gl.GL_TEXTURE_2D, gl.GL_TEXTURE_MIN_FILTER, gl.GL_LINEAR)
-gl.glTexParameterf(gl.GL_TEXTURE_2D, gl.GL_TEXTURE_MAG_FILTER, gl.GL_LINEAR)
-factory_sprite.tex:disable()
+
+local function smoothen(sprite)
+  sprite.tex:enable()
+  gl.glTexParameterf(gl.GL_TEXTURE_2D, gl.GL_TEXTURE_MIN_FILTER, gl.GL_LINEAR)
+  gl.glTexParameterf(gl.GL_TEXTURE_2D, gl.GL_TEXTURE_MAG_FILTER, gl.GL_LINEAR)
+  sprite.tex:disable()
+end
+
+smoothen(factory_sprite)
+smoothen(factory_layer_0)
+smoothen(factory_layer_1)
+smoothen(factory_layer_2)
+smoothen(factory_layer_3)
+smoothen(factory_layer_4)
