@@ -5,7 +5,7 @@ local v2 = require 'dokidoki.v2'
 BUILDING_SPEED = 3
 
 local SEGMENTS = 32
-local RADIUS = 30
+local RADIUS = 32
 local OFFSET = -4
 
 UNIT_COSTS = { fighter = 50, bomber = 170, frigate = 360, upgrade = 720 }
