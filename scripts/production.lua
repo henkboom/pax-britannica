@@ -111,7 +111,7 @@ function draw()
   -- Draw the available resources pie-slice
   gl.glBegin(gl.GL_TRIANGLE_FAN)
     local angle = scale_angle(self.resources.amount) * math.pi * 2
-    gl.glColor4d(0, 0, 0, 0.5)
+    gl.glColor4d(0, 0, 0, 0.6)
     gl.glVertex2d(0, 0)
     for point = 0,SEGMENTS-1 do
       gl.glVertex2d(math.sin(point / SEGMENTS * angle) * RADIUS, math.cos(point / SEGMENTS * angle) * RADIUS)
@@ -125,7 +125,7 @@ function draw()
     gl.glBegin(gl.GL_TRIANGLE_FAN)
       local cost = get_resources_spent(potential_cost)
       local bottom_highlight_angle = scale_angle(cost) * math.pi * 2
-      gl.glColor4d(1, 1, 1, 0.5)
+      gl.glColor4d(0.7, 1, 1, 0.7)
       gl.glVertex2d(0, 0)
       for point = 0,SEGMENTS-1 do
         gl.glVertex2d(math.sin(point / SEGMENTS * math.pi * 0.5 + bottom_highlight_angle) * RADIUS, math.cos(point / SEGMENTS * math.pi * 0.5 + bottom_highlight_angle) * RADIUS)
@@ -148,8 +148,7 @@ function draw()
     needle_velocity = 0
     needle_angle = angle
   end
-  color = self.ship.player_colors[self.ship.player]
-  gl.glColor3d(color[1], color[2], color[3])
+  gl.glColor3d(1, 1, 1)
   gl.glPushMatrix()
     gl.glScaled(0.5, 0.5, 1)
     gl.glRotated(-needle_angle * 360, 0, 0, 1)
