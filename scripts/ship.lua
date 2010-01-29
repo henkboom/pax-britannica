@@ -7,13 +7,6 @@ assert(hit_points, 'missing hit_points argument')
 
 local max_hit_points = hit_points
 
---local player_colors = {
---  {0.5, 0.2, 0.8},
---  {0.5, 0.8, 0.2},
---  {0.2, 0.6, 0.6},
---  {0.8, 0.4, 0.2}  
---}
-
 player_colors = {
   {1.0, 1.0, 1.0},
   {0.5, 0.8, 0.2},
@@ -22,6 +15,10 @@ player_colors = {
 }
 
 self.sprite.color = player_colors[player]
+
+if sprites_table then
+  self.sprite.image = game.resources[sprites_table][player]
+end
 
 velocity = v2(0, 0)
 

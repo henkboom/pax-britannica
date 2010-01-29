@@ -5,7 +5,7 @@ local v2 = require 'dokidoki.v2'
 BUILDING_SPEED = 3
 
 local SEGMENTS = 32
-local RADIUS = 30
+local RADIUS = 32
 local OFFSET = -4
 
 UNIT_COSTS = { fighter = 50, bomber = 170, frigate = 360, upgrade = 720 }
@@ -106,12 +106,12 @@ function draw()
   
   gl.glPushMatrix()
   
-  game.resources.factory_layer_2:draw()
+  game.resources.production_layer_1:draw()
   
   -- Draw the available resources pie-slice
   gl.glBegin(gl.GL_TRIANGLE_FAN)
     local angle = scale_angle(self.resources.amount) * math.pi * 2
-    gl.glColor4d(0, 0, 0, 0.5)
+    gl.glColor4d(0, 0, 0, 0.6)
     gl.glVertex2d(0, 0)
     for point = 0,SEGMENTS-1 do
       gl.glVertex2d(math.sin(point / SEGMENTS * angle) * RADIUS, math.cos(point / SEGMENTS * angle) * RADIUS)
@@ -125,7 +125,7 @@ function draw()
     gl.glBegin(gl.GL_TRIANGLE_FAN)
       local cost = get_resources_spent(potential_cost)
       local bottom_highlight_angle = scale_angle(cost) * math.pi * 2
-      gl.glColor4d(1, 1, 1, 0.5)
+      gl.glColor4d(0.7, 1, 1, 0.7)
       gl.glVertex2d(0, 0)
       for point = 0,SEGMENTS-1 do
         gl.glVertex2d(math.sin(point / SEGMENTS * math.pi * 0.5 + bottom_highlight_angle) * RADIUS, math.cos(point / SEGMENTS * math.pi * 0.5 + bottom_highlight_angle) * RADIUS)
@@ -148,16 +148,15 @@ function draw()
     needle_velocity = 0
     needle_angle = angle
   end
-  color = self.ship.player_colors[self.ship.player]
-  gl.glColor3d(color[1], color[2], color[3])
+  gl.glColor3d(1, 1, 1)
   gl.glPushMatrix()
     gl.glScaled(0.5, 0.5, 1)
     gl.glRotated(-needle_angle * 360, 0, 0, 1)
     game.resources.needle_sprite:draw()
   gl.glPopMatrix()
   
-  game.resources.factory_layer_3:draw()
-  game.resources.factory_layer_4:draw()
+  game.resources.production_layer_2:draw()
+  game.resources.production_layer_3:draw()
   
   -- Draw the preview outline
   if button_held then
