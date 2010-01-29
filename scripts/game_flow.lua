@@ -9,7 +9,7 @@ local RIGHT = game.constants.screen_right
 local BOTTOM = game.constants.screen_bottom
 local TOP = game.constants.screen_top
 local CENTER = v2((LEFT + RIGHT) / 2, (TOP + BOTTOM) / 2)
-local RADIUS = 200
+local RADIUS = 300
 
 local POSITIONS = {
   false,
@@ -26,6 +26,8 @@ local POSITIONS = {
 
 local state = 'init'
 local selectors
+
+local game_over_timer = 0
 
 local function generate_positions(n)
   local positions = {}
@@ -52,6 +54,8 @@ function update()
         {'selector', player=4})
     }
 
+    game.actors.new(blueprints.fade_in)
+
     state = 'player_select'
   elseif state == 'player_select' then
     if game.keyboard.key_pressed(string.byte('S')) then
@@ -63,39 +67,50 @@ function update()
       end
 
       if #players > 0 then
-        for i, selector in ipairs(selectors) do
-          selector.dead = true
-        end
-
-        local cpu_player
-
-        if #players == 1 then
-          cpu_player = players[1] == 1 and 2 or 1
-          players[#players+1] = cpu_player
-        end
-
-        local positions = generate_positions(#players)
-        for i, p in ipairs(players) do
-          local pos = POSITIONS[#players][i]
-          local facing = v2.norm(v2.rotate90(pos - CENTER))
-          if p == cpu_player then
-            game.actors.new(blueprints.easy_enemy_factory,
-              {'transform', pos=pos, facing=facing},
-              {'ship', player=p})
-          else
-            game.actors.new(blueprints.player_factory,
-              {'transform', pos=pos, facing=facing},
-              {'ship', player=p})
+        game.actors.new(blueprints.fade_out, {'fade', callback=function ()
+          for i, selector in ipairs(selectors) do
+            selector.dead = true
           end
-        end
-        state = 'in_game'
+
+          local cpu_player
+
+          if #players == 1 then
+            cpu_player = players[1] == 1 and 2 or 1
+            players[#players+1] = cpu_player
+          end
+
+          local positions = generate_positions(#players)
+          for i, p in ipairs(players) do
+            local pos = POSITIONS[#players][i]
+            local facing = v2.norm(v2.rotate90(pos - CENTER))
+            if p == cpu_player then
+              game.actors.new(blueprints.easy_enemy_factory,
+                {'transform', pos=pos, facing=facing},
+                {'ship', player=p})
+            else
+              game.actors.new(blueprints.player_factory,
+                {'transform', pos=pos, facing=facing},
+                {'ship', player=p})
+            end
+          end
+
+          state = 'in_game'
+          game.actors.new(blueprints.fade_in)
+        end})
+
+        state = nil
       end
     end
   elseif state == 'in_game' then
     if #game.actors.get('factory') < 2 then
-      kernel.switch_scene(the_game.make())
+      game_over_timer = game_over_timer + 1
+      if game_over_timer > 300 then
+        game.actors.new(blueprints.fade_out, {'fade', callback=function ()
+          kernel.switch_scene(the_game.make())
+        end})
+      end
     end
   else
-    error 'invalid state'
+    -- no state
   end
 end
