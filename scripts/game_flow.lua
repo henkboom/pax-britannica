@@ -27,6 +27,8 @@ local POSITIONS = {
 local state = 'init'
 local selectors
 
+local wait_time = 0
+
 local function generate_positions(n)
   local positions = {}
   for i = 1, n do
@@ -93,7 +95,11 @@ function update()
     end
   elseif state == 'in_game' then
     if #game.actors.get('factory') < 2 then
-      kernel.switch_scene(the_game.make())
+      wait_time = wait_time + 1
+      if wait_time > 180 then
+        wait_time = 0
+        kernel.switch_scene(the_game.make())
+      end
     end
   else
     error 'invalid state'

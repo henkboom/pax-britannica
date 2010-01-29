@@ -14,6 +14,8 @@ local potential_cost = 0
 local needle_angle = 0
 local needle_velocity = 0
 
+local texcoord_scroller = -0.25
+
 button_held = false
 halt_production = false
 
@@ -163,7 +165,7 @@ function draw()
   game.resources.production_layer_2:draw()
   game.resources.production_layer_3:draw()
   
-  -- Draw the preview outline
+  -- Draw the preview outline 
   if button_held then
     if potential_cost > UNIT_COSTS.upgrade then
       game.resources.upgrade_preview_sprite:draw()
@@ -175,6 +177,12 @@ function draw()
       game.resources.fighter_preview_sprite:draw()
     end
   else
+    texcoord_scroller = texcoord_scroller + 0.01
+    if texcoord_scroller > 0.25 then texcoord_scroller = texcoord_scroller - 0.5 end    
+    gl.glMatrixMode(gl.GL_TEXTURE)
+    gl.glTranslated(texcoord_scroller, 0,0)
+    gl.glMatrixMode(gl.GL_MODELVIEW)
+  
     if self.ship.health_percentage() < 0.2 then
       game.resources.health_none:draw()
     elseif self.ship.health_percentage() < 0.5 then
@@ -182,6 +190,10 @@ function draw()
     else
       game.resources.health_full:draw()
     end
+    
+    gl.glMatrixMode(gl.GL_TEXTURE)
+    gl.glLoadIdentity()
+    gl.glMatrixMode(gl.GL_MODELVIEW)      
   end
   
   gl.glColor3d(1, 1, 1)

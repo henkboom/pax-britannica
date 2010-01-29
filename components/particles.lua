@@ -18,8 +18,8 @@ local big_bubble_emitter = particles.make_emitter(
     0)    
 
 local explosion_emitter = particles.make_emitter(
-    game.resources.explosion_sprite.size[1] / 50,
-    game.resources.explosion_sprite.size[2] / 50,
+    game.resources.explosion_sprite.size[1] / 64,
+    game.resources.explosion_sprite.size[2] / 64,
     game.resources.explosion_sprite.tex.name,
     10,
     1,
@@ -54,7 +54,7 @@ function explode(pos)
     local offset = v2.random() * 3
     spark_emitter:add_particle(pos.x + offset.x, pos.y + offset.y, vel.x, vel.y)
   end
-  for i = 1, 40 do
+  for i = 1, 50 do
     local vel = v2(math.random() * 2 - 1, math.random() * 2 - 1) * 0.2
     local offset = v2.random() * 17
     big_bubble_emitter:add_particle(pos.x + offset.x, pos.y + offset.y, vel.x, vel.y)

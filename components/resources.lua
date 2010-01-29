@@ -80,6 +80,12 @@ local function smoothen(sprite)
   sprite.tex:disable()
 end
 
+local function tilen(sprite)
+  sprite.tex:enable()
+  gl.glTexParameteri(gl.GL_TEXTURE_2D, gl.GL_TEXTURE_WRAP_S, gl.GL_REPEAT)
+  sprite.tex:disable()
+end
+
 for _, s in pairs(factory_sprites) do
   smoothen(s)
 end
@@ -97,3 +103,7 @@ smoothen(upgrade_preview_sprite)
 smoothen(health_full)
 smoothen(health_some)
 smoothen(health_none)
+
+tilen(health_full)
+tilen(health_some)
+tilen(health_none)
