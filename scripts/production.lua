@@ -15,6 +15,7 @@ local needle_angle = 0
 local needle_velocity = 0
 
 button_held = false
+halt_production = false
 
 local function spawn(unit_type)
   self.resources.amount = self.resources.amount - UNIT_COSTS[unit_type]
@@ -93,6 +94,10 @@ local function get_resources_spent(frames)
 end
 
 function draw()
+  if halt_production then
+    return
+  end
+
   local pos = self.transform.pos;
   local offset = OFFSET * self.transform.facing
 
