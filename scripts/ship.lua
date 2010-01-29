@@ -7,13 +7,6 @@ assert(hit_points, 'missing hit_points argument')
 
 local max_hit_points = hit_points
 
---local player_colors = {
---  {0.5, 0.2, 0.8},
---  {0.5, 0.8, 0.2},
---  {0.2, 0.6, 0.6},
---  {0.8, 0.4, 0.2}  
---}
-
 player_colors = {
   {1.0, 1.0, 1.0},
   {0.5, 0.8, 0.2},
@@ -22,6 +15,10 @@ player_colors = {
 }
 
 self.sprite.color = player_colors[player]
+
+if sprites_table then
+  self.sprite.image = assert(game.resources[sprites_table][player])
+end
 
 velocity = v2(0, 0)
 
@@ -80,9 +77,37 @@ function damage(amount)
 end
 
 function destruct()
-  game.particles.explode(self.transform.pos)
-  game.log.record_death(self.blueprint)
-  self.dead = true
+  if self.factory_ai then
+    factory_destruct()
+  else
+    game.particles.explode(self.transform.pos)
+    game.log.record_death(self.blueprint)
+    self.dead = true
+  end
+end
+
+local death_counter = 100
+local next_explosion = 10
+local opacity = 0.93
+
+function factory_destruct()
+  if death_counter > 0 then
+    self.production.halt_production = true
+    self.sprite.color = {self.sprite.color[1], self.sprite.color[2], self.sprite.color[3], math.max(0, opacity)}
+    opacity = opacity - 0.006
+    if death_counter % next_explosion == 0 then
+      random_vector = (v2.random() + v2.random()) * 30
+      game.particles.explode(self.transform.pos + random_vector)
+      next_explosion = math.random(9,12)
+    end
+    death_counter = death_counter - 1
+  else
+    for i = 1,5 do
+      random = (v2.random() + v2.random()) * 20
+      game.particles.explode(self.transform.pos + random)
+    end
+    self.dead = true
+  end
 end
 
 -- automatically thrusts and turns according to the target

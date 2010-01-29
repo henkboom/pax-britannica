@@ -37,6 +37,7 @@ function make ()
       game.actors.new(blueprints.background,
         {'transform', pos=v2(0, 0)})
   
+      game.actors.new(blueprints.background_fx)
       game.init_component('particles')
   
       game.actors.new(blueprints.game_flow)
