@@ -44,6 +44,7 @@ health_full = graphics.sprite_from_image('sprites/health_full.png', nil, 'center
 health_some = graphics.sprite_from_image('sprites/health_some.png', nil, 'center')
 health_none = graphics.sprite_from_image('sprites/health_none.png', nil, 'center')
 
+laser_sprite = graphics.sprite_from_image('sprites/laser.png', nil, 'center')
 bomb_sprite = graphics.sprite_from_image('sprites/bomb.png', nil, 'center')
 missile_sprite = graphics.sprite_from_image('sprites/missile.png', nil, 'center')
 
