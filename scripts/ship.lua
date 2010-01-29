@@ -73,7 +73,7 @@ local function go_towards_or_away(target_pos, force_thrust, is_away)
 end
 
 function damage(amount)
-  hit_points = hit_points - amount
+  hit_points = math.max(hit_points - amount, 0)
 end
 
 function destruct()
@@ -106,6 +106,7 @@ function factory_destruct()
       random = (v2.random() + v2.random()) * 20
       game.particles.explode(self.transform.pos + random)
     end
+    game.log.record_death(self.blueprint)
     self.dead = true
   end
 end
