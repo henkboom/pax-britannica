@@ -7,14 +7,14 @@ assert(hit_points, 'missing hit_points argument')
 
 local max_hit_points = hit_points
 
-player_colors = {
-  {1.0, 1.0, 1.0},
-  {0.5, 0.8, 0.2},
-  {0.2, 0.6, 0.6},
-  {0.8, 0.4, 0.2}
-}
+--player_colors = {
+--  {1.0, 1.0, 1.0},
+--  {0.5, 0.8, 0.2},
+--  {0.2, 0.6, 0.6},
+--  {0.8, 0.4, 0.2}
+--}
 
-self.sprite.color = player_colors[player]
+--self.sprite.color = player_colors[player]
 
 if sprites_table then
   self.sprite.image = assert(game.resources[sprites_table][player])
