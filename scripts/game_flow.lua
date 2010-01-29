@@ -57,21 +57,39 @@ function update()
     if game.keyboard.key_pressed(string.byte('S')) then
       local players = {}
       for i, selector in ipairs(selectors) do
-        selector.dead = true
         if selector.selector.picked then
           players[#players+1] = i
         end
       end
 
-      local positions = generate_positions(#players)
-      for i, p in ipairs(players) do
-        local pos = POSITIONS[#players][i]
-        local facing = v2.rotate90(pos - CENTER)
-        game.actors.new(blueprints.easy_enemy_factory,
-          {'transform', pos=pos, facing=facing},
-          {'ship', player=p})
+      if #players > 0 then
+        for i, selector in ipairs(selectors) do
+          selector.dead = true
+        end
+
+        local cpu_player
+
+        if #players == 1 then
+          cpu_player = players[1] == 1 and 2 or 1
+          players[#players+1] = cpu_player
+        end
+
+        local positions = generate_positions(#players)
+        for i, p in ipairs(players) do
+          local pos = POSITIONS[#players][i]
+          local facing = v2.norm(v2.rotate90(pos - CENTER))
+          if p == cpu_player then
+            game.actors.new(blueprints.easy_enemy_factory,
+              {'transform', pos=pos, facing=facing},
+              {'ship', player=p})
+          else
+            game.actors.new(blueprints.player_factory,
+              {'transform', pos=pos, facing=facing},
+              {'ship', player=p})
+          end
+        end
+        state = 'in_game'
       end
-      state = 'in_game'
     end
   elseif state == 'in_game' then
     if #game.actors.get('factory') < 2 then
