@@ -40,6 +40,10 @@ bomber_preview_sprite = graphics.sprite_from_image('sprites/bomber_outline.png',
 frigate_preview_sprite = graphics.sprite_from_image('sprites/frigate_outline.png', nil, 'center')
 upgrade_preview_sprite = graphics.sprite_from_image('sprites/upgrade_outline.png', nil, 'center')
 
+health_full = graphics.sprite_from_image('sprites/health_full.png', nil, 'center')
+health_some = graphics.sprite_from_image('sprites/health_some.png', nil, 'center')
+health_none = graphics.sprite_from_image('sprites/health_none.png', nil, 'center')
+
 bomb_sprite = graphics.sprite_from_image('sprites/bomb.png', nil, 'center')
 missile_sprite = graphics.sprite_from_image('sprites/missile.png', nil, 'center')
 
@@ -88,3 +92,6 @@ smoothen(fighter_preview_sprite)
 smoothen(bomber_preview_sprite)
 smoothen(frigate_preview_sprite)
 smoothen(upgrade_preview_sprite)
+smoothen(health_full)
+smoothen(health_some)
+smoothen(health_none)

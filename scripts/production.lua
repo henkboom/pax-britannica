@@ -174,6 +174,14 @@ function draw()
     elseif potential_cost > UNIT_COSTS.fighter then
       game.resources.fighter_preview_sprite:draw()
     end
+  else
+    if self.ship.health_percentage() < 0.2 then
+      game.resources.health_none:draw()
+    elseif self.ship.health_percentage() < 0.5 then
+      game.resources.health_some:draw()
+    else
+      game.resources.health_full:draw()
+    end
   end
   
   gl.glColor3d(1, 1, 1)
