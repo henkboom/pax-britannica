@@ -94,11 +94,12 @@ function factory_destruct()
   if death_counter > 0 then
     self.production.halt_production = true
     self.sprite.color = {self.sprite.color[1], self.sprite.color[2], self.sprite.color[3], math.max(0, opacity)}
-    opacity = opacity - 0.006
+    -- opacity = opacity - 0.006
+    opacity = 0
     if death_counter % next_explosion == 0 then
       random_vector = (v2.random() + v2.random()) * 30
       game.particles.explode(self.transform.pos + random_vector)
-      next_explosion = math.random(9,12)
+      next_explosion = math.random(6,15)
     end
     death_counter = death_counter - 1
   else

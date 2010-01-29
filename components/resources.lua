@@ -44,6 +44,7 @@ bomb_sprite = graphics.sprite_from_image('sprites/bomb.png', nil, 'center')
 missile_sprite = graphics.sprite_from_image('sprites/missile.png', nil, 'center')
 
 bubble_sprite = graphics.sprite_from_image('sprites/bubble.png', nil, 'center')
+big_bubble_sprite = graphics.sprite_from_image('sprites/big_bubble.png', nil, 'center')
 explosion_sprite = graphics.sprite_from_image('sprites/explosion.png', nil, 'center')
 spark_sprite = graphics.sprite_from_image('sprites/spark.png', nil, 'center')
 
