@@ -25,7 +25,7 @@
 
 require "dokidoki.module"
 [[ set_fps, set_max_frameskip, get_width, get_height, get_ratio,
-   set_video_mode, set_ratio, start_main_loop, abort_main_loop,
+   set_video_mode, set_ratio, start_main_loop, abort_main_loop, switch_scene,
    get_framerate ]]
 
 require "glfw"
@@ -57,6 +57,8 @@ height = 480
 ratio = width / height
 
 frame_times = {}
+
+next_scene = nil
 
 ---- Public Interface ---------------------------------------------------------
 
@@ -148,7 +150,16 @@ function start_main_loop (scene)
     set_video_mode(width, height)
 
     log "starting main loop"
-    main_loop(scene)
+
+    next_scene = scene
+    while next_scene do
+      local scene = next_scene
+      next_scene = nil
+      main_loop(scene)
+      if next_scene then
+        running = true
+      end
+    end
   end, get_stack_trace)
 
   log "shutting down"
@@ -173,8 +184,20 @@ end
 --- Sets a flag to terminate the main loop at the next opportunity.
 ---
 --- This function should be called from one of the scene callbacks; the loop
---- will be aborted when it returns.
+--- will be aborted when the callback returns.
 function abort_main_loop ()
+  assert(running)
+  running = false
+end
+
+--- ### `switch_scene(scene)`
+--- Queues up a scene to switch to.
+---
+--- This function should be called from one of the scene callbacks; the scenes
+--- will be switched when the callback returns.
+function switch_scene(scene)
+  assert(running)
+  next_scene = scene
   running = false
 end
 
