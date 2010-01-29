@@ -6,15 +6,7 @@ assert(accel, 'missing accel argument')
 assert(hit_points, 'missing hit_points argument')
 
 local max_hit_points = hit_points
-
---player_colors = {
---  {1.0, 1.0, 1.0},
---  {0.5, 0.8, 0.2},
---  {0.2, 0.6, 0.6},
---  {0.8, 0.4, 0.2}
---}
-
---self.sprite.color = player_colors[player]
+self.sprite.color = {1.0, 1.0, 1.0}
 
 if sprites_table then
   self.sprite.image = assert(game.resources[sprites_table][player])
@@ -92,14 +84,13 @@ end
 
 local death_counter = 100
 local next_explosion = 10
-local opacity = 0.93
+local opacity = 0.3
 
 function factory_destruct()
   if death_counter > 0 then
     self.production.halt_production = true
     self.sprite.color = {self.sprite.color[1], self.sprite.color[2], self.sprite.color[3], math.max(0, opacity)}
-    -- opacity = opacity - 0.006
-    opacity = 0
+    opacity = opacity - 0.006
     if death_counter % next_explosion == 0 then
       random_vector = (v2.random() + v2.random()) * 30
       game.particles.explode(self.transform.pos + random_vector)
