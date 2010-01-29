@@ -1,5 +1,5 @@
 require 'dokidoki.module'
-[[ background, fighter, bomber, frigate, selection_factory, player_factory,
+[[ background, debris, background_fx, fighter, bomber, frigate, selection_factory, player_factory,
    easy_enemy_factory, laser, bomb, missile ]]
 
 local collision = require 'dokidoki.collision'
@@ -9,6 +9,14 @@ local v2 = require 'dokidoki.v2'
 background = game.make_blueprint('background',
   {'transform'},
   {'sprite', resource='background'})
+  
+debris = game.make_blueprint('debris',
+  {'transform'},
+  {'debris'},
+  {'sprite'})
+  
+background_fx = game.make_blueprint('background_fx',
+  {'background_fx'})
 
 fighter = game.make_blueprint('fighter',
   {'transform'},

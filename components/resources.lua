@@ -25,6 +25,10 @@ bubble_sprite = graphics.sprite_from_image('sprites/bubble.png', nil, 'center')
 explosion_sprite = graphics.sprite_from_image('sprites/explosion.png', nil, 'center')
 spark_sprite = graphics.sprite_from_image('sprites/spark.png', nil, 'center')
 
+debris_large_sprite = graphics.sprite_from_image('sprites/debris_large.png', nil, 'center')
+debris_med_sprite = graphics.sprite_from_image('sprites/debris_med.png', nil, 'center')
+debris_small_sprite = graphics.sprite_from_image('sprites/debris_small.png', nil, 'center')
+
 -- woot for hacks, this fixes some icky jittering when the factory moves
 local gl = require 'gl'
 
@@ -40,4 +44,6 @@ smoothen(factory_layer_0)
 smoothen(factory_layer_1)
 smoothen(factory_layer_2)
 smoothen(factory_layer_3)
-smoothen(factory_layer_4)
+smoothen(debris_large_sprite)
+smoothen(debris_med_sprite)
+smoothen(debris_small_sprite)
