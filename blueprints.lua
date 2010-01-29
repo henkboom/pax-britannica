@@ -1,7 +1,7 @@
 require 'dokidoki.module'
 [[ background, debris, fish, background_fx, game_flow, fade_in,
    fade_out, fighter, bomber, frigate, selection_factory, player_factory,
-   easy_enemy_factory, laser, bomb, missile ]]
+   easy_enemy_factory, laser, bomb, missile, countdown ]]
 
 local collision = require 'dokidoki.collision'
 local game = require 'dokidoki.game'
@@ -32,6 +32,11 @@ fade_in = game.make_blueprint('fade',
 
 fade_out = game.make_blueprint('fade',
   {'fade', from=0, to=1, duration=60})
+  
+countdown = game.make_blueprint('countdown',
+  {'countdown'},
+  {'sprite'},
+  {'transform', pos=v2(1024/2, 768/2)})
 
 fighter = game.make_blueprint('fighter',
   {'transform'},

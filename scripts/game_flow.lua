@@ -27,6 +27,7 @@ local POSITIONS = {
 local state = 'init'
 local selectors
 
+local countdown_timer = 5
 local game_over_timer = 0
 
 local function generate_positions(n)
@@ -35,6 +36,50 @@ local function generate_positions(n)
     positions[#positions+1] = v2(math.cos(i/n), math.sin(i/n)) * 200
   end
   return positions
+end
+
+local function start_game()
+  local players = {}
+  for i, selector in ipairs(selectors) do
+    if selector.selector.picked then
+      players[#players+1] = i
+    end
+  end
+
+  if #players > 0 then
+    game.actors.new(blueprints.fade_out, {'fade', callback=function ()
+      for i, selector in ipairs(selectors) do
+        selector.dead = true
+      end
+
+      local cpu_player
+
+      if #players == 1 then
+        cpu_player = players[1] == 1 and 2 or 1
+        players[#players+1] = cpu_player
+      end
+
+      local positions = generate_positions(#players)
+      for i, p in ipairs(players) do
+        local pos = POSITIONS[#players][i]
+        local facing = v2.norm(v2.rotate90(pos - CENTER))
+        if p == cpu_player then
+          game.actors.new(blueprints.easy_enemy_factory,
+            {'transform', pos=pos, facing=facing},
+            {'ship', player=p})
+        else
+          game.actors.new(blueprints.player_factory,
+            {'transform', pos=pos, facing=facing},
+            {'ship', player=p})
+        end
+      end
+
+      state = 'in_game'
+      game.actors.new(blueprints.fade_in)
+    end})
+
+    state = nil
+  end
 end
 
 function update()
@@ -59,47 +104,17 @@ function update()
     state = 'player_select'
   elseif state == 'player_select' then
     if game.keyboard.key_pressed(string.byte('S')) then
-      local players = {}
-      for i, selector in ipairs(selectors) do
-        if selector.selector.picked then
-          players[#players+1] = i
-        end
+      game.actors.new(blueprints.countdown)
+      state = 'countdown'
+      for _,selector in ipairs(selectors) do
+        selector.selector.stop_checking = true
       end
-
-      if #players > 0 then
-        game.actors.new(blueprints.fade_out, {'fade', callback=function ()
-          for i, selector in ipairs(selectors) do
-            selector.dead = true
-          end
-
-          local cpu_player
-
-          if #players == 1 then
-            cpu_player = players[1] == 1 and 2 or 1
-            players[#players+1] = cpu_player
-          end
-
-          local positions = generate_positions(#players)
-          for i, p in ipairs(players) do
-            local pos = POSITIONS[#players][i]
-            local facing = v2.norm(v2.rotate90(pos - CENTER))
-            if p == cpu_player then
-              game.actors.new(blueprints.easy_enemy_factory,
-                {'transform', pos=pos, facing=facing},
-                {'ship', player=p})
-            else
-              game.actors.new(blueprints.player_factory,
-                {'transform', pos=pos, facing=facing},
-                {'ship', player=p})
-            end
-          end
-
-          state = 'in_game'
-          game.actors.new(blueprints.fade_in)
-        end})
-
-        state = nil
-      end
+    end
+  elseif state == 'countdown' then
+    countdown_timer = countdown_timer - 1/60
+    if countdown_timer <= 0 then
+      countdown_timer = 5
+      start_game()
     end
   elseif state == 'in_game' then
     if #game.actors.get('factory') < 2 then

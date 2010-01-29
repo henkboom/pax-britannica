@@ -30,6 +30,14 @@ factory_sprites = {
   graphics.sprite_from_image('sprites/factory_p4.png', nil, 'center')
 }
 
+number_sprites = {
+  graphics.sprite_from_image('sprites/1.png', nil, 'center'),
+  graphics.sprite_from_image('sprites/2.png', nil, 'center'),
+  graphics.sprite_from_image('sprites/3.png', nil, 'center'),
+  graphics.sprite_from_image('sprites/4.png', nil, 'center'),
+  graphics.sprite_from_image('sprites/5.png', nil, 'center')
+}
+
 production_layer_1 = graphics.sprite_from_image('sprites/production1.png', nil, 'center')
 production_layer_2 = graphics.sprite_from_image('sprites/production2.png', nil, 'center')
 production_layer_3 = graphics.sprite_from_image('sprites/production3.png', nil, 'center')
