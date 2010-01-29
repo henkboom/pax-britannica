@@ -183,9 +183,9 @@ function draw()
     gl.glTranslated(texcoord_scroller, 0,0)
     gl.glMatrixMode(gl.GL_MODELVIEW)
   
-    if self.ship.health_percentage() < 0.2 then
+    if self.ship.health_percentage() < 0.3 then
       game.resources.health_none:draw()
-    elseif self.ship.health_percentage() < 0.5 then
+    elseif self.ship.health_percentage() < 0.6 then
       game.resources.health_some:draw()
     else
       game.resources.health_full:draw()
