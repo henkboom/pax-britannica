@@ -106,7 +106,7 @@ function draw()
   
   gl.glPushMatrix()
   
-  game.resources.factory_layer_2:draw()
+  game.resources.production_layer_1:draw()
   
   -- Draw the available resources pie-slice
   gl.glBegin(gl.GL_TRIANGLE_FAN)
@@ -155,8 +155,8 @@ function draw()
     game.resources.needle_sprite:draw()
   gl.glPopMatrix()
   
-  game.resources.factory_layer_3:draw()
-  game.resources.factory_layer_4:draw()
+  game.resources.production_layer_2:draw()
+  game.resources.production_layer_3:draw()
   
   -- Draw the preview outline
   if button_held then

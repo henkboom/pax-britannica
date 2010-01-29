@@ -2,16 +2,37 @@ local graphics = require 'dokidoki.graphics'
 
 background = graphics.sprite_from_image('sprites/background.png', nil, {0, 0})
 
-fighter_sprite = graphics.sprite_from_image('sprites/fighter.png', nil, 'center')
-bomber_sprite = graphics.sprite_from_image('sprites/bomber.png', nil, 'center')
-frigate_sprite = graphics.sprite_from_image('sprites/frigate.png', nil, 'center')
+fighter_sprites = {
+  graphics.sprite_from_image('sprites/fighter_p1.png', nil, 'center'),
+  graphics.sprite_from_image('sprites/fighter_p2.png', nil, 'center'),
+  graphics.sprite_from_image('sprites/fighter_p3.png', nil, 'center'),
+  graphics.sprite_from_image('sprites/fighter_p4.png', nil, 'center')
+}
 
-factory_sprite = graphics.sprite_from_image('sprites/factory.png', nil, 'center')
-factory_layer_0 = graphics.sprite_from_image('sprites/factory0.png', nil, 'center')
-factory_layer_1 = graphics.sprite_from_image('sprites/factory1.png', nil, 'center')
-factory_layer_2 = graphics.sprite_from_image('sprites/factory2.png', nil, 'center')
-factory_layer_3 = graphics.sprite_from_image('sprites/factory3.png', nil, 'center')
-factory_layer_4 = graphics.sprite_from_image('sprites/factory4.png', nil, 'center')
+bomber_sprites = {
+  graphics.sprite_from_image('sprites/bomber_p1.png', nil, 'center'),
+  graphics.sprite_from_image('sprites/bomber_p2.png', nil, 'center'),
+  graphics.sprite_from_image('sprites/bomber_p3.png', nil, 'center'),
+  graphics.sprite_from_image('sprites/bomber_p4.png', nil, 'center')
+}
+
+frigate_sprites = {
+  graphics.sprite_from_image('sprites/frigate_p1.png', nil, 'center'),
+  graphics.sprite_from_image('sprites/frigate_p2.png', nil, 'center'),
+  graphics.sprite_from_image('sprites/frigate_p3.png', nil, 'center'),
+  graphics.sprite_from_image('sprites/frigate_p4.png', nil, 'center')
+}
+
+factory_sprites = {
+  graphics.sprite_from_image('sprites/factory_p1.png', nil, 'center'),
+  graphics.sprite_from_image('sprites/factory_p2.png', nil, 'center'),
+  graphics.sprite_from_image('sprites/factory_p3.png', nil, 'center'),
+  graphics.sprite_from_image('sprites/factory_p4.png', nil, 'center')
+}
+
+production_layer_1 = graphics.sprite_from_image('sprites/production1.png', nil, 'center')
+production_layer_2 = graphics.sprite_from_image('sprites/production2.png', nil, 'center')
+production_layer_3 = graphics.sprite_from_image('sprites/production3.png', nil, 'center')
 
 needle_sprite = graphics.sprite_from_image('sprites/needle.png', nil, 'center')
 fighter_preview_sprite = graphics.sprite_from_image('sprites/fighter_outline.png', nil, 'center')
@@ -35,9 +56,9 @@ local function smoothen(sprite)
   sprite.tex:disable()
 end
 
-smoothen(factory_sprite)
-smoothen(factory_layer_0)
-smoothen(factory_layer_1)
-smoothen(factory_layer_2)
-smoothen(factory_layer_3)
-smoothen(factory_layer_4)
+for _, s in ipairs(factory_sprites) do
+  smoothen(s)
+end
+smoothen(production_layer_1)
+smoothen(production_layer_2)
+smoothen(production_layer_3)
