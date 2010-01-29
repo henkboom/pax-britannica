@@ -72,6 +72,10 @@ local function go_towards_or_away(target_pos, force_thrust, is_away)
   end
 end
 
+function health_percentage()
+  return math.max(hit_points / max_hit_points, 0)
+end
+
 function damage(amount)
   hit_points = math.max(hit_points - amount, 0)
 end
