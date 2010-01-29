@@ -46,9 +46,22 @@ bubble_sprite = graphics.sprite_from_image('sprites/bubble.png', nil, 'center')
 explosion_sprite = graphics.sprite_from_image('sprites/explosion.png', nil, 'center')
 spark_sprite = graphics.sprite_from_image('sprites/spark.png', nil, 'center')
 
-debris_large_sprite = graphics.sprite_from_image('sprites/debris_large.png', nil, 'center')
-debris_med_sprite = graphics.sprite_from_image('sprites/debris_med.png', nil, 'center')
-debris_small_sprite = graphics.sprite_from_image('sprites/debris_small.png', nil, 'center')
+debris_sprites = {
+  graphics.sprite_from_image('sprites/debris_large.png', nil, 'center'),
+  graphics.sprite_from_image('sprites/debris_med.png', nil, 'center'),
+  graphics.sprite_from_image('sprites/debris_small.png', nil, 'center')
+}
+
+fish_sprites = {
+  graphics.sprite_from_image('sprites/fish1.png', nil, 'center'),
+  graphics.sprite_from_image('sprites/fish2.png', nil, 'center'),
+  graphics.sprite_from_image('sprites/fish3.png', nil, 'center'),
+  graphics.sprite_from_image('sprites/fish4.png', nil, 'center'),
+  graphics.sprite_from_image('sprites/fish5.png', nil, 'center'),
+  graphics.sprite_from_image('sprites/fish6.png', nil, 'center'),
+  graphics.sprite_from_image('sprites/fish7.png', nil, 'center'),
+  graphics.sprite_from_image('sprites/fish8.png', nil, 'center')
+}
 
 -- woot for hacks, this fixes some icky jittering when the factory moves
 local gl = require 'gl'
@@ -60,12 +73,12 @@ local function smoothen(sprite)
   sprite.tex:disable()
 end
 
-for _, s in ipairs(factory_sprites) do
+for _, s in pairs(factory_sprites) do
+  smoothen(s)
+end
+for _, s in ipairs(fish_sprites) do
   smoothen(s)
 end
 smoothen(production_layer_1)
 smoothen(production_layer_2)
 smoothen(production_layer_3)
-smoothen(debris_large_sprite)
-smoothen(debris_med_sprite)
-smoothen(debris_small_sprite)
