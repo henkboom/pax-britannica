@@ -1,3 +1,7 @@
+print('selector')
+for k, v in pairs(self.selector) do
+  print(k, v)
+end
 assert(player, 'missing player argument')
 picked = false
 

@@ -1,6 +1,6 @@
 require 'dokidoki.module'
-[[ background, fighter, bomber, frigate, selection_factory, player_factory,
-   easy_enemy_factory, laser, bomb, missile ]]
+[[ background, game_flow, fighter, bomber, frigate, selection_factory,
+   player_factory, easy_enemy_factory, laser, bomb, missile ]]
 
 local collision = require 'dokidoki.collision'
 local game = require 'dokidoki.game'
@@ -9,6 +9,9 @@ local v2 = require 'dokidoki.v2'
 background = game.make_blueprint('background',
   {'transform'},
   {'sprite', resource='background'})
+
+game_flow = game.make_blueprint('game_flow',
+  {'game_flow'})
 
 fighter = game.make_blueprint('fighter',
   {'transform'},
@@ -76,6 +79,6 @@ missile = game.make_blueprint('missile',
   {'sprite', resource='missile_sprite'},
   {'collision', collision_type='bullet', damage=40, poly=collision.make_rectangle(5, 2)},
   {'ship', turn_speed=0.055, accel=0.15, hit_points=1},
-  {'heatseeking_ai'})  
+  {'heatseeking_ai'})
 
 return get_module_exports()
