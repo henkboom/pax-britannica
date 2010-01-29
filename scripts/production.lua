@@ -160,12 +160,14 @@ function draw()
   
   -- Draw the preview outline
   if button_held then
-    if potential_cost > UNIT_COSTS.frigate then
+    if potential_cost > UNIT_COSTS.upgrade then
+      game.resources.upgrade_preview_sprite:draw()
+    elseif potential_cost > UNIT_COSTS.frigate then
       game.resources.frigate_preview_sprite:draw() 
     elseif potential_cost > UNIT_COSTS.bomber then
       game.resources.bomber_preview_sprite:draw() 
     elseif potential_cost > UNIT_COSTS.fighter then
-      game.resources.fighter_preview_sprite:draw() 
+      game.resources.fighter_preview_sprite:draw()
     end
   end
   
