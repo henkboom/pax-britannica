@@ -141,10 +141,11 @@ function make_game (update_methods, draw_methods, init)
   function game.actors.new(blueprint, ...)
     local arguments = {}
     for _, arg in ipairs{...} do
-      if type(arg[1]) == 'string' then
-        arg[1] = load_script(arg[1])
+      local script = arg[1]
+      if type(script) == 'string' then
+        script = load_script(script)
       end
-      arguments[arg[1]] = arg
+      arguments[script] = arg
     end
 
     local actor = {
@@ -156,30 +157,31 @@ function make_game (update_methods, draw_methods, init)
     }
 
     for _, script_spec in ipairs(blueprint) do
-      if type(script_spec[1]) == 'string' then
-        script_spec[1] = load_script(script_spec[1])
+      local script = script_spec[1]
+      if type(script) == 'string' then
+        script = load_script(script)
       end
-      local script_name = script_spec[1].name
-      local script_init = script_spec[1].init
+      local script_name = script.name
+      local script_init = script.init
 
       -- create script environment
-      local script = {self = actor, game = game}
+      local script_env = {self = actor, game = game}
 
       -- add it to the actor, checking that there's no script collision
       if actor[script_name] ~= nil then
         error('script name collision for "' .. script_name .. "'")
       end
-      actor[script_name] = script
+      actor[script_name] = script_env
 
       -- initialize default values from blueprint
       for k, v in pairs(script_spec) do
-        if k ~= 1 then script[k] = v end
+        if k ~= 1 then script_env[k] = v end
       end
 
       -- add constructor values
-      if arguments[script_spec[1]] then
-        for k, v in pairs(arguments[script_spec[1]]) do
-          if k ~= 1 then script[k] = v end
+      if arguments[script] then
+        for k, v in pairs(arguments[script]) do
+          if k ~= 1 then script_env[k] = v end
         end
       end
 
@@ -201,7 +203,7 @@ function make_game (update_methods, draw_methods, init)
       local env = getfenv(script_init)
       setfenv(script_init, setmetatable({}, {
         __index = function (_, k)
-          local ret = script[k]
+          local ret = script_env[k]
           if ret ~= nil then
             return ret
           else
@@ -209,7 +211,7 @@ function make_game (update_methods, draw_methods, init)
           end
         end,
         __newindex = function (_, k, v)
-          script[k] = v
+          script_env[k] = v
         end
       }))
       script_init(script_name)
@@ -217,7 +219,7 @@ function make_game (update_methods, draw_methods, init)
 
       -- index the script by its methods
       for method, t in pairs(scripts_by_method) do
-        if script[method] then t[#t+1] = script end
+        if script_env[method] then t[#t+1] = script_env end
       end
     end
 
