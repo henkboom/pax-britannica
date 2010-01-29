@@ -40,6 +40,7 @@ bomber_preview_sprite = graphics.sprite_from_image('sprites/bomber_outline.png',
 frigate_preview_sprite = graphics.sprite_from_image('sprites/frigate_outline.png', nil, 'center')
 upgrade_preview_sprite = graphics.sprite_from_image('sprites/upgrade_outline.png', nil, 'center')
 
+laser_sprite = graphics.sprite_from_image('sprites/laser.png', nil, 'center')
 bomb_sprite = graphics.sprite_from_image('sprites/bomb.png', nil, 'center')
 missile_sprite = graphics.sprite_from_image('sprites/missile.png', nil, 'center')
 

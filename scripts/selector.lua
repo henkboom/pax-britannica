@@ -1,7 +1,10 @@
 assert(player, 'missing player argument')
+
 picked = false
 
 local fade = 0.1
+
+self.sprite.image = assert(game.resources.factory_sprites[player])
 
 function update()
   if not picked and game.the_one_button.held(player) then
