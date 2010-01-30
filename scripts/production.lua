@@ -6,7 +6,8 @@ BUILDING_SPEED = 3
 
 local SEGMENTS = 32
 local RADIUS = 32
-local OFFSET = -4
+local DRAW_OFFSET = -4
+local SPAWN_OFFSET = 47
 
 UNIT_COSTS = { fighter = 50, bomber = 170, frigate = 360, upgrade = 720 }
 
@@ -23,11 +24,12 @@ local function spawn(unit_type)
   self.resources.amount = self.resources.amount - UNIT_COSTS[unit_type]
   
   if (unit_type == 'upgrade') then 
-    self.resources.harvest_rate = self.resources.harvest_rate * 1.25
+    self.resources.harvest_rate = self.resources.harvest_rate + 0.15
   else
+    local spawn_pos = self.transform.pos + SPAWN_OFFSET * self.transform.facing
     game.log.record_spawn(blueprints[unit_type])
     game.actors.new(blueprints[unit_type],
-      {'transform', pos=self.transform.pos, facing=self.transform.facing},
+      {'transform', pos=spawn_pos, facing=self.transform.facing},
       {'ship', player=self.ship.player})
   end
 end
@@ -101,7 +103,7 @@ function draw()
   end
 
   local pos = self.transform.pos;
-  local offset = OFFSET * self.transform.facing
+  local offset = DRAW_OFFSET * self.transform.facing
 
   gl.glPushMatrix()
   gl.glTranslated(pos.x + offset.x, pos.y + offset.y, 0)
