@@ -27,7 +27,6 @@ local POSITIONS = {
 local state = 'init'
 local selectors
 
-local countdown_timer = 5
 local game_over_timer = 0
 
 local function generate_positions(n)
@@ -103,18 +102,16 @@ function update()
 
     state = 'player_select'
   elseif state == 'player_select' then
-    if game.keyboard.key_pressed(string.byte('S')) then
-      game.actors.new(blueprints.countdown)
-      state = 'countdown'
-      for _,selector in ipairs(selectors) do
-        selector.selector.stop_checking = true
+    local player_selected = false
+    for _, s in ipairs(selectors) do
+      if s.selector.picked then
+        player_selected = true
       end
     end
-  elseif state == 'countdown' then
-    countdown_timer = countdown_timer - 1/60
-    if countdown_timer <= 0 then
-      countdown_timer = 5
-      start_game()
+
+    if player_selected then
+      game.actors.new(blueprints.countdown, {'countdown', callback=start_game})
+      state = nil
     end
   elseif state == 'in_game' then
     if #game.actors.get('factory') < 2 then
