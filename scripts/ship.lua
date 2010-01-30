@@ -92,8 +92,7 @@ function factory_destruct()
     self.sprite.color = {self.sprite.color[1], self.sprite.color[2], self.sprite.color[3], math.max(0, opacity)}
     opacity = opacity - 0.006
     if death_counter % next_explosion == 0 then
-      random_vector = (v2.random() + v2.random()) * 30
-      game.particles.explode(self.transform.pos + random_vector)
+      game.particles.explode(random_point_on_ship())
       next_explosion = math.random(6,15)
     end
     death_counter = death_counter - 1
