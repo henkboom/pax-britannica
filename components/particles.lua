@@ -35,6 +35,9 @@ local spark_emitter = particles.make_emitter(
 
 local emitters = { big_bubble_emitter, bubble_emitter, explosion_emitter, spark_emitter }
 
+local background_emitters = {big_bubble_emitter, bubble_emitter}
+local foreground_emitters = {explosion_emitter, spark_emitter}
+
 function add_bubble(pos)
   bubble_emitter:add_particle(pos.x, pos.y, math.random() * 0.1 - 0.05, 0.01 + math.random() * 0.05)
 end
@@ -83,8 +86,13 @@ function bullet_hit(ship, bullet)
 end
 
 game.actors.new_generic('particles', function ()
-  function particle_draw ()
-    for _, emitter in ipairs(emitters) do
+  function draw ()
+    for _, emitter in ipairs(background_emitters) do
+      emitter:draw()
+    end
+  end
+  function draw_foreground ()
+    for _, emitter in ipairs(foreground_emitters) do
       emitter:draw()
     end
   end
@@ -95,8 +103,7 @@ game.actors.new_generic('particles', function ()
         bubble_emitter:add_particle(300, 300, vel.x, vel.y)
       end
     end
-    for _, emitter in ipairs(emitters) do
-      emitter:update()
-    end
+    for _, emitter in ipairs(foreground_emitters) do emitter:update() end
+    for _, emitter in ipairs(background_emitters) do emitter:update() end
   end
 end)

@@ -10,7 +10,7 @@ function make ()
   return game.make_game(
     {'update_setup', 'update', 'collision_registry', 'collision_check',
      'update_cleanup'},
-    {'draw_setup', 'draw', 'particle_draw', 'fade_draw'},
+    {'draw_setup', 'draw', 'draw_foreground', 'fade_draw'},
     function (game)
       math.randomseed(os.time())
 
