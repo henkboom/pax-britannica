@@ -10,7 +10,7 @@ function make ()
   return game.make_game(
     {'update_setup', 'update', 'collision_registry', 'collision_check',
      'update_cleanup'},
-    {'draw_setup', 'draw', 'fade_draw'},
+    {'draw_setup', 'draw', 'particle_draw', 'fade_draw'},
     function (game)
       math.randomseed(os.time())
   
@@ -28,6 +28,7 @@ function make ()
       game.init_component('log')
       game.init_component('fast_forward')
       game.init_component('the_one_button')
+      game.init_component('particles')
       
       function game.exit_handler.on_close()
         game.log.print_stats()
@@ -38,7 +39,6 @@ function make ()
         {'transform', pos=v2(0, 0)})
   
       game.actors.new(blueprints.background_fx)
-      game.init_component('particles')
   
       game.actors.new(blueprints.game_flow)
     end)

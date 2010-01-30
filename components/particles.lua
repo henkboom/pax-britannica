@@ -83,7 +83,7 @@ function bullet_hit(ship, bullet)
 end
 
 game.actors.new_generic('particles', function ()
-  function draw ()
+  function particle_draw ()
     for _, emitter in ipairs(emitters) do
       emitter:draw()
     end
