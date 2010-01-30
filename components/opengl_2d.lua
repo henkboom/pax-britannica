@@ -10,8 +10,10 @@ game.actors.new_generic('opengl_setup', function ()
     kernel.set_ratio(width / height)
 
     local bg = background_color
-    gl.glClearColor(bg[1], bg[2], bg[3], 0)
-    gl.glClear(gl.GL_COLOR_BUFFER_BIT)
+    if bg then
+      gl.glClearColor(bg[1], bg[2], bg[3], 0)
+      gl.glClear(gl.GL_COLOR_BUFFER_BIT)
+    end
 
     gl.glEnable(gl.GL_BLEND)
     gl.glBlendFunc(gl.GL_SRC_ALPHA, gl.GL_ONE_MINUS_SRC_ALPHA)
