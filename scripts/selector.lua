@@ -26,7 +26,7 @@ end
 
 function draw()
   local pos = self.transform.pos + OFFSET_PIXELS * self.transform.facing
-  local pulse = (1 + math.cos(pulse_time/120*2*math.pi))/2
+  local pulse = (1 + math.cos(pulse_time/180*2*math.pi))/2
 
   local color = fade * pulse + 1 * (1-pulse)
 
