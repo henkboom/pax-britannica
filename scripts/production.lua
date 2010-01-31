@@ -135,7 +135,7 @@ function draw()
     gl.glBegin(gl.GL_TRIANGLE_FAN)
       local cost = get_resources_spent(potential_cost)
       local bottom_highlight_angle = scale_angle(cost) * math.pi * 2
-      gl.glColor4d(0.7, 1, 1, 0.7)
+      gl.glColor4d(0.5, 1, 1, 1)
       gl.glVertex2d(0, 0)
       for point = 0,SEGMENTS do
         gl.glVertex2d(math.sin(point / SEGMENTS * math.pi * 0.5 + bottom_highlight_angle) * RADIUS, math.cos(point / SEGMENTS * math.pi * 0.5 + bottom_highlight_angle) * RADIUS)
