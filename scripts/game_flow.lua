@@ -118,6 +118,7 @@ function update()
       game_over_timer = game_over_timer + 1
       if game_over_timer > 300 then
         game.actors.new(blueprints.fade_out, {'fade', callback=function ()
+          game.log.print_stats()
           kernel.switch_scene(the_game.make())
         end})
       end
