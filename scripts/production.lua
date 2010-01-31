@@ -9,7 +9,7 @@ local RADIUS = 32
 local DRAW_OFFSET = -4
 local SPAWN_OFFSET = 47
 
-UNIT_COSTS = { fighter = 50, bomber = 170, frigate = 360, upgrade = 720 }
+UNIT_COSTS = { fighter = 50, bomber = 170, frigate = 360, upgrade = 1080 }
 
 local potential_cost = 0
 local needle_angle = 0
@@ -24,7 +24,7 @@ local function spawn(unit_type)
   self.resources.amount = self.resources.amount - UNIT_COSTS[unit_type]
   
   if (unit_type == 'upgrade') then 
-    self.resources.harvest_rate = self.resources.harvest_rate + 0.15
+    self.resources.harvest_rate = self.resources.harvest_rate + 0.25
   else
     local spawn_pos = self.transform.pos + SPAWN_OFFSET * self.transform.facing
     game.log.record_spawn(blueprints[unit_type])
