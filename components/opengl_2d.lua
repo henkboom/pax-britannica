@@ -17,6 +17,8 @@ game.actors.new_generic('opengl_setup', function ()
 
     gl.glEnable(gl.GL_BLEND)
     gl.glBlendFunc(gl.GL_SRC_ALPHA, gl.GL_ONE_MINUS_SRC_ALPHA)
+    gl.glAlphaFunc(gl.GL_GREATER, 0)
+    gl.glEnable(gl.GL_ALPHA_TEST)
 
     gl.glMatrixMode(gl.GL_PROJECTION)
     gl.glLoadIdentity()
