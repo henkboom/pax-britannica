@@ -256,13 +256,19 @@ function main_loop (scene)
 
   while true do
     ---- handle events
+    local new_width, new_height
     for i, event in ipairs(events) do
       if event.type == 'resize' then
-        set_video_mode(event.width, event.height)
+        new_width = event.width
+        new_height = event.height
       end
       scene.handle_event(event)
       if not running then return end
     end
+    if new_width and (new_width ~= width or new_height ~= height) then
+      set_video_mode(new_width, new_height)
+    end
+
     while #events ~= 0 do events[#events] = nil end
 
     ---- update
