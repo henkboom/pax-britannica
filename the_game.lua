@@ -3,6 +3,7 @@ require 'dokidoki.module' [[ make ]]
 local game = require 'dokidoki.game'
 local kernel = require 'dokidoki.kernel'
 local v2 = require 'dokidoki.v2'
+require 'glfw'
 
 local blueprints = require 'blueprints'
 
@@ -20,6 +21,7 @@ function make ()
     {'draw_setup', 'draw', 'draw_foreground', 'fade_draw'},
     function (game)
       math.randomseed(os.time())
+      glfw.SetWindowTitle("Pax Britannica")
 
       game.init_component('exit_handler')
       game.init_component('keyboard')
