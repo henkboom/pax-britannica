@@ -108,8 +108,6 @@ function draw()
   gl.glPushMatrix()
   gl.glTranslated(pos.x + offset.x, pos.y + offset.y, 0)
   
-  gl.glPushMatrix()
-  
   game.resources.production_layer_1:draw()
   
   -- Draw the available resources pie-slice
@@ -195,8 +193,6 @@ function draw()
   end
   
   gl.glColor3d(1, 1, 1)
-  
-  gl.glPopMatrix() -- tilt rotation to compensate for art
   
   gl.glPopMatrix() -- main push
 end
