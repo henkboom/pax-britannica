@@ -179,13 +179,22 @@ function draw()
     gl.glMatrixMode(gl.GL_TEXTURE)
     gl.glTranslated(texcoord_scroller, 0,0)
     gl.glMatrixMode(gl.GL_MODELVIEW)
-  
-    local health = self.ship.health_percentage()
+    
+    local health = self.ship.health_percentage()  
     if health < game.constants.low_health_threshold then
-      game.resources.health_none:draw()
+      local factor = health / game.constants.low_health_threshold
+      gl.glScaled(1, 0.7, 1)
+      gl.glColor3d(1, 0.3, 0.3)
+      game.resources.health_some:draw()
     elseif health < game.constants.high_health_threshold then
+      local factor = (health - game.constants.low_health_threshold) / (game.constants.high_health_threshold - game.constants.low_health_threshold)
+      gl.glScaled(1, factor * 0.3 + 0.7, 1)
+      gl.glColor3d(1, factor * 0.7 + 0.3, factor * 0.2 + 0.3)
       game.resources.health_some:draw()
     else
+      local factor = (health - game.constants.high_health_threshold) / (1 - game.constants.high_health_threshold)
+      gl.glScaled(1, health, 1)
+      gl.glColor3d((1-factor)*0.3+0.7, 1, factor * 0.4 + 0.6)    
       game.resources.health_full:draw()
     end
     

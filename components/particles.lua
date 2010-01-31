@@ -35,12 +35,20 @@ local mid_explosion_emitter = particles.make_emitter(
     15)    
     
 local small_explosion_emitter = particles.make_emitter(
-    game.resources.explosion_sprite.size[1] / 64,
-    game.resources.explosion_sprite.size[2] / 64,
+    game.resources.explosion_sprite.size[1] / 96,
+    game.resources.explosion_sprite.size[2] / 96,
     game.resources.explosion_sprite.tex.name,
     10,
     1,
     10)
+    
+local tiny_explosion_emitter = particles.make_emitter(
+    game.resources.explosion_sprite.size[1] / 128,
+    game.resources.explosion_sprite.size[2] / 128,
+    game.resources.explosion_sprite.tex.name,
+    10,
+    1,
+    5)    
 
 local spark_emitter = particles.make_emitter(
     game.resources.spark_sprite.size[1] * 1.75,
@@ -92,7 +100,7 @@ local function explode_mid(pos)
     end
   end
   for i = 1, 15 do
-    local vel = v2(math.random() * 2 - 1, math.random() * 2 - 1) * 5
+    local vel = v2(math.random() * 2 - 1, math.random() * 2 - 1) * 4
     local offset = v2.random() * 3
     spark_emitter:add_particle(pos.x + offset.x, pos.y + offset.y, vel.x, vel.y)
   end
@@ -114,11 +122,33 @@ local function explode_small(pos)
     end
   end
   for i = 1, 10 do
-    local vel = v2(math.random() * 2 - 1, math.random() * 2 - 1) * 5
+    local vel = v2(math.random() * 2 - 1, math.random() * 2 - 1) * 3
     local offset = v2.random() * 3
     spark_emitter:add_particle(pos.x + offset.x, pos.y + offset.y, vel.x, vel.y)
   end
   for i = 1, 10 do
+    local vel = v2(math.random() * 2 - 1, math.random() * 2 - 1) * 0.2
+    local offset = v2.random() * 5
+    big_bubble_emitter:add_particle(pos.x + offset.x, pos.y + offset.y, vel.x, vel.y)
+  end  
+end
+
+local function explode_tiny(pos)
+  small_explosion_emitter:add_particle(pos.x, pos.y, 0, 0)
+  for i = 1, 2 do
+    local vel = (v2.random() + v2.random())
+    for i = 1, 5 do
+      local vel = vel * i/20 * 2
+      local offset = v2.random() * 10
+      spark_emitter:add_particle(pos.x + offset.x, pos.y + offset.y, vel.x, vel.y)
+    end
+  end
+  for i = 1, 5 do
+    local vel = v2(math.random() * 2 - 1, math.random() * 2 - 1) * 2
+    local offset = v2.random() * 3
+    spark_emitter:add_particle(pos.x + offset.x, pos.y + offset.y, vel.x, vel.y)
+  end
+  for i = 1, 5 do
     local vel = v2(math.random() * 2 - 1, math.random() * 2 - 1) * 0.2
     local offset = v2.random() * 5
     big_bubble_emitter:add_particle(pos.x + offset.x, pos.y + offset.y, vel.x, vel.y)
@@ -165,7 +195,7 @@ function bullet_hit(ship, bullet)
   elseif bullet.blueprint.name == 'bomb' then
     explode_mid(pos)
   elseif bullet.blueprint.name == 'missile' then    
-    explode_small(pos)
+    explode_tiny(pos)
   end
 end
 
