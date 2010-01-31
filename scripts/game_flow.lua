@@ -26,6 +26,7 @@ local POSITIONS = {
 
 local state = 'init'
 local selectors
+local splash
 
 local game_over_timer = 0
 
@@ -50,6 +51,7 @@ local function start_game()
       for i, selector in ipairs(selectors) do
         selector.dead = true
       end
+      splash.dead = true
 
       local cpu_player
 
@@ -83,20 +85,23 @@ end
 
 function update()
   if state == 'init' then
+    local dist = 130
+    local offset = v2(-75, 0)
     selectors = {
       game.actors.new(blueprints.selection_factory,
-        {'transform', pos=v2(LEFT + 200, TOP - 200)},
+        {'transform', pos=offset+v2(1024/2 - dist/2 - dist, 768/2), facing=v2(0, 1)},
         {'selector', player=1}),
       game.actors.new(blueprints.selection_factory,
-        {'transform', pos=v2(RIGHT - 200, TOP - 200), facing=v2(-1, 0)},
+        {'transform', pos=offset+v2(1024/2 - dist/2, 768/2), facing=v2(0, 1)},
         {'selector', player=2}),
       game.actors.new(blueprints.selection_factory,
-        {'transform', pos=v2(LEFT + 200, BOTTOM + 200)},
+        {'transform', pos=offset+v2(1024/2 + dist/2, 768/2), facing=v2(0, 1)},
         {'selector', player=3}),
       game.actors.new(blueprints.selection_factory,
-        {'transform', pos=v2(RIGHT - 200, BOTTOM + 200), facing=v2(-1, 0)},
+        {'transform', pos=offset+v2(1024/2 + dist + dist/2, 768/2), facing=v2(0, 1)},
         {'selector', player=4})
     }
+    splash = game.actors.new(blueprints.splash)
 
     game.actors.new(blueprints.fade_in)
 
@@ -110,7 +115,7 @@ function update()
     end
 
     if player_selected then
-      game.actors.new(blueprints.countdown, {'countdown', callback=start_game})
+      game.actors.new(blueprints.countdown, {'countdown', callback=start_game}, {'transform', pos=v2(1024/2, 768/2 - 200)})
       state = nil
     end
   elseif state == 'in_game' then

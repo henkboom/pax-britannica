@@ -82,6 +82,10 @@ fish_sprites = {
   graphics.sprite_from_image('sprites/fish8.png', nil, 'center')
 }
 
+title_sprite = graphics.sprite_from_image('sprites/title.png', nil, 'center')
+credits_sprite = graphics.sprite_from_image('sprites/credits.png', nil, 'center')
+--press_a_sprite = graphics.sprite_from_image('sprites/press_A.png', nil, 'center')
+
 -- woot for hacks, this fixes some icky jittering when the factory moves
 local gl = require 'gl'
 

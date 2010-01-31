@@ -1,7 +1,7 @@
 require 'dokidoki.module'
 [[ background, debris, fish, background_fx, music_loader, game_flow, fade_in,
    fade_out, fighter, bomber, frigate, selection_factory, player_factory,
-   easy_enemy_factory, laser, bomb, missile, countdown ]]
+   easy_enemy_factory, laser, bomb, missile, countdown, splash ]]
 
 local collision = require 'dokidoki.collision'
 local game = require 'dokidoki.game'
@@ -71,6 +71,9 @@ selection_factory = game.make_blueprint('selection_factory',
   {'transform'},
   {'sprite', resource='factory_sprite', color={0.2, 0.2, 0.2}},
   {'selector'})
+  
+splash = game.make_blueprint('splash',
+  {'splash'})
   
 player_factory = game.make_blueprint('factory',
   {'transform'},
