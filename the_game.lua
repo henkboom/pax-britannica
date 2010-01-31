@@ -28,6 +28,9 @@ function make ()
       game.init_component('opengl_2d')
       game.opengl_2d.width = 1024
       game.opengl_2d.height = 768
+      if not args['--windowed'] then
+        game.opengl_2d.background_color = nil
+      end
 
       game.init_component('constants')
       game.init_component('collision')
