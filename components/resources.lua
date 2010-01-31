@@ -32,6 +32,18 @@ factory_sprites = {
   graphics.sprite_from_image('sprites/factory_p4.png', nil, 'center')
 }
 
+factory_light_damage_sprites = {
+  graphics.sprite_from_image('sprites/factory_light_damage_1.png', nil, 'center'),
+  graphics.sprite_from_image('sprites/factory_light_damage_2.png', nil, 'center'),
+  graphics.sprite_from_image('sprites/factory_light_damage_3.png', nil, 'center'),
+}
+
+factory_heavy_damage_sprites = {
+  graphics.sprite_from_image('sprites/factory_heavy_damage_1.png', nil, 'center'),
+  graphics.sprite_from_image('sprites/factory_heavy_damage_2.png', nil, 'center'),
+  graphics.sprite_from_image('sprites/factory_heavy_damage_3.png', nil, 'center'),
+}
+
 number_sprites = {
   graphics.sprite_from_image('sprites/1.png', nil, 'center'),
   graphics.sprite_from_image('sprites/2.png', nil, 'center'),
