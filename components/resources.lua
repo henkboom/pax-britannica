@@ -38,6 +38,8 @@ number_sprites = {
   graphics.sprite_from_image('sprites/5.png', nil, 'center')
 }
 
+a_button = graphics.sprite_from_image('sprites/a_button.png', nil, 'center')
+
 production_layer_1 = graphics.sprite_from_image('sprites/production1.png', nil, 'center')
 production_layer_2 = graphics.sprite_from_image('sprites/production2.png', nil, 'center')
 production_layer_3 = graphics.sprite_from_image('sprites/production3.png', nil, 'center')
