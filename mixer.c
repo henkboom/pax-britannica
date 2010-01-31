@@ -34,6 +34,7 @@ typedef struct
     // shared
     volatile int is_new;
     const sound_data_t * volatile data;
+    int loop; // callback-only after init
 
     volatile int new_fade_duration;
     volatile fade_t new_fade;
@@ -150,7 +151,22 @@ static void channel_mix_into(int channel, calc_t * output,
 
     chan->position = position + to_copy;
 
-    if(chan->position == data->frames) channel_stop(channel);
+    if(chan->position == data->frames)
+    {
+        // imprecise looping for now
+        if(chan->loop > 0)
+        {
+            chan->loop--;
+            if(chan->loop == 0)
+                channel_stop(channel);
+            else
+                chan->position = 0;
+        }
+        else
+        {
+            chan->position = 0;
+        }
+    }
 }
 
 //// General Audio ////////////////////////////////////////////////////////////
@@ -177,7 +193,7 @@ static void mix_into(sample_t * output, size_t frame_count)
 }
 
 static int play_sound_effect(const sound_data_t * data, float left,
-                             float right)
+                             float right, int loop)
 {
     int c = 0;
     while(c != CHANNELS && channel_is_active(c)) c++;
@@ -188,6 +204,7 @@ static int play_sound_effect(const sound_data_t * data, float left,
     else
     {
         channels[c].is_new = 1;
+        channels[c].loop = loop;
 
         channels[c].new_fade.volume[0] = left;
         channels[c].new_fade.volume[1] = right;
@@ -502,8 +519,9 @@ static int sound_effect__play(lua_State *L)
     sound_data_t * sound = check_sound_effect(L, 1);
     float left = luaL_optnumber(L, 2, 1.0);
     float right = luaL_optnumber(L, 3, left);
+    int loop = luaL_optint(L, 4, 1);
 
-    int channel = play_sound_effect(sound, left, right);
+    int channel = play_sound_effect(sound, left, right, loop);
 
     if(channel < 0)
         lua_pushnil(L);
