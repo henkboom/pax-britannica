@@ -8,6 +8,11 @@ local blueprints = require 'blueprints'
 
 local music
 
+local args = {}
+for _, a in ipairs(arg) do
+  args[a] = true
+end
+
 function make ()
   return game.make_game(
     {'update_setup', 'update', 'collision_registry', 'collision_check',
@@ -43,7 +48,7 @@ function make ()
         game.actors.new(blueprints.game_flow)
       end
 
-      if music then
+      if args['--no-music'] or music then
         init()
       else
         game.actors.new(blueprints.music_loader,
