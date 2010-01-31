@@ -13,7 +13,8 @@ function draw()
   local f = self.transform.facing
   gl.glRotated(180/math.pi * math.atan2(f.y, f.x), 0, 0, 1)
 
-  gl.glColor4d(1, 1, 1, math.random())
+  local opacity = (self.sprite.color[4] or 1) * math.random()
+  gl.glColor4d(1, 1, 1, opacity)
   local health = self.ship.health_percentage()
   if health < game.constants.low_health_threshold then
     game.resources.factory_heavy_damage_sprites[math.floor(time/4)%3+1]:draw()

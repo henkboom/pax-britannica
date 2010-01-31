@@ -37,7 +37,6 @@ function make ()
       game.init_component('log')
       game.init_component('fast_forward')
       game.init_component('the_one_button')
-      game.init_component('particles')
 
       game.exit_handler.trap_esc = true
       function game.exit_handler.on_close()
@@ -49,6 +48,7 @@ function make ()
         game.actors.new(blueprints.background)
         game.actors.new(blueprints.background_fx)
         game.actors.new(blueprints.game_flow)
+        game.init_component('particles')
       end
 
       if args['--no-music'] or music then
