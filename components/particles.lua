@@ -74,7 +74,7 @@ local function explode_big(pos)
     local offset = v2.random() * 3
     spark_emitter:add_particle(pos.x + offset.x, pos.y + offset.y, vel.x, vel.y)
   end
-  for i = 1, 60 do
+  for i = 1, 50 do
     local vel = v2(math.random() * 2 - 1, math.random() * 2 - 1) * 0.2
     local offset = v2.random() * 17
     big_bubble_emitter:add_particle(pos.x + offset.x, pos.y + offset.y, vel.x, vel.y)
@@ -83,28 +83,6 @@ end
 
 local function explode_mid(pos)
   mid_explosion_emitter:add_particle(pos.x, pos.y, 0, 0)
-  for i = 1, 15 do
-    local vel = (v2.random() + v2.random())
-    for i = 1, 15 do
-      local vel = vel * i/20 * 2
-      local offset = v2.random() * 10
-      spark_emitter:add_particle(pos.x + offset.x, pos.y + offset.y, vel.x, vel.y)
-    end
-  end
-  for i = 1, 20 do
-    local vel = v2(math.random() * 2 - 1, math.random() * 2 - 1) * 5
-    local offset = v2.random() * 3
-    spark_emitter:add_particle(pos.x + offset.x, pos.y + offset.y, vel.x, vel.y)
-  end
-  for i = 1, 30 do
-    local vel = v2(math.random() * 2 - 1, math.random() * 2 - 1) * 0.2
-    local offset = v2.random() * 10
-    big_bubble_emitter:add_particle(pos.x + offset.x, pos.y + offset.y, vel.x, vel.y)
-  end  
-end
-
-local function explode_small(pos)
-  small_explosion_emitter:add_particle(pos.x, pos.y, 0, 0)
   for i = 1, 10 do
     local vel = (v2.random() + v2.random())
     for i = 1, 10 do
@@ -113,12 +91,34 @@ local function explode_small(pos)
       spark_emitter:add_particle(pos.x + offset.x, pos.y + offset.y, vel.x, vel.y)
     end
   end
+  for i = 1, 15 do
+    local vel = v2(math.random() * 2 - 1, math.random() * 2 - 1) * 5
+    local offset = v2.random() * 3
+    spark_emitter:add_particle(pos.x + offset.x, pos.y + offset.y, vel.x, vel.y)
+  end
+  for i = 1, 20 do
+    local vel = v2(math.random() * 2 - 1, math.random() * 2 - 1) * 0.2
+    local offset = v2.random() * 10
+    big_bubble_emitter:add_particle(pos.x + offset.x, pos.y + offset.y, vel.x, vel.y)
+  end  
+end
+
+local function explode_small(pos)
+  small_explosion_emitter:add_particle(pos.x, pos.y, 0, 0)
+  for i = 1, 5 do
+    local vel = (v2.random() + v2.random())
+    for i = 1, 5 do
+      local vel = vel * i/20 * 2
+      local offset = v2.random() * 10
+      spark_emitter:add_particle(pos.x + offset.x, pos.y + offset.y, vel.x, vel.y)
+    end
+  end
   for i = 1, 10 do
     local vel = v2(math.random() * 2 - 1, math.random() * 2 - 1) * 5
     local offset = v2.random() * 3
     spark_emitter:add_particle(pos.x + offset.x, pos.y + offset.y, vel.x, vel.y)
   end
-  for i = 1, 15 do
+  for i = 1, 10 do
     local vel = v2(math.random() * 2 - 1, math.random() * 2 - 1) * 0.2
     local offset = v2.random() * 5
     big_bubble_emitter:add_particle(pos.x + offset.x, pos.y + offset.y, vel.x, vel.y)
