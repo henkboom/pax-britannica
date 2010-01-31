@@ -39,6 +39,7 @@ function make ()
       game.init_component('the_one_button')
       game.init_component('particles')
 
+      game.exit_handler.trap_esc = true
       function game.exit_handler.on_close()
         game.log.print_stats()
         kernel.abort_main_loop()
