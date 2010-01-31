@@ -14,12 +14,18 @@
 --- --------------
 
 local kernel = require 'dokidoki.kernel'
+require 'glfw'
 
 on_close = on_close or kernel.abort_main_loop
+if trap_esc == nil then
+  trap_esc = false
+end
 
 game.actors.new_generic('exit_handler', function ()
   function handle_event(event)
-    if event.type == 'quit' then
+    if event.type == 'quit' or
+       (trap_esc and event.type == 'key' and event.is_down and
+        event.key == glfw.KEY_ESC) then
       on_close()
     end
   end
