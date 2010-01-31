@@ -120,11 +120,12 @@ function draw()
   -- Draw the available resources pie-slice
   gl.glBegin(gl.GL_TRIANGLE_FAN)
     local angle = scale_angle(self.resources.amount) * math.pi * 2
+    local filled_angle = math.pi * 2 - angle
     gl.glColor4d(0, 0, 0, 0.6)
     gl.glVertex2d(0, 0)
-    for point = 0,SEGMENTS-1 do
-      gl.glVertex2d(math.sin(point / SEGMENTS * angle) * RADIUS, math.cos(point / SEGMENTS * angle) * RADIUS)
-      gl.glVertex2d(math.sin((point+1) / SEGMENTS * angle) * RADIUS, math.cos((point+1) / SEGMENTS * angle) * RADIUS)
+    for point = 0,SEGMENTS do
+      local vert = v2.unit(math.pi/2 - angle - point / SEGMENTS * filled_angle) * RADIUS
+      gl.glVertex2d(vert.x, vert.y)
     end
     gl.glVertex2d(0, 0)
   gl.glEnd()   
@@ -136,9 +137,8 @@ function draw()
       local bottom_highlight_angle = scale_angle(cost) * math.pi * 2
       gl.glColor4d(0.7, 1, 1, 0.7)
       gl.glVertex2d(0, 0)
-      for point = 0,SEGMENTS-1 do
+      for point = 0,SEGMENTS do
         gl.glVertex2d(math.sin(point / SEGMENTS * math.pi * 0.5 + bottom_highlight_angle) * RADIUS, math.cos(point / SEGMENTS * math.pi * 0.5 + bottom_highlight_angle) * RADIUS)
-        gl.glVertex2d(math.sin((point+1) / SEGMENTS * math.pi * 0.5 + bottom_highlight_angle) * RADIUS, math.cos((point+1) / SEGMENTS * math.pi * 0.5 + bottom_highlight_angle) * RADIUS)
       end
     gl.glEnd()    
   else
