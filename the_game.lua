@@ -54,7 +54,7 @@ function make ()
         game.actors.new(blueprints.music_loader,
           {'load_music', filename='audio/music.ogg', callback=function(loaded)
              music = loaded
-             music:play()
+             music:play(1, 1, 0)
              init()
            end})
       end
