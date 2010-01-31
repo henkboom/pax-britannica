@@ -6,6 +6,8 @@ local v2 = require 'dokidoki.v2'
 
 local blueprints = require 'blueprints'
 
+local music
+
 function make ()
   return game.make_game(
     {'update_setup', 'update', 'collision_registry', 'collision_check',
@@ -19,8 +21,6 @@ function make ()
       game.init_component('opengl_2d')
       game.opengl_2d.width = 1024
       game.opengl_2d.height = 768
-      -- disable clearing, since we draw our own background
-      game.opengl_2d.background_color = false
 
       game.init_component('constants')
       game.init_component('collision')
@@ -37,9 +37,22 @@ function make ()
         kernel.abort_main_loop()
       end
 
-      game.actors.new(blueprints.background)
-      game.actors.new(blueprints.background_fx)
-      game.actors.new(blueprints.game_flow)
+      local function init()
+        game.actors.new(blueprints.background)
+        game.actors.new(blueprints.background_fx)
+        game.actors.new(blueprints.game_flow)
+      end
+
+      if music then
+        init()
+      else
+        game.actors.new(blueprints.music_loader,
+          {'load_music', filename='audio/music.ogg', callback=function(loaded)
+             music = loaded
+             music:play()
+             init()
+           end})
+      end
     end)
 end
 

@@ -1,5 +1,5 @@
 require 'dokidoki.module'
-[[ background, debris, fish, background_fx, game_flow, fade_in,
+[[ background, debris, fish, background_fx, music_loader, game_flow, fade_in,
    fade_out, fighter, bomber, frigate, selection_factory, player_factory,
    easy_enemy_factory, laser, bomb, missile, countdown ]]
 
@@ -23,6 +23,11 @@ fish = game.make_blueprint('fish',
   
 background_fx = game.make_blueprint('background_fx',
   {'background_fx'})
+
+music_loader = game.make_blueprint('music_loader',
+  {'transform', pos=v2(1024, 0)},
+  {'sprite', resource='loading'},
+  {'load_music', filename='audio/music.ogg'})
 
 game_flow = game.make_blueprint('game_flow',
   {'game_flow'})

@@ -2,6 +2,8 @@ local graphics = require 'dokidoki.graphics'
 
 background = graphics.sprite_from_image('sprites/background.png', nil, {0, 0})
 
+loading = graphics.sprite_from_image('sprites/loading.png', nil, {113, -10})
+
 fighter_sprites = {
   graphics.sprite_from_image('sprites/fighter_p1.png', nil, 'center'),
   graphics.sprite_from_image('sprites/fighter_p2.png', nil, 'center'),
