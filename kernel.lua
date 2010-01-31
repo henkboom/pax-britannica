@@ -25,8 +25,8 @@
 
 require "dokidoki.module"
 [[ set_fps, set_max_frameskip, get_width, get_height, get_ratio,
-   set_video_mode, set_ratio, start_main_loop, abort_main_loop, switch_scene,
-   get_framerate ]]
+   set_fullscreen, set_video_mode, set_ratio, start_main_loop, abort_main_loop,
+   switch_scene, get_framerate ]]
 
 require "glfw"
 
@@ -51,6 +51,7 @@ sleep_allowance = 0.002
 ---- State Variables ----------------------------------------------------------
 
 running = false
+use_fullscreen = false
 
 width = 640
 height = 480
@@ -88,6 +89,16 @@ function get_width () return width end
 --- Returns the current total window height in pixels. This includes borders
 --- when the ratio doesn't match the window size.
 function get_height () return height end
+
+--- ### `set_fullscreen(fullscreen)`
+--- Sets whether or not a fullscreen window should be opened. This must be
+--- called before entering the main loop.
+---
+--- The default is to open in a window.
+function set_fullscreen(fullscreen)
+  assert(not running, 'set_fullscreen must be called before the main loop')
+  use_fullscreen = fullscreen
+end
 
 --- ### `set_video_mode(width, height)`
 --- Sets the desired width/height of the window in pixels.
@@ -146,7 +157,8 @@ function start_main_loop (scene)
     running = true
     
     log "setting video mode. . ."
-    glfw.OpenWindow(width, height, 8, 8, 8, 8, 24, 0, glfw.WINDOW)
+    glfw.OpenWindow(width, height, 8, 8, 8, 8, 24, 0,
+                    use_fullscreen and glfw.FULLSCREEN or glfw.WINDOW)
     set_video_mode(width, height)
 
     log "starting main loop"
