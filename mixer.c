@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <portaudio.h>
+#include "stb_vorbis.h"
 
 //// Types, Constants, Globals ////////////////////////////////////////////////
 
@@ -215,6 +216,22 @@ static void channel_fade_to(int channel, float duration, float left,
     }
 }
 
+//// Sound Data ///////////////////////////////////////////////////////////////
+
+static sound_data_t * new_sound_data(size_t frames)
+{
+    sound_data_t * data = (sound_data_t *)malloc(sizeof(sound_data_t));
+    data->frames = frames;
+    data->samples = (sample_t *)malloc(frames * sizeof(sample_t) * 2);
+    return data;
+}
+
+static void delete_sound_data(sound_data_t * data)
+{
+    free(data->samples);
+    free(data);
+}
+
 //// WAV Loading //////////////////////////////////////////////////////////////
 
 static unsigned char get_u8(FILE * file)
@@ -248,20 +265,6 @@ static int get_chunk_id(const char * id, FILE * file)
     read = fread(chunk_id, 1, 4, file);
     CHECK(read == 4 && strcmp(chunk_id, id) == 0, NULL);
     return 1;
-}
-
-static sound_data_t * new_sound_data(size_t frames)
-{
-    sound_data_t * data = (sound_data_t *)malloc(sizeof(sound_data_t));
-    data->frames = frames;
-    data->samples = (sample_t *)malloc(frames * sizeof(sample_t) * 2);
-    return data;
-}
-
-static void delete_sound_data(sound_data_t * data)
-{
-    free(data->samples);
-    free(data);
 }
 
 static sound_data_t * load_wav(const char * filename)
@@ -319,6 +322,33 @@ static sound_data_t * load_wav(const char * filename)
         data = NULL;
         ERROR("error or end of file before finished reading samples");
     }
+
+    return data;
+}
+
+//// OGG Loading //////////////////////////////////////////////////////////////
+
+static sound_data_t * load_ogg(const char * filename)
+{
+    sound_data_t * data = new_sound_data(0);
+    int channels;
+    int ret = stb_vorbis_decode_filename(
+        (char *)filename,
+        &channels,
+        &data->samples);
+    if(channels != 2)
+    {
+        delete_sound_data(data);
+        data = NULL;
+        ERROR("only 2-channel ogg files are supported");
+    }
+    if(ret < 0)
+    {
+        delete_sound_data(data);
+        data = NULL;
+        ERROR("some sort of error in stb_vorbis_decode_filename");
+    }
+    data->frames = ret;
 
     return data;
 }
@@ -413,10 +443,12 @@ static int mixer__uninit(lua_State *L)
     return 1;
 }
 
-static int mixer__load_wav(lua_State *L)
+static int generic_sound_loader(
+    lua_State *L,
+    sound_data_t * (*loader) (const char *filename))
 {
     const char * filename = luaL_checkstring(L, 1);
-    sound_data_t * sound = load_wav(filename);
+    sound_data_t * sound = loader(filename);
     
     if(sound == NULL)
     {
@@ -431,8 +463,16 @@ static int mixer__load_wav(lua_State *L)
         lua_setmetatable(L, -2);
         return 1;
     }
+}
 
-    return 0;
+static int mixer__load_wav(lua_State *L)
+{
+    return generic_sound_loader(L, load_wav);
+}
+
+static int mixer__load_ogg(lua_State *L)
+{
+    return generic_sound_loader(L, load_ogg);
 }
 
 static int mixer__channel_fade_to(lua_State *L)
@@ -483,6 +523,7 @@ static const luaL_Reg mixer_lib[] =
     {"init", mixer__init},
     {"uninit", mixer__uninit},
     {"load_wav", mixer__load_wav},
+    {"load_ogg", mixer__load_ogg},
     {"channel_fade_to", mixer__channel_fade_to},
     {NULL, NULL}
 };
