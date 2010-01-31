@@ -108,11 +108,6 @@ function draw()
   gl.glPushMatrix()
   gl.glTranslated(pos.x + offset.x, pos.y + offset.y, 0)
   
-  gl.glEnable(gl.GL_LINE_SMOOTH)
-  gl.glHint(gl.GL_LINE_SMOOTH_HINT, gl.GL_NICEST)
-	gl.glEnable(gl.GL_BLEND)
-	gl.glBlendFunc(gl.GL_SRC_ALPHA, gl.GL_ONE_MINUS_SRC_ALPHA)
-  
   gl.glPushMatrix()
   
   game.resources.production_layer_1:draw()
@@ -202,8 +197,6 @@ function draw()
   gl.glColor3d(1, 1, 1)
   
   gl.glPopMatrix() -- tilt rotation to compensate for art
-  
-  gl.glDisable(gl.GL_LINE_SMOOTH)
   
   gl.glPopMatrix() -- main push
 end

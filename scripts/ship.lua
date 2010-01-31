@@ -84,7 +84,7 @@ end
 
 local death_counter = 100
 local next_explosion = 10
-local opacity = 0.3
+local opacity = 0.6
 
 function factory_destruct()
   if death_counter > 0 then
