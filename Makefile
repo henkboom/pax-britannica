@@ -1,5 +1,8 @@
 NAME=gamma4
 
+# always descend
+.PHONY: $(NAME)
+
 # bootstrap
 linux:
 	make $(NAME) \
@@ -21,7 +24,7 @@ mingw:
 particles.o: particles.c
 	gcc -O2 -Wall -c $^
 
-$(NAME): particles.o
+$(NAME):
 	make -C dokidoki-support $(PLATFORM) NAME="../$(NAME)" EXTRA_CFLAGS='-DEXTRA_LOADERS=\"../extra_loaders.h\"' EXTRA_LDFLAGS="" EXTRA_OBJECTS="../particles.o"
 
 clean:
