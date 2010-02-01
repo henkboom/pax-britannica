@@ -76,7 +76,7 @@ function destruct()
   if self.factory_ai then
     factory_destruct()
   else
-    game.particles.explode(self.transform.pos)
+    game.particles.explode(self)
     game.log.record_death(self.blueprint)
     self.dead = true
   end
@@ -84,7 +84,7 @@ end
 
 local death_counter = 100
 local next_explosion = 10
-local opacity = 0.3
+local opacity = 0.6
 
 function factory_destruct()
   if death_counter > 0 then
@@ -92,14 +92,14 @@ function factory_destruct()
     self.sprite.color = {self.sprite.color[1], self.sprite.color[2], self.sprite.color[3], math.max(0, opacity)}
     opacity = opacity - 0.006
     if death_counter % next_explosion == 0 then
-      game.particles.explode(random_point_on_ship())
+      game.particles.explode(self, random_point_on_ship())
       next_explosion = math.random(6,15)
     end
     death_counter = death_counter - 1
   else
     for i = 1,5 do
       random = (v2.random() + v2.random()) * 20
-      game.particles.explode(self.transform.pos + random)
+      game.particles.explode(self, self.transform.pos + random)
     end
     game.log.record_death(self.blueprint)
     self.dead = true

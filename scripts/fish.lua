@@ -7,7 +7,7 @@ local FADE_TIME = 2
 local random_direction = v2(math.random() < 0.5 and 1 or -1, 0)
 local random_scale = math.random() * 0.75 + 0.5
 local random_speed = math.random() + 0.5
-local random_opacity = math.random() * 0.1 + 0.05
+local random_opacity = math.random() * 0.1 + 0.1
 
 local since_alive = 0
 
