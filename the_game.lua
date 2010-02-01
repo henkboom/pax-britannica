@@ -28,9 +28,7 @@ function make ()
       game.init_component('opengl_2d')
       game.opengl_2d.width = 1024
       game.opengl_2d.height = 768
-      if not args['--windowed'] then
-        game.opengl_2d.background_color = nil
-      end
+      game.opengl_2d.background_color = {0, 0, 0}
 
       game.init_component('constants')
       game.init_component('collision')
@@ -49,6 +47,9 @@ function make ()
       end
 
       local function init()
+        if not args['--windowed'] then
+          game.opengl_2d.background_color = nil
+        end
         game.actors.new(blueprints.background)
         game.actors.new(blueprints.background_fx)
         game.actors.new(blueprints.game_flow)
