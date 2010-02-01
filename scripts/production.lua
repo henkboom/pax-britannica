@@ -181,12 +181,12 @@ function draw()
     local health = self.ship.health_percentage()  
     if health < game.constants.low_health_threshold then
       local factor = health / game.constants.low_health_threshold
-      gl.glScaled(1, 0.7, 1)
-      gl.glColor3d(1, 0.3, 0.3)
-      game.resources.health_some:draw()
+      gl.glScaled(1, math.max(0.5, factor), 1)
+      gl.glColor3d(1, factor*0.3, factor*0.3)
+      game.resources.health_none:draw()
     elseif health < game.constants.high_health_threshold then
       local factor = (health - game.constants.low_health_threshold) / (game.constants.high_health_threshold - game.constants.low_health_threshold)
-      gl.glScaled(1, factor * 0.3 + 0.7, 1)
+      gl.glScaled(1, factor * 0.5 + 0.5, 1)
       gl.glColor3d(1, factor * 0.7 + 0.3, factor * 0.2 + 0.3)
       game.resources.health_some:draw()
     else
