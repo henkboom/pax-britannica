@@ -4,6 +4,10 @@ callback = callback or function () end
 
 local counter = 5
 
+function reset_counter()
+  counter = 5
+end
+
 function update()
   counter = counter - 1/60
   self.sprite.color = {1, 1, 1, math.sin(math.mod(counter, 1) * math.pi)}
