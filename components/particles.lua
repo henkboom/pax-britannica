@@ -97,7 +97,7 @@ game.actors.new_generic('particles', function ()
     end
   end
   function update ()
-    if game.keyboard.key_held(string.byte('P')) then
+    if game.debug_keys.key_held(string.byte('P')) then
       for i = 1, 10 do
         local vel = v2.random() * 3
         bubble_emitter:add_particle(300, 300, vel.x, vel.y)

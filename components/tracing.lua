@@ -3,7 +3,7 @@ local gl = require 'gl'
 local tracers = {}
 
 local function in_debug_mode()
-  return game.keyboard.key_held(string.byte('`'))
+  return game.debug_keys.key_held(string.byte('`'))
 end
 
 function trace_line(from, to)

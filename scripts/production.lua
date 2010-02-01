@@ -56,10 +56,10 @@ function update()
   end
   
   -- this is debugging code and should be removed sometime soon...
-  local key_z = game.keyboard.key_pressed(string.byte('Z'))
-  local key_x = game.keyboard.key_pressed(string.byte('X'))
-  local key_c = game.keyboard.key_pressed(string.byte('C'))
-  local key_v = game.keyboard.key_pressed(string.byte('V'))
+  local key_z = game.debug_keys.key_pressed(string.byte('Z'))
+  local key_x = game.debug_keys.key_pressed(string.byte('X'))
+  local key_c = game.debug_keys.key_pressed(string.byte('C'))
+  local key_v = game.debug_keys.key_pressed(string.byte('V'))
 
   if key_z then spawn('fighter') end
   if key_x then spawn('bomber')  end

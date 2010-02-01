@@ -40,6 +40,7 @@ function make ()
       game.init_component('log')
       game.init_component('fast_forward')
       game.init_component('the_one_button')
+      game.init_component('debug_keys')
 
       game.exit_handler.trap_esc = true
       function game.exit_handler.on_close()

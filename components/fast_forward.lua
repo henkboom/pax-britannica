@@ -2,7 +2,7 @@ local kernel = require 'dokidoki.kernel'
 
 game.actors.new_generic('fast_forward', function ()
   function update()
-    if game.keyboard.key_held(string.byte(" ")) then
+    if game.debug_keys.key_held(string.byte(" ")) then
       kernel.set_fps(300)
       kernel.set_max_frameskip(60)
     else
