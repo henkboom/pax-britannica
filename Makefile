@@ -25,7 +25,7 @@ particles.o: particles.c
 	gcc -O2 -Wall -c $^
 
 $(NAME):
-	make -C dokidoki-support $(PLATFORM) NAME="../$(NAME)" EXTRA_CFLAGS='-DEXTRA_LOADERS=\"../extra_loaders.h\"' EXTRA_LDFLAGS="" EXTRA_OBJECTS="../particles.o"
+	make -C dokidoki-support $(PLATFORM) NAME="../$(NAME)" EXTRA_CFLAGS='-DEXTRA_LOADERS=\"../extra_loaders.h\"' EXTRA_OBJECTS="../particles.o"
 
 clean:
 	rm -f particles.o
