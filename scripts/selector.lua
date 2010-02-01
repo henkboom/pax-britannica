@@ -13,6 +13,8 @@ local fade = 0.2
 
 local pulse_time = 0
 
+callback = callback or function () end
+
 self.sprite.image = assert(game.resources.factory_sprites[player])
 
 function update()
@@ -20,6 +22,7 @@ function update()
 
   if not picked and game.the_one_button.held(player) then
     picked = true
+    callback()
   end
   if picked then
     fade = math.min(fade + 0.1, 1)

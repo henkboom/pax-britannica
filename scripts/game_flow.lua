@@ -115,7 +115,10 @@ function update()
     end
 
     if player_selected then
-      game.actors.new(blueprints.countdown, {'countdown', callback=start_game}, {'transform', pos=v2(1024/2, 768/2 - 200)})
+      local c = game.actors.new(blueprints.countdown, {'countdown', callback=start_game}, {'transform', pos=v2(1024/2, 768/2 - 200)})
+      for _,s in ipairs(selectors) do
+        s.selector.callback = c.countdown.reset_counter
+      end
       state = nil
     end
   elseif state == 'in_game' then
