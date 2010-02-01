@@ -4,10 +4,10 @@ local old_states = {}
 local states = {}
 
 local player_keys = {
-  string.byte('1'),
-  string.byte('2'),
-  string.byte('3'),
-  string.byte('4')
+  string.byte('A'),
+  string.byte('F'),
+  string.byte('H'),
+  string.byte('L')
 }
 
 local player_joysticks = {
