@@ -177,6 +177,8 @@ function draw()
     gl.glMatrixMode(gl.GL_TEXTURE)
     gl.glTranslated(texcoord_scroller, 0,0)
     gl.glMatrixMode(gl.GL_MODELVIEW)
+    gl.glPushMatrix()
+    gl.glScaled(1.20, 1, 1)
     
     local health = self.ship.health_percentage()  
     if health < game.constants.low_health_threshold then
@@ -196,6 +198,7 @@ function draw()
       game.resources.health_full:draw()
     end
     
+    gl.glPopMatrix()
     gl.glMatrixMode(gl.GL_TEXTURE)
     gl.glLoadIdentity()
     gl.glMatrixMode(gl.GL_MODELVIEW)      
