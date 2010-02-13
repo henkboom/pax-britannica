@@ -165,7 +165,7 @@ function start_main_loop (scene)
 
     next_scene = scene
     while next_scene do
-      local scene = next_scene
+      scene = next_scene
       next_scene = nil
       main_loop(scene)
       if next_scene then
