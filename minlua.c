@@ -1,4 +1,8 @@
+#include <libgen.h>
+#include <malloc.h>
 #include <stdio.h>
+#include <unistd.h>
+
 #include <lua.h>
 #include <lauxlib.h>
 #include <lualib.h>
@@ -40,10 +44,69 @@ void init_preloaders(lua_State *L)
     lua_pop(L, 2);
 }
 
+//// working directory handling ///////////////////////////////////////////////
+
+#ifdef DOKIDOKI_LINUX
+
+int get_exe_path(char *buffer, int size)
+{
+    int ret = readlink("/proc/self/exe", buffer, size);
+    if(0 >= ret && ret < size)
+        buffer[ret] = 0;
+    return ret;
+}
+
+int switch_to_game_directory()
+{
+    printf("switching\n");
+    int size = 256;
+    char *buffer = NULL;
+    while(!buffer)
+    {
+        buffer = (char *)malloc(size);
+        int ret = get_exe_path(buffer, size);
+
+        // error
+        if(ret <= 0)
+        {
+            free(buffer);
+            buffer = NULL;
+            return 0;
+        }
+        // buffer too small
+        else if(ret == size)
+        {
+            free(buffer);
+            buffer = NULL;
+            size *= 2;
+        }
+    }
+
+    char *dir = dirname(buffer);
+    printf("switching to %s\n", dir);
+
+    int ret = chdir(dir);
+    printf("%d\n", ret);
+    free(buffer);
+    return ret;
+}
+
+#else
+
+int switch_to_game_directory()
+{
+    printf("automatic game path detection not supported on this platform\n");
+    return 0;
+}
+
+#endif
+
 //// main program /////////////////////////////////////////////////////////////
 
 int main(int argc, char ** argv)
 {
+    switch_to_game_directory();
+
     // load lua and libraries
     lua_State *L = lua_open();
     luaL_openlibs(L);
