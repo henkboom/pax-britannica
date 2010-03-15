@@ -46,8 +46,7 @@ void init_preloaders(lua_State *L)
 
 //// working directory handling ///////////////////////////////////////////////
 
-#ifdef DOKIDOKI_LINUX
-
+#if defined(DOKIDOKI_LINUX)
 int get_exe_path(char *buffer, int size)
 {
     int ret = readlink("/proc/self/exe", buffer, size);
@@ -55,10 +54,61 @@ int get_exe_path(char *buffer, int size)
         buffer[ret] = 0;
     return ret;
 }
-
+#elif defined(DOKIDOKI_WINDOWS)
+// untested
+int get_exe_path(char *buffer, int size)
+{
+    //return GetModuleFileName(NULL, buffer, size);
+    return 0;
+}
+#elif defined(DOKIDOKI_MACOSX)
+// untested
+//#include <CFURL.h>
 int switch_to_game_directory()
 {
-    printf("switching\n");
+    //printf("finding the bundle directory\n");
+    //CFURLRef url = CFBundleCopyBundleURL(CFBundleGetMainBundle());
+    //if(!url)
+    //{
+    //    printf("no bundle found");
+    //    return 0;
+    //}
+    //CFStringRef str = CFURLCopyFileSystemPath(cfurl, kCFURLPOSIXPathStyle);
+    //CFRelease(url);
+
+    //int size = CFStringGetLength(str) + 1;
+    //char *buffer = (char *)malloc(size);
+
+    //int success = CFStringGetCString(str, buffer, size, kCFURLPOSIXPathStyle);
+    //CFRelease(str);
+    //
+    //if(success)
+    //{
+    //    char *dir = dirname(buffer);
+
+    //    int success = chdir(dir);
+    //    if(success)
+    //        printf("changed directory to '%s'\n", dir);
+    //    else
+    //        printf("failed changing directory to '%s'\n", dir);
+    //}
+
+    //free(buffer);
+    //return success;
+    return 0;
+}
+#else
+int switch_to_game_directory()
+{
+    printf("automatic game path detection not supported on this platform\n");
+    return 0;
+}
+#endif
+
+#if defined(DOKIDOKI_WINDOWS) || defined(DOKIDOKI_LINUX)
+int switch_to_game_directory()
+{
+    printf("finding the game's directory\n");
     int size = 256;
     char *buffer = NULL;
     while(!buffer)
@@ -71,6 +121,7 @@ int switch_to_game_directory()
         {
             free(buffer);
             buffer = NULL;
+            printf("failed locating the executable\n");
             return 0;
         }
         // buffer too small
@@ -83,22 +134,16 @@ int switch_to_game_directory()
     }
 
     char *dir = dirname(buffer);
-    printf("switching to %s\n", dir);
 
-    int ret = chdir(dir);
-    printf("%d\n", ret);
+    int success = chdir(dir);
+    if(success)
+        printf("changed directory to '%s'\n", dir);
+    else
+        printf("failed to change directory to '%s'\n", dir);
+
     free(buffer);
-    return ret;
+    return success;
 }
-
-#else
-
-int switch_to_game_directory()
-{
-    printf("automatic game path detection not supported on this platform\n");
-    return 0;
-}
-
 #endif
 
 //// main program /////////////////////////////////////////////////////////////
