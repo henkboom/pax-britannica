@@ -54,12 +54,11 @@ int get_exe_path(char *buffer, int size)
         buffer[ret] = 0;
     return ret;
 }
-#elif defined(DOKIDOKI_WINDOWS)
-// untested
+#elif defined(DOKIDOKI_MINGW)
+#include <windows.h>
 int get_exe_path(char *buffer, int size)
 {
-    //return GetModuleFileName(NULL, buffer, size);
-    return 0;
+    return GetModuleFileName(NULL, buffer, size);
 }
 #elif defined(DOKIDOKI_MACOSX)
 // untested
@@ -105,7 +104,7 @@ int switch_to_game_directory()
 }
 #endif
 
-#if defined(DOKIDOKI_WINDOWS) || defined(DOKIDOKI_LINUX)
+#if defined(DOKIDOKI_MINGW) || defined(DOKIDOKI_LINUX)
 int switch_to_game_directory()
 {
     printf("finding the game's directory\n");
