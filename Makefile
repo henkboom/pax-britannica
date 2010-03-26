@@ -23,7 +23,7 @@ macosx:
 		STATIC_LINK="" \
 		DYNAMIC_LINK="" \
 		PLATFORM_CFLAGS="-DDOKIDOKI_MACOSX" \
-		PLATFORM_LDFLAGS="-Wl,-reexport-llua -framework AGL -framework OpenGL -framework Carbon"
+		PLATFORM_LDFLAGS="-framework AGL -framework OpenGL -framework Carbon"
 
 mingw:
 	make $(TARGET) PLATFORM=mingw \
