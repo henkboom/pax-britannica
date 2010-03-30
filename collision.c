@@ -23,7 +23,7 @@ typedef struct {
     polygon_s *poly;
 } body_s;
 
-vector_s make_vector(lua_Number x, lua_Number y)
+static vector_s make_vector(lua_Number x, lua_Number y)
 {
     vector_s v;
     v.x = x;
@@ -31,49 +31,49 @@ vector_s make_vector(lua_Number x, lua_Number y)
     return v;
 }
 
-lua_Number vector_magnitude_squared(vector_s v)
+static lua_Number vector_magnitude_squared(vector_s v)
 {
     return v.x * v.x + v.y * v.y;
 }
 
-lua_Number vector_magnitude(vector_s v)
+static lua_Number vector_magnitude(vector_s v)
 {
     return sqrt(v.x*v.x + v.y * v.y);
 }
 
-vector_s vector_neg(vector_s v)
+static vector_s vector_neg(vector_s v)
 {
     return make_vector(-v.x, -v.y);
 }
 
-vector_s vector_mul(vector_s v, lua_Number s)
+static vector_s vector_mul(vector_s v, lua_Number s)
 {
     return make_vector(v.x * s, v.y * s);
 }
 
-lua_Number vector_dot(vector_s v1, vector_s v2)
+static lua_Number vector_dot(vector_s v1, vector_s v2)
 {
     return v1.x * v2.x + v1.y * v2.y;
 }
 
-vector_s vector_sub(vector_s v1, vector_s v2)
+static vector_s vector_sub(vector_s v1, vector_s v2)
 {
     return make_vector(v1.x - v2.x, v1.y - v2.y);
 }
 
-vector_s vector_rotate_to(vector_s v, vector_s facing)
+static vector_s vector_rotate_to(vector_s v, vector_s facing)
 {
     return make_vector(v.x * facing.x + v.y * -facing.y,
                        v.x * facing.y + v.y * facing.x);
 }
 
-vector_s vector_rotate_from(vector_s v, vector_s facing)
+static vector_s vector_rotate_from(vector_s v, vector_s facing)
 {
     return make_vector(v.x * facing.x + v.y * facing.y,
                        v.x * -facing.y + v.y * facing.x);
 }
 
-int collision_native__make_polygon(lua_State *L)
+static int collision_native__make_polygon(lua_State *L)
 {
     int vertex_count = lua_objlen(L, 1) / 2;
 
@@ -100,7 +100,7 @@ int collision_native__make_polygon(lua_State *L)
     return 1;
 }
 
-lua_Number halfwidth_along_axis(vector_s axis, const polygon_s *poly)
+static lua_Number halfwidth_along_axis(vector_s axis, const polygon_s *poly)
 {
     lua_Number hw = 0;
     int i;
@@ -112,8 +112,8 @@ lua_Number halfwidth_along_axis(vector_s axis, const polygon_s *poly)
     return hw;
 }
 
-int separate_by_axis(vector_s axis, lua_Number hw1, const body_s *body1,
-                     const body_s *body2, vector_s *out)
+static int separate_by_axis(vector_s axis, lua_Number hw1, const body_s *body1,
+                            const body_s *body2, vector_s *out)
 {
     //printf("axiss = %lf, %lf\n", axis.x, axis.y);
     lua_Number overlap =
@@ -140,7 +140,8 @@ int separate_by_axis(vector_s axis, lua_Number hw1, const body_s *body1,
     return 1;
 }
 
-int separate_by_axes(const body_s *body1, const body_s *body2, vector_s *out)
+static int separate_by_axes(const body_s *body1, const body_s *body2,
+                            vector_s *out)
 {
     polygon_s *poly1 = body1->poly;
 
@@ -158,7 +159,7 @@ int separate_by_axes(const body_s *body1, const body_s *body2, vector_s *out)
     return 1;
 }
 
-int collision_native__collide(lua_State *L)
+static int collision_native__collide(lua_State *L)
 {
     //printf("#### starting\n");
     body_s body1, body2;
