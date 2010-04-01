@@ -5,7 +5,6 @@ import(require 'gl')
 
 kernel = require "dokidoki.kernel"
 graphics = require "dokidoki.graphics"
-sound = require "dokidoki.sound"
 
 function make_texture_scene ()
   local time = 0
