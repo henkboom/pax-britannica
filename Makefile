@@ -22,8 +22,8 @@ macosx:
 	make $(TARGET) PLATFORM=macosx \
 		STATIC_LINK="" \
 		DYNAMIC_LINK="" \
-		PLATFORM_CFLAGS="-DDOKIDOKI_MACOSX" \
-		PLATFORM_LDFLAGS="-framework AGL -framework OpenGL -framework Carbon"
+		PLATFORM_CFLAGS="-DDOKIDOKI_MACOSX -I/opt/local/include" \
+		PLATFORM_LDFLAGS="-L/opt/local/lib -framework AGL -framework OpenGL -framework Carbon"
 
 mingw:
 	make $(TARGET) PLATFORM=mingw \
