@@ -325,10 +325,11 @@ end
 function texture_from_string (image_string, width, height, channels)
   -- Creates an OpenGL texture from the data in image_string.
   --
-  -- width and height must be powers of two. The bytes in image_string are
-  -- treated as unsigned byte values. channels must be 1, 2, 3, or 4 for V, VA,
-  -- RGB, and RGBA respectively. #image_string should be width*height*channels.
-  -- The generated texture, the width, and the height are returned.
+  -- If width and height are not powers of two, the texture will be padded out
+  -- to the nearest greater power of two. The bytes in image_string are treated
+  -- as unsigned byte values. channels must be 1, 2, 3, or 4 for V, VA, RGB,
+  -- and RGBA respectively. #image_string should be width*height*channels.  The
+  -- generated texture, the final width, and the final height are returned.
 
   assert(#image_string == width * height * channels,
          "image_string length doesn't match")
