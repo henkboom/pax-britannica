@@ -14,91 +14,6 @@ local will = require "dokidoki.private.will"
 
 ---- Fonts and Text -----------------------------------------------------------
 
---function init_fonts()
---  if TTF_WasInit() == 0 then sdl_check(TTF_Init() == 0) end
---end
---
---local font_map_chars = map(string.char, range((" "):byte(), ("~"):byte()))
---
---function make_font_map (filename, size, chars)
---  assert(filename)
---  assert(size and size > 0)
---  chars = chars or font_map_chars
---
---  init_fonts()
---
---  -- Keep a padding of this much in glyphs to prevent them from bleeding into
---  -- each other when using linear filters. This has to be higher if you're
---  -- using strong mipmapping. It should always be at least 1.
---  local glyph_padding = 1
---
---  local font = TTF_OpenFont(filename, size)
---  local line_height =
---    math.max(TTF_FontLineSkip(font), TTF_FontHeight(font))
---
---  -- Start the surface at 512x64, but the height will grow automatically.
---  local surface = SDL_CreateRGBSurface(
---    SDL_SWSURFACE, 512, 64, 32, rmask, gmask, bmask, amask)
---
---  local x = glyph_padding
---  local y = glyph_padding
---
---  local rects = {}
---
---  for _, c in pairs(font_map_chars) do
---    local glyph = surface_from_text(font, c)
---    -- Go to the next row if this one is full.
---    if x + glyph.w + glyph_padding > surface.w then
---      x = glyph_padding
---      y = y + line_height + glyph_padding
---      assert(x + glyph.w + glyph_padding <= surface.w,
---             "A glyph is too wide for the texture.")
---    end
---    -- If there isn't enough room for the current row, grow the texture to fit
---    -- it.
---    if y + line_height + glyph_padding > surface.h then
---      local new_surface = SDL_CreateRGBSurface(
---        SDL_SWSURFACE, surface.w,
---        to_power_of_two(y + line_height + glyph_padding), 32, rmask, gmask,
---        bmask, amask)
---      flat_blit(surface, nil, new_surface, nil)
---      SDL_FreeSurface(surface)
---      surface = new_surface
---    end
---
---    -- Blit the glyph!
---    flat_blit(glyph, nil, surface, {x, y})
---
---    rects[c] = {x, y, glyph.w, glyph.h}
---    x = x + glyph.w + glyph_padding
---
---    SDL_FreeSurface(glyph)
---  end
---
---  -- Convert rendered text to a texture
---  local tex = texture_from_surface(surface)
---
---  -- Make the sprites
---  local sprites = {}
---  for c, rect in pairs(rects) do
---    -- Transform the pixel coordinates into texture coordinates
---    local tex_rect =
---    {
---      rect[1] / surface.w,
---      rect[2] / surface.h,
---      rect[3] / surface.w,
---      rect[4] / surface.h
---    }
---    sprites[c] =
---      make_sprite(tex, {rect[3], rect[4]}, {0, line_height}, tex_rect)
---  end
---
---  SDL_FreeSurface(surface)
---  TTF_CloseFont(font)
---
---  return sprites;
---end
-
 function font_map_line_height (font_map)
   local _, some_glyph = next(font_map)
   return some_glyph.size[2]
@@ -129,17 +44,6 @@ function draw_text(font_map, text)
   end
   glPopMatrix()
 end
-
---function surface_from_text(font, text)
---  assert(font)
---  assert(text)
---  local color = SDL_Color_new()
---  color.r, color.g, color.b = 255, 255, 255
---  local surface = TTF_RenderUTF8_Blended(font, text, color)
---  sdl_check(surface)
---  SDL_Color_delete(color)
---  return surface
---end
 
 ---- Sprites ------------------------------------------------------------------
 
