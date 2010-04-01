@@ -43,6 +43,8 @@ function make_game (update_methods, draw_methods, init)
   for _, method in ipairs(update_methods) do scripts_by_method[method] = {} end
   for _, method in ipairs(draw_methods) do scripts_by_method[method] = {} end
 
+  game.make_script = make_script
+  game.make_blueprint = make_blueprint
 
   -- delayed_require(name)
   -- Works like the regular require except that it returns a function
