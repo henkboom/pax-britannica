@@ -43,7 +43,9 @@ function make_sprite_scene ()
       glTranslated(320, 240, 0)
       glScaled(2, 2, 2)
       glColor3d(1, 1, 1)
-      graphics.draw_text(font_map, "Yay it works!\n\nnew line!")
+      local fps = math.floor(kernel.get_framerate()+0.5)
+      graphics.draw_text(font_map,
+        "Yay it works!\n\n" .. fps .. " fps")
     glPopMatrix()
   end
 
