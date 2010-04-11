@@ -415,6 +415,7 @@ static int init()
 static int uninit()
 {
     PA_CHECK(Pa_StopStream(stream));
+    PA_CHECK(Pa_CloseStream(stream));
     PA_CHECK(Pa_Terminate());
 
     return 1;
