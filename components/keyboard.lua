@@ -24,13 +24,13 @@ end
 --- ### `key_held(key)`
 --- Returns true if `key` is currently down, false otherwise.
 function key_held(key)
-  return key_states[key]
+  return not not key_states[key]
 end
 
 --- ### `key_released(key)`
 --- Returns true if `key` was released since the last frame, false otherwise.
 function key_released(key)
-  return not key_states[key] and old_key_states[key]
+  return not not (not key_states[key] and old_key_states[key])
 end
 
 game.actors.new_generic('key_monitor', function ()
