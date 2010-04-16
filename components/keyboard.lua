@@ -18,7 +18,7 @@ local old_key_states = {}
 --- ### `key_pressed(key)`
 --- Returns true if `key` was pressed since the last frame, false otherwise.
 function key_pressed(key)
-  return key_states[key] and not old_key_states[key]
+  return not not (key_states[key] and not old_key_states[key])
 end
 
 --- ### `key_held(key)`
