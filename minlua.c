@@ -61,40 +61,37 @@ int get_exe_path(char *buffer, int size)
     return GetModuleFileName(NULL, buffer, size);
 }
 #elif defined(DOKIDOKI_MACOSX)
-// untested
-//#include <CFURL.h>
+#include <CFBundle.h>
+#include <CFURL.h>
 int switch_to_game_directory()
 {
-    //printf("finding the bundle directory\n");
-    //CFURLRef url = CFBundleCopyBundleURL(CFBundleGetMainBundle());
-    //if(!url)
-    //{
-    //    printf("no bundle found");
-    //    return 0;
-    //}
-    //CFStringRef str = CFURLCopyFileSystemPath(cfurl, kCFURLPOSIXPathStyle);
-    //CFRelease(url);
+    printf("finding the bundle directory\n");
+    CFURLRef url = CFBundleCopyResourcesDirectoryURL(CFBundleGetMainBundle());
+    if(!url)
+    {
+        printf("no bundle found");
+        return 0;
+    }
+    CFStringRef str = CFURLCopyFileSystemPath(url, kCFURLPOSIXPathStyle);
+    CFRelease(url);
 
-    //int size = CFStringGetLength(str) + 1;
-    //char *buffer = (char *)malloc(size);
+    int size = CFStringGetLength(str) + 1;
+    char *dir = (char *)malloc(size);
 
-    //int success = CFStringGetCString(str, buffer, size, kCFURLPOSIXPathStyle);
-    //CFRelease(str);
-    //
-    //if(success)
-    //{
-    //    char *dir = dirname(buffer);
+    int success = CFStringGetCString(str, dir, size, kCFURLPOSIXPathStyle);
+    CFRelease(str);
+    
+    if(success)
+    {
+        int success = chdir(dir);
+        if(success == 0)
+            printf("changed directory to '%s'\n", dir);
+        else
+            printf("failed changing directory to '%s'\n", dir);
+    }
 
-    //    int success = chdir(dir);
-    //    if(success)
-    //        printf("changed directory to '%s'\n", dir);
-    //    else
-    //        printf("failed changing directory to '%s'\n", dir);
-    //}
-
-    //free(buffer);
-    //return success;
-    return 0;
+    free(dir);
+    return success;
 }
 #else
 int switch_to_game_directory()
@@ -135,7 +132,7 @@ int switch_to_game_directory()
     char *dir = dirname(buffer);
 
     int success = chdir(dir);
-    if(success)
+    if(success == 0)
         printf("changed directory to '%s'\n", dir);
     else
         printf("failed to change directory to '%s'\n", dir);

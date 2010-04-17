@@ -22,7 +22,7 @@ macosx:
 	make $(TARGET) PLATFORM=macosx \
 		STATIC_LINK="" \
 		DYNAMIC_LINK="" \
-		PLATFORM_CFLAGS="-DDOKIDOKI_MACOSX -I/opt/local/include" \
+		PLATFORM_CFLAGS="-DDOKIDOKI_MACOSX -I/System/Library/Frameworks/CoreFoundation.framework/Headers -I/opt/local/include" \
 		PLATFORM_LDFLAGS="-L/opt/local/lib -framework AGL -framework OpenGL -framework Carbon"
 
 mingw:
