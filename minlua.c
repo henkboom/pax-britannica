@@ -66,12 +66,17 @@ int get_exe_path(char *buffer, int size)
 int switch_to_game_directory()
 {
     printf("finding the bundle directory\n");
-    CFURLRef url = CFBundleCopyResourcesDirectoryURL(CFBundleGetMainBundle());
+
+    CFBundleRef bundle = CFBundleGetMainBundle();
+    CFURLRef url = NULL;
+    if(bundle)
+        url = CFBundleCopyBundleURL(bundle);
     if(!url)
     {
         printf("no bundle found");
         return 0;
     }
+
     CFStringRef str = CFURLCopyFileSystemPath(url, kCFURLPOSIXPathStyle);
     CFRelease(url);
 
@@ -88,6 +93,12 @@ int switch_to_game_directory()
             printf("changed directory to '%s'\n", dir);
         else
             printf("failed changing directory to '%s'\n", dir);
+
+        // there must be a better way to tell if we're bundled :/
+        if(chdir("Contents/Resources") == 0)
+            printf("running as an app bundle, changed to resources directory\n");
+        else
+            printf("running unbundled\n");
     }
 
     free(dir);
