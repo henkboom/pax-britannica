@@ -509,6 +509,18 @@ static int mixer__channel_fade_to(lua_State *L)
     return 0;
 }
 
+static int mixer__channel_stop(lua_State *L)
+{
+    check_initted(L);
+    int channel = luaL_checkint(L, 1);
+
+    luaL_argcheck(L, channel_is_valid(channel), 1, "invalid channel given");
+
+    channel_stop(channel);
+
+    return 0;
+}
+
 static sound_data_t * check_sound_effect(lua_State *L, int index)
 {
     return *(sound_data_t **)luaL_checkudata(L, index, "mixer.sound_effect");
@@ -544,6 +556,7 @@ static const luaL_Reg mixer_lib[] =
     {"load_wav", mixer__load_wav},
     {"load_ogg", mixer__load_ogg},
     {"channel_fade_to", mixer__channel_fade_to},
+    {"channel_stop", mixer__channel_stop},
     {NULL, NULL}
 };
 
