@@ -47,6 +47,9 @@ local char_origin = {0, char_height}
 local start_code = string.byte(' ')
 local end_code = string.byte('~')
 
+-- looks like it wasn't such a good idea to pack the characters so tightly...
+local epsilon = 0.01
+
 function load()
   local tex, width, height = graphics.texture_from_string(
     assert(stb_image.load_from_string(data)))
@@ -55,9 +58,14 @@ function load()
 
   for code = start_code, end_code do
     local i = code - start_code
-    local x = (i % chars_per_row) * char_width
-    local y = math.floor(i / chars_per_row) * char_height
-    local rect = {x/width, y/height, char_width/width, char_height/height}
+    local x = (i % chars_per_row) * char_width + epsilon
+    local y = math.floor(i / chars_per_row) * char_height + epsilon
+    local rect = {
+      x/width,
+      y/height,
+      (char_width-epsilon*2)/width,
+      (char_height-epsilon*2)/height
+    }
 
     fontmap[string.char(code)] = graphics.make_sprite(
       tex, char_size, char_origin, rect)
