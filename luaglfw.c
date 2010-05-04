@@ -98,6 +98,25 @@ static void unsupportedFunction( lua_State *L, char const *name )
     lua_error( L );
 }
 
+static void pushVideoMode( lua_State *L, const GLFWvidmode *mode)
+{
+    lua_newtable( L );
+    lua_pushstring( L, "Width" );
+    lua_pushnumber( L, mode->Width );
+    lua_rawset( L, -3 );
+    lua_pushstring( L, "Height" );
+    lua_pushnumber( L, mode->Height );
+    lua_rawset( L, -3 );
+    lua_pushstring( L, "RedBits" );
+    lua_pushnumber( L, mode->RedBits );
+    lua_rawset( L, -3 );
+    lua_pushstring( L, "GreenBits" );
+    lua_pushnumber( L, mode->GreenBits );
+    lua_rawset( L, -3 );
+    lua_pushstring( L, "BlueBits" );
+    lua_pushnumber( L, mode->BlueBits );
+    lua_rawset( L, -3 );
+}
 
 
 //************************************************************************
@@ -407,11 +426,23 @@ static int glfw_SwapInterval( lua_State *L )
 // Video modes
 //========================================================================
 
+#define LUAGLFW_MAX_NUM_MODES 256
+
 static int glfw_GetVideoModes( lua_State *L )
 {
-    // !!TODO!!
-    unsupportedFunction( L, "GetVideoModes" );
-    return 0;
+    GLFWvidmode modes[ LUAGLFW_MAX_NUM_MODES ];
+    int modecount, i;
+
+    modecount = glfwGetVideoModes( modes, LUAGLFW_MAX_NUM_MODES );
+
+    lua_newtable( L );
+    for( i = 0; i < modecount; i++ )
+    {
+        pushVideoMode( L, &modes[i] );
+        lua_rawseti( L, -2, i + 1 );
+    }
+
+    return 1;
 }
 
 static int glfw_GetDesktopMode( lua_State *L )
@@ -419,13 +450,7 @@ static int glfw_GetDesktopMode( lua_State *L )
     GLFWvidmode mode;
     glfwGetDesktopMode( &mode );
 
-    lua_newtable( L );
-    lua_pushstring( L, "Width" );
-    lua_pushnumber( L, mode.Width );
-    lua_rawset( L, -3 );
-    lua_pushstring( L, "Height" );
-    lua_pushnumber( L, mode.Height );
-    lua_rawset( L, -3 );
+    pushVideoMode( L, &mode );
 
     return 1;
 }
