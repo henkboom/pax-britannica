@@ -157,6 +157,12 @@ function start_main_loop (scene)
 
     running = true
     
+    log.log_message "detected video modes:"
+    for _, mode in ipairs(glfw.GetVideoModes()) do
+      log.log_message('  ' .. mode.Width .. 'x' .. mode.Height .. ' R' ..
+                      mode.RedBits .. ' G' .. mode.GreenBits .. ' B' ..
+                      mode.BlueBits)
+    end
     log.log_message "setting video mode. . ."
     glfw.OpenWindow(width, height, 8, 8, 8, 8, 24, 0,
                     use_fullscreen and glfw.FULLSCREEN or glfw.WINDOW)
