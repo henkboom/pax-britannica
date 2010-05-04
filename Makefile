@@ -37,5 +37,22 @@ clean:
 
 #### Actual Building
 
-$(TARGET): minlua.o luaglfw.o lua_stb_image.o mixer.o memarray.o gl.o glu.o collision.o stb_vorbis.o $(EXTRA_OBJECTS)
+OBJS= collision.o \
+	  gl.o \
+	  glu.o \
+	  log.o \
+	  lua_stb_image.o \
+	  luaglfw.o \
+	  memarray.o \
+	  minlua.o \
+	  mixer.o \
+	  stb_vorbis.o \
+	  $(EXTRA_OBJECTS)
+
+$(TARGET): $(OBJS)
 	$(CC) -o $@ $^ $(LDFLAGS)
+
+log.o: log.h
+lua_stb_image.o: stb_image.c
+minlua.o: log.h
+mixer.o: stb_vorbis.h

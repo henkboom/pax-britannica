@@ -1,11 +1,14 @@
 #include <libgen.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 
 #include <lua.h>
 #include <lauxlib.h>
 #include <lualib.h>
+
+#include "log.h"
 
 //// preloaders ///////////////////////////////////////////////////////////////
 // to statically link in binary lua modules:
@@ -31,6 +34,7 @@ void init_preloaders(lua_State *L)
     REGISTER_LOADER("gl", luaopen_gl);
     REGISTER_LOADER("glfw", luaopen_glfw);
     REGISTER_LOADER("glu", luaopen_glu);
+    REGISTER_LOADER("log", luaopen_log);
     REGISTER_LOADER("memarray", luaopen_memarray);
     REGISTER_LOADER("mixer", luaopen_mixer);
     REGISTER_LOADER("stb_image", luaopen_stb_image);
@@ -65,7 +69,7 @@ int get_exe_path(char *buffer, int size)
 #include <CFURL.h>
 int switch_to_game_directory()
 {
-    printf("finding the bundle directory\n");
+    log_message("finding the bundle directory");
 
     CFBundleRef bundle = CFBundleGetMainBundle();
     CFURLRef url = NULL;
@@ -73,7 +77,7 @@ int switch_to_game_directory()
         url = CFBundleCopyBundleURL(bundle);
     if(!url)
     {
-        printf("no bundle found");
+        log_message("no bundle found");
         return 0;
     }
 
@@ -90,15 +94,15 @@ int switch_to_game_directory()
     {
         int success = chdir(dir);
         if(success == 0)
-            printf("changed directory to '%s'\n", dir);
+            log_messagef("changed directory to '%s'", dir);
         else
-            printf("failed changing directory to '%s'\n", dir);
+            log_messagef("failed changing directory to '%s'", dir);
 
         // there must be a better way to tell if we're bundled :/
         if(chdir("Contents/Resources") == 0)
-            printf("running as an app bundle, changed to resources directory\n");
+            log_message("running as an app bundle, changed to resources directory");
         else
-            printf("running unbundled\n");
+            log_message("running unbundled");
     }
 
     free(dir);
@@ -107,7 +111,7 @@ int switch_to_game_directory()
 #else
 int switch_to_game_directory()
 {
-    printf("automatic game path detection not supported on this platform\n");
+    log_message("automatic game path detection not supported on this platform");
     return 0;
 }
 #endif
@@ -115,7 +119,7 @@ int switch_to_game_directory()
 #if defined(DOKIDOKI_MINGW) || defined(DOKIDOKI_LINUX)
 int switch_to_game_directory()
 {
-    printf("finding the game's directory\n");
+    log_message("finding the game's directory");
     int size = 256;
     char *buffer = NULL;
     while(!buffer)
@@ -128,7 +132,7 @@ int switch_to_game_directory()
         {
             free(buffer);
             buffer = NULL;
-            printf("failed locating the executable\n");
+            log_message("failed locating the executable");
             return 0;
         }
         // buffer too small
@@ -144,9 +148,9 @@ int switch_to_game_directory()
 
     int success = chdir(dir);
     if(success == 0)
-        printf("changed directory to '%s'\n", dir);
+        log_messagef("changed directory to '%s'", dir);
     else
-        printf("failed to change directory to '%s'\n", dir);
+        log_messagef("failed to change directory to '%s'", dir);
 
     free(buffer);
     return success;
@@ -157,6 +161,14 @@ int switch_to_game_directory()
 
 int main(int argc, char ** argv)
 {
+    int i;
+
+    int use_logfile = 1;
+    for(i = 0; i < argc; i++)
+        if(strcmp(argv[i], "--stderr") == 0)
+            use_logfile = 0;
+    log_init(use_logfile);
+
     switch_to_game_directory();
 
     // load lua and libraries
@@ -166,7 +178,6 @@ int main(int argc, char ** argv)
     
     // load arguments (and pre-arguments) into a global 'arg' table
     lua_newtable(L);
-    int i;
     for(i = 0; i < argc; i++)
     {
         lua_pushstring(L, argv[i]);
@@ -190,7 +201,9 @@ int main(int argc, char ** argv)
     }
 
     if(error)
-        fprintf(stderr, "%s\n", lua_tostring(L, -1));
+        log_messagef("fatal error: %s", lua_tostring(L, -1));
+    else
+        log_message("exiting normally");
 
     lua_close(L);
     return error;
