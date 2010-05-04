@@ -31,6 +31,7 @@ require "dokidoki.module"
 require "glfw"
 
 local mixer = require "mixer"
+local log = require "log"
 
 import(require "gl")
 
@@ -147,21 +148,21 @@ function start_main_loop (scene)
   -- glfw.Terminate() needs to be called even if there is an error, since
   -- otherwise it may not return the screen to its original resolution.
   local success, message = xpcall(function ()
-    log "initializing mixer. . ."
+    log.log_message "initializing mixer. . ."
     assert(mixer.init())
-    log "initializing glfw. . ."
+    log.log_message "initializing glfw. . ."
     if glfw.Init() == GL_FALSE then
       error("glfw initialization failed")
     end
 
     running = true
     
-    log "setting video mode. . ."
+    log.log_message "setting video mode. . ."
     glfw.OpenWindow(width, height, 8, 8, 8, 8, 24, 0,
                     use_fullscreen and glfw.FULLSCREEN or glfw.WINDOW)
     set_video_mode(width, height)
 
-    log "starting main loop"
+    log.log_message "starting main loop"
 
     next_scene = scene
     while next_scene do
@@ -174,7 +175,7 @@ function start_main_loop (scene)
     end
   end, get_stack_trace)
 
-  log "shutting down"
+  log.log_message "shutting down"
   glfw.Terminate()
 
   if not success then error(message, 0) end
@@ -282,8 +283,10 @@ function main_loop (scene)
       local max_update_time = max_frameskip / fps + 0.001
       local total_update_time = current_time - last_update_time
       if max_update_time < total_update_time then
-        warn("underrun of %ims",
-              math.ceil(1000 * (total_update_time - max_update_time)))
+        log.log_message(
+          "warning: underrun of " ..
+          math.ceil(1000 * (total_update_time - max_update_time)) ..
+          "ms")
         last_update_time = current_time - max_update_time
       end
       -- update the right number of times
@@ -338,14 +341,6 @@ function log_frame_time(time)
   if #frame_times > max_sample_frames then
     table.remove(frame_times, 1)
   end
-end
-
-function warn(str, ...)
-  io.stderr:write(string.format("warning: " .. str .. "\n", ...))
-end
-
-function log(str, ...)
-  io.stderr:write(string.format(str .. "\n", ...))
 end
 
 return get_module_exports()

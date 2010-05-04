@@ -70,7 +70,7 @@ function make_actor_scene (update_methods, draw_methods, init)
        event.type == 'key' and event.is_down and event.key == glfw.KEY_ESC then
       kernel.abort_main_loop()
       for k, v in pairs(actor_timings) do
-        print(v, k, k.pos)
+        log.log_message(v .. '\t' .. k .. '\t' .. k.pos)
       end
     -- Other key events
     elseif event.type == 'key' and event.is_down and
