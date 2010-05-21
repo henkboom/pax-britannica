@@ -1,7 +1,8 @@
 require "dokidoki.module"
 [[ make, unit,
    add, sub, neg, mul, div, dot, cross, project,
-   mag, sqrmag, norm, eq, coords, rotate, rotate90, rotate_to, rotate_from,
+   mag, sqrmag, angle, norm, eq, coords,
+   rotate, rotate90, rotate_to, rotate_from,
    random,
    zero, i, j ]]
 
@@ -20,6 +21,7 @@ function project(a, b) return b * (dot(a, b) / sqrmag(b)) end
 
 function mag (v)      return math.sqrt(v.x * v.x + v.y * v.y) end
 function sqrmag (v)   return dot(v, v) end
+function angle (v)    return math.atan2(v.y, v.x) end
 function norm (v)     return v / mag(v) end
 function eq (a, b)    return a.x == b.x and a.y == b.y end
 function coords (v)   return v.x, v.y end
