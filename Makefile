@@ -5,6 +5,7 @@ PLATFORMS=linux macosx mingw
 
 $(PLATFORMS): particles.o
 	make -C dokidoki-support $@ \
+		NAME="../$(NAME)" \
 		EXTRA_CFLAGS='-DEXTRA_LOADERS=\"../extra_loaders.h\"' \
 		EXTRA_OBJECTS="../particles.o"
 
