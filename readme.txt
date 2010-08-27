@@ -8,7 +8,7 @@ Setup
 
 No pre-required frameworks or libraries are necessary
 to play the game. Just hook up Xbox controllers and
-double-click on gamma4.exe to start it.
+double-click on the Pax Britannica executable to start it.
 
 The game can be played with one player versus the 
 computer, or up to four players head-to-head. Simply
