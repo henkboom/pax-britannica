@@ -494,7 +494,7 @@ static int init()
         2, // channels
         SAMPLE_RATE, // rate
         1, // resample
-        (unsigned)((float)BUFFER_SIZE/SAMPLE_RATE*1000000*4))); // latency in us
+        (unsigned)((float)BUFFER_SIZE/SAMPLE_RATE*1000000*20))); // latency in us
 
     ALSA_CHECK(snd_pcm_prepare(sound_device));
 
