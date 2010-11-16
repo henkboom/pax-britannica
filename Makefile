@@ -5,7 +5,7 @@ NAME=dokidoki-support
 TARGET=$(NAME)
 CFLAGS=-Wall -O2 -DMEMARRAY_USE_OPENGL \
 	   $(PLATFORM_CFLAGS) $(EXTRA_CFLAGS)
-LDFLAGS=$(STATIC_LINK) -llua -lportaudio -lglfw \
+LDFLAGS=$(STATIC_LINK) -llua -lglfw \
 		$(DYNAMIC_LINK) $(PLATFORM_LDFLAGS) $(EXTRA_LDFLAGS)
 CC=gcc
 
@@ -23,14 +23,14 @@ macosx:
 		STATIC_LINK="" \
 		DYNAMIC_LINK="" \
 		PLATFORM_CFLAGS="-DDOKIDOKI_MACOSX -I/System/Library/Frameworks/CoreFoundation.framework/Headers -I/opt/local/include" \
-		PLATFORM_LDFLAGS="-L/opt/local/lib -framework AGL -framework OpenGL -framework Carbon"
+		PLATFORM_LDFLAGS="-lportaudio -L/opt/local/lib -framework AGL -framework OpenGL -framework Carbon"
 
 mingw:
 	make $(TARGET) PLATFORM=mingw \
 		STATIC_LINK="-Wl,-Bstatic" \
 		DYNAMIC_LINK="-Wl,-Bdynamic" \
 		PLATFORM_CFLAGS="-DDOKIDOKI_MINGW" \
-		PLATFORM_LDFLAGS="-lopengl32 -lglu32 -lole32 -lwinmm"
+		PLATFORM_LDFLAGS="-Wl,-Bstatic -lportaudio -Wl,-Bdynamic -lopengl32 -lglu32 -lole32 -lwinmm"
 
 clean:
 	rm -f *.o $(NAME)

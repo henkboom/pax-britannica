@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <portaudio.h>
 #include "stb_vorbis.h"
 
 //// Types, Constants, Globals ////////////////////////////////////////////////
@@ -12,6 +11,7 @@ typedef int calc_t;
 #define SAMPLE_MIN (-0x8000)
 #define SAMPLE_MAX 0x7FFF
 #define PORTAUDIO_SAMPLE_TYPE paInt16
+#define ALSA_SAMPLE_TYPE SND_PCM_FORMAT_S16
 
 #define SAMPLE_RATE 44100
 #define SAMPLE_TIME (1.0/SAMPLE_RATE)
@@ -52,7 +52,16 @@ static const char * error_string = NULL;
 static int calc_buffer[BUFFER_SIZE * 2];
 
 #define CHECK(condition, message) \
-    { if(!(condition)) { if(message) error_string = message; return 0; } }
+do \
+{ \
+    if(!(condition)) \
+    { \
+        if(message) \
+            error_string = message; \
+        return 0; \
+    } \
+} while(0)
+
 #define ERROR(message) CHECK(0, message)
 
 //// Fades ////////////////////////////////////////////////////////////////////
@@ -370,11 +379,21 @@ static sound_data_t * load_ogg(const char * filename)
     return data;
 }
 
+#if defined(DOKIDOKI_MACOSX) || defined(DOKIDOKI_MINGW)
 //// Portaudio ////////////////////////////////////////////////////////////////
 
+#include <portaudio.h>
+
 #define PA_CHECK(error) \
-    { PaError PA_CHECK__err = (error); if(PA_CHECK__err != paNoError) \
-        { error_string = Pa_GetErrorText(PA_CHECK__err); return 0; } }
+do \
+{ \
+    PaError PA_CHECK__err = (error); \
+    if(PA_CHECK__err != paNoError) \
+    { \
+        error_string = Pa_GetErrorText(PA_CHECK__err); \
+        return 0; \
+    } \
+} while(0)
 
 static PaStream * stream = NULL;
 
@@ -421,6 +440,100 @@ static int uninit()
     return 1;
 }
 
+//// ALSA /////////////////////////////////////////////////////////////////////
+#elif defined(DOKIDOKI_LINUX)
+
+#define ALSA_CHECK(error) \
+do \
+{ \
+    int ALSA_CHECK__err = (error); \
+    if(ALSA_CHECK__err < 0) \
+    { \
+        error_string = snd_strerror(ALSA_CHECK__err); \
+        return 0; \
+    } \
+} while(0)
+
+#include <alsa/asoundlib.h>
+#include <GL/glfw.h>
+
+static snd_pcm_t * sound_device = NULL;
+
+static GLFWthread audio_thread = 0;
+static volatile int running = 0;
+static GLFWmutex running_mutex = NULL;
+
+static GLFWCALL void audio_loop(void *data)
+{
+    sample_t buffer[BUFFER_SIZE*2];
+
+    glfwLockMutex(running_mutex);
+    while(running)
+    {
+        glfwUnlockMutex(running_mutex);
+
+        mix_into(buffer, BUFFER_SIZE);
+        int err = snd_pcm_writei(sound_device, buffer, BUFFER_SIZE);
+        if(err < 0)
+            err = snd_pcm_recover(sound_device, err, 0);
+
+        glfwLockMutex(running_mutex);
+        if(err < 0)
+            break;
+    }
+    glfwUnlockMutex(running_mutex);
+}
+
+static int init()
+{
+    ALSA_CHECK(snd_pcm_open(&sound_device, "default", SND_PCM_STREAM_PLAYBACK, 0));
+
+    ALSA_CHECK(snd_pcm_set_params(sound_device,
+        ALSA_SAMPLE_TYPE, // format
+        SND_PCM_ACCESS_RW_INTERLEAVED, // access type
+        2, // channels
+        SAMPLE_RATE, // rate
+        1, // resample
+        (unsigned)((float)BUFFER_SIZE/SAMPLE_RATE*1000000*4))); // latency in us
+
+    ALSA_CHECK(snd_pcm_prepare(sound_device));
+
+    CHECK(running_mutex = glfwCreateMutex(),
+          "audio mutex creation failed");
+    running = 1;
+    audio_thread = glfwCreateThread(audio_loop, NULL);
+
+    return 1;
+}
+
+static int uninit()
+{
+    glfwLockMutex(running_mutex);
+    running = 0;
+    glfwUnlockMutex(running_mutex);
+    glfwWaitThread(audio_thread, GLFW_WAIT);
+
+    ALSA_CHECK(snd_pcm_close(sound_device));
+    sound_device = NULL;
+
+    return 1;
+}
+
+//// No Audio /////////////////////////////////////////////////////////////////
+#else
+
+static int init()
+{
+    return 1;
+}
+
+static int uninit()
+{
+    return 1;
+}
+
+#endif
+
 //// Lua //////////////////////////////////////////////////////////////////////
 
 #include <lua.h>
@@ -428,8 +541,16 @@ static int uninit()
 #include <lauxlib.h>
 
 #define LUA_CHECK(L, condition, message) \
-    { if(!(condition)) \
-        { lua_pushnil(L); lua_pushstring(L, message); return 2; } }
+do \
+{ \
+    if(!(condition)) \
+    { \
+        lua_pushnil(L); \
+        lua_pushstring(L, message); \
+        return 2; \
+    } \
+} while(0)
+
 #define LUA_ERROR(L, message) LUA_CHECK(L, 0, message)
 
 static int mixer__initted = 0;
