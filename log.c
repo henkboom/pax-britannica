@@ -41,6 +41,7 @@ void log_message(const char *message)
 {
     fputs(message, file);
     fputs("\n", file);
+    fflush(file);
 }
 
 void log_messagef(const char *fmt, ...)
@@ -50,6 +51,7 @@ void log_messagef(const char *fmt, ...)
 
     vfprintf(file, fmt, args);
     fputs("\n", file);
+    fflush(file);
 
     va_end(args);
 }
