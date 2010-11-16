@@ -148,12 +148,12 @@ function start_main_loop (scene)
   -- glfw.Terminate() needs to be called even if there is an error, since
   -- otherwise it may not return the screen to its original resolution.
   local success, message = xpcall(function ()
-    log.log_message "initializing mixer. . ."
-    assert(mixer.init())
     log.log_message "initializing glfw. . ."
     if glfw.Init() == GL_FALSE then
       error("glfw initialization failed")
     end
+    log.log_message "initializing mixer. . ."
+    assert(mixer.init())
 
     running = true
     
