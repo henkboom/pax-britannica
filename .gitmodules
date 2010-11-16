@@ -1,6 +1,6 @@
 [submodule "dokidoki"]
 	path = dokidoki
-	url = git://github.com/henkboom/dokidoki.git
+	url = git://github.com/henkboom/pax-britannica.git
 [submodule "dokidoki-support"]
 	path = dokidoki-support
-	url = git://github.com/henkboom/dokidoki-support.git
+	url = git://github.com/henkboom/pax-britannica.git
