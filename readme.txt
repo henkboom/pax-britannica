@@ -1,4 +1,8 @@
-﻿====================================================
+                                                                     
+                                                                     
+                                                                     
+                                             
+====================================================
 ==                 PAX BRITANNICA                 ==
 ==    One-button real-time strategy for GAMMA4    ==
 ====================================================
@@ -6,15 +10,13 @@
 Setup
 --------
 
-No pre-required frameworks or libraries are necessary
-to play the game. Just hook up Xbox controllers and
-double-click on the Pax Britannica executable to start it.
-
 The game can be played with one player versus the 
 computer, or up to four players head-to-head. Simply
 press 'A' on the title screen to join the game.
 Other players can join as long as the 5-second 
-countdown doesn't run out.
+countdown doesn't run out. The 'a', 'f', 'h' and 'l'
+keys are mapped to players 1-4. Alternately, you can
+play with Xbox controllers.
 
 
 Controls
@@ -83,4 +85,3 @@ Artwork:
 
 Music:
     Ben Abraham
-
