@@ -3,6 +3,11 @@ APPNAME=PaxBritannica
 
 PLATFORMS=linux macosx mingw
 
+help:
+	@echo No platform given, printing help :D
+	@echo
+	@cat compiling.txt
+
 $(PLATFORMS): particles.o
 	make -C dokidoki-support $@ \
 		NAME="../$(NAME)" \
