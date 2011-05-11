@@ -54,9 +54,9 @@ sleep_allowance = 0.002
 running = false
 use_fullscreen = false
 
-width = 640
-height = 480
-ratio = width / height
+width = nil
+height = nil
+ratio = nil
 
 frame_times = {}
 
@@ -83,12 +83,14 @@ end
 
 --- ### `get_width()`
 --- Returns the current total window width in pixels. This includes borders
---- when the ratio doesn't match the window size.
+--- when the ratio doesn't match the window size. Returns nil if called before
+--- the main loop and the width has never been set with `set_size()`.
 function get_width () return width end
 
 --- ### `get_height()`
 --- Returns the current total window height in pixels. This includes borders
---- when the ratio doesn't match the window size.
+--- when the ratio doesn't match the window size. Returns nil if called before
+--- the main loop and the height has never been set with `set_size()`.
 function get_height () return height end
 
 --- ### `set_fullscreen(fullscreen)`
@@ -124,7 +126,8 @@ end
 
 --- ### `get_ratio()`
 --- Returns the screen ratio used within the window for the active area. See
---- also `set_ratio()`.
+--- also `set_ratio()`. Returns nil if called before the main loop and no ratio
+--- has been set with `set_ratio()`.
 function get_ratio () return ratio end
 
 --- ### `set_ratio(ratio)`
@@ -163,7 +166,16 @@ function start_main_loop (scene)
                       mode.RedBits .. ' G' .. mode.GreenBits .. ' B' ..
                       mode.BlueBits)
     end
-    log.log_message "setting video mode. . ."
+    if width == nil then
+      log.log_message('using desktop video mode')
+      local mode = glfw.GetDesktopMode()
+      width = mode.Width
+      height = mode.Height
+    end
+    if ratio == nil then
+      ratio = width / height
+    end
+    log.log_message("setting video mode to " .. width .. "x" .. height .. ". . .")
     glfw.OpenWindow(width, height, 8, 8, 8, 8, 24, 0,
                     use_fullscreen and glfw.FULLSCREEN or glfw.WINDOW)
     set_video_mode(width, height)
