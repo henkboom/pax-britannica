@@ -10,9 +10,12 @@ for _, a in ipairs(arg) do
   args[a] = true
 end
 
-if not args['--windowed'] then
+kernel.set_ratio(4/3)
+
+if args['--windowed'] then
+  kernel.set_video_mode(1024, 768)
+else
   kernel.set_fullscreen(true)
 end
 
-kernel.set_video_mode(1024, 768)
 kernel.start_main_loop(the_game.make())

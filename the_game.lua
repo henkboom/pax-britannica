@@ -47,9 +47,6 @@ function make ()
       end
 
       local function init()
-        if not args['--windowed'] then
-          game.opengl_2d.background_color = nil
-        end
         game.actors.new(blueprints.background)
         game.actors.new(blueprints.background_fx)
         game.actors.new(blueprints.game_flow)
