@@ -8,7 +8,7 @@ help:
 	@echo
 	@cat compiling.txt
 
-$(PLATFORMS): particles.o
+$(PLATFORMS):
 	make -C dokidoki-support $@ \
 		NAME="../$(NAME)" \
 		EXTRA_CFLAGS='-DEXTRA_LOADERS=\"../extra_loaders.h\"' \
