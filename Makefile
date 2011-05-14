@@ -11,7 +11,7 @@ help:
 $(PLATFORMS):
 	make -C dokidoki-support $@ \
 		NAME="../$(NAME)" \
-		EXTRA_CFLAGS='-DEXTRA_LOADERS=\"../extra_loaders.h\"' \
+		EXTRA_CFLAGS="-DEXTRA_LOADERS=\"../extra_loaders.h\" $(EXTRA_CFLAGS)" \
 		EXTRA_OBJECTS="../particles.o"
 
 clean:

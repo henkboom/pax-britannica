@@ -11,7 +11,7 @@ Windows: make mingw
 Pax Britannica depends on lua 5.1 and glfw. On some systems you might need to
 tell the build process where to find these. On Ubuntu, for example, the
 liblua5.1-dev package installs lua as lua5.1, so you need to use
-    make linux EXTRA_CFLAGS=-L/usr/include/lua5.1
+    make linux EXTRA_CFLAGS=-I/usr/include/lua5.1
 and additionally change -llua in dokidoki-support/Makefile to -llua5.1
 
 None of this is a problem if you installed lua from source ;)
